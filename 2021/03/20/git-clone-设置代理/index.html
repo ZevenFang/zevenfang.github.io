@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/zh-cn" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="ZevenFang">
+
+
+
+<meta name="description" content="# 一次性代理 git clone -c http.proxy=&quot;http://127.0.0.1:1087&quot; https://github.com/ # 全局设置代理 git config --global http.https://github.com.proxy socks5://127.0.0.1:1086">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git clone 设置临时代理">
+<meta property="og:url" content="http://fangzf.me/2021/03/20/git-clone-设置代理/index.html">
+<meta property="og:site_name" content="纸帆|ZevenFang">
+<meta property="og:description" content="# 一次性代理 git clone -c http.proxy=&quot;http://127.0.0.1:1087&quot; https://github.com/ # 全局设置代理 git config --global http.https://github.com.proxy socks5://127.0.0.1:1086">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-05-11T01:52:41.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git clone 设置临时代理">
+<meta name="twitter:description" content="# 一次性代理 git clone -c http.proxy=&quot;http://127.0.0.1:1087&quot; https://github.com/ # 全局设置代理 git config --global http.https://github.com.proxy socks5://127.0.0.1:1086">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="纸帆|ZevenFang" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>git clone 设置临时代理 | 纸帆|ZevenFang</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">ZevenFang</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:fangfan1997@126.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="http://weibo.com/zevenfang" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ZevenFang" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Meteor/">Meteor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactNative/">ReactNative</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html5/">html5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svn/">svn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wordpress/">wordpress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/树莓派/">树莓派</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">无论任何时候，都不能动摇对胜利的信心。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">ZevenFang</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">ZevenFang</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:fangfan1997@126.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="http://weibo.com/zevenfang" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ZevenFang" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-git-clone-设置代理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/03/20/git-clone-设置代理/" class="article-date">
+      <time datetime="2021-03-20T08:30:24.000Z" itemprop="datePublished">2021-03-20</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      git clone 设置临时代理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 一次性代理</span>
+<span class="token function">git</span> clone -c http.proxy<span class="token operator">=</span><span class="token string">"http://127.0.0.1:1087"</span> https://github.com/
+<span class="token comment" spellcheck="true"># 全局设置代理</span>
+<span class="token function">git</span> config --global http.https://github.com.proxy socks5://127.0.0.1:1086
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2021/04/14/使用Docker运行SpringBoot项目/">
+                    使用Docker运行SpringBoot项目
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2021/03/19/npm自动切换国内源/">
+                    npm自动切换国内源
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"git clone 设置临时代理　| 纸帆|ZevenFang　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<style>
+    #lv-container{
+        margin-left: 30px;
+        margin-right: 30px
+    }
+    @media screen and (max-width: 800px) {
+        #lv-container{
+            margin-left: 10px;
+            margin-right: 10px
+        }
+    }
+</style>
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODMxNC80ODg2" >
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2021/04/14/使用Docker运行SpringBoot项目/" title="上一篇: 使用Docker运行SpringBoot项目">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2021/03/19/npm自动切换国内源/" title="下一篇: npm自动切换国内源">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/openwrt安装git/">openwrt安装git</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/30/Nginx使用try-files和proxy-pass部署前端应用到oss上/">Nginx使用try_files和proxy_pass部署前端应用到oss上</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/29/Linux使用命令清理硬盘空间/">Linux使用命令清理硬盘空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/28/spring-cloud-打包指定模块生产环境jar包/">spring cloud 打包指定模块生产环境jar包</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/使用docker发布单页-spa-应用/">使用docker发布单页(spa)应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/nmap根据mac查找ip地址/">nmap根据mac查找ip地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/14/使用Docker运行SpringBoot项目/">使用Docker运行SpringBoot项目</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/20/git-clone-设置代理/">git clone 设置临时代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/19/npm自动切换国内源/">npm自动切换国内源</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/01/electron安装问题/">electron安装问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/27/如何在NPM安装期间使用不同版本的python/">如何在NPM安装期间使用不同版本的python</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/19/Docker直接指定镜像地址下载/">Docker直接指定镜像地址下载</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/01/解决WordPress开启https后资源文件还是访问http问题/">解决WordPress开启https后资源文件还是访问http问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/27/Gradle-使用阿里云镜像源/">Gradle 使用阿里云镜像源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/16/yarn-国内加速镜像源/">yarn 国内加速镜像源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/15/Gradle-设置全局代理/">Gradle 设置全局代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/15/Homebrew国内安装脚本/">Homebrew国内安装脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/06/利用docker快速在当前目录创建ftp账户/">利用docker快速在当前目录创建ftp账户</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/06/Android-SDKManager-自动授权同意证书/">Android SDKManager 自动授权同意证书</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/20/树莓派修改DNS/">树莓派修改DNS</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/树莓派自定义屏幕分辨率/">树莓派自定义屏幕分辨率</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/网页设置科幻感背景/">网页设置科幻感背景</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/21/使用openssl生成rsa私钥、公钥和证书/">使用openssl生成rsa私钥、公钥和证书</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/10/树莓派旋转电容触摸方向/">树莓派旋转电容触摸方向</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/21/使用yrm更换yarn源/">使用yrm更换yarn源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/20/pidcat查看logcat日志/">pidcat查看logcat日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/19/wget整站下载命令/">wget整站下载命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/14/chromium-browser常用命令/">chromium-browser常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/12/MongoDB转换ObjectId为String字段/">MongoDB转换ObjectId为String字段</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/30/ufw防火墙命令/">ufw防火墙命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/06/开启Android无线ADB/">开启Android无线ADB</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/15/树莓派GPIO引脚图/">树莓派GPIO引脚图</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/14/树莓派读取DHT11温湿度模块-Python/">树莓派读取DHT11温湿度模块-Python</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/11/wordpress-替换-google-fonts-字体/">wordpress 替换 google fonts 字体</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/28/Linux一行命令查找并杀掉进程/">Linux一行命令查找并杀掉进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/03/shadow-kcptun/">Shadowsocks Kcptun</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Base64-转-文件下载/">Base64 转 文件下载</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/28/Gitlab出现502异常解决方法/">Gitlab出现502异常解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/nmap-实用技巧/">nmap 实用技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/22/Nginx-配置-SSL-虚拟主机/">Nginx 配置 SSL 虚拟主机</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/16/使用-frp-实现内网穿透/">使用 frp 实现内网穿透</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/11/react-native-集成微信支付/">react-native 集成微信支付</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/05/react-native-集成支付宝/">react-native 集成支付宝</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/04/一行命令创建和删除-git-分支/">一行命令创建和删除 git 分支</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/React-Native-Modal-点击遮罩层关闭/">React Native Modal 点击遮罩层关闭</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/30/解决黑苹果活动监视器意外退出问题/">解决黑苹果活动监视器意外退出问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/node-调用命令行程序/">node 调用命令行程序</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/20/使用脚本来改变某个repo的Git历史/">使用脚本来改变某个repo的Git历史</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/15/使用node-http-proxy代理调试接口/">使用node-http-proxy代理调试接口</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/13/使用-Chrome-调试-ReactNative-接口/">使用 Chrome 调试 ReactNative 接口</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Nginx解决跨域请求/">Nginx解决跨域请求</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/28/Docker镜像导入导出/">Docker镜像导入导出</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/24/常用前端校验工具类/">常用前端校验工具类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/13/使用-Gradle-自动签名发布-Android-应用/">使用 Gradle 自动签名发布 Android 应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/02/部署Meteor应用到服务器/">部署 Meteor 应用到服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/15/使用-Blob-下载文件流/">使用 Blob 下载文件流</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/15/判断-iframe-是否加载完成/">判断 iframe 是否加载完成</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/13/使用-FormData-上传文件/">使用 FormData 上传文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/08/让-Zsh-终端走代理/">让 Zsh 终端走代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/04/使用-XMLHttpRequest-发送-Ajax/">使用 XMLHttpRequest 发送 Ajax</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/25/Finder-在当前目录打开-iTerm2/">Finder 在当前目录打开 iTerm2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/21/Xcode-离线下载地址/">Xcode 离线下载地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/19/让Finder标题显示当前路径/">让Finder标题显示当前路径</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/17/更新Github-fork后的项目代码/">更新Github fork后的项目代码</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/21/Android应用签名/">Android应用签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/21/连接Redux调试服务器/">连接Redux调试服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/22/ReactNative从设备上访问开发服务器/">ReactNative从设备上访问开发服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/02/ubuntu搭建svn服务器/">ubuntu搭建svn服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/mongodb的基本操作（CRUD）/">mongodb的基本操作（CRUD）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/简易搭建mongodb/">简易搭建mongodb</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/Ubuntu常用命令及快捷键/">Ubuntu常用命令及快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/html5自定义表单提示/">html5自定义表单提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/PHP-header-函数/">PHP header()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/PHP防盗链技术/">PHP防盗链技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/MySQL触发器/">MySQL触发器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/MySQL用户授权/">MySQL用户授权</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/前端技术资源合集/">前端技术资源合集</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/ubuntu搭建git服务器/">ubuntu搭建git服务器</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i>
+                2015-2021 ZevenFang
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>

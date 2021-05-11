@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/zh-cn" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="ZevenFang">
+
+
+
+<meta name="description" content="现在很多 APP 都有集成第三方支付平台的需求，用来支付自己的产品，但是官方一般都没有介绍如何集成到 react-native 的应用中，本篇文章将基于官方提供的集成文档，介绍如何将支付宝集成到 react-native 应用中。">
+<meta name="keywords" content="React,ReactNative">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-native 集成支付宝">
+<meta property="og:url" content="http://fangzf.me/2017/12/05/react-native-集成支付宝/index.html">
+<meta property="og:site_name" content="纸帆|ZevenFang">
+<meta property="og:description" content="现在很多 APP 都有集成第三方支付平台的需求，用来支付自己的产品，但是官方一般都没有介绍如何集成到 react-native 的应用中，本篇文章将基于官方提供的集成文档，介绍如何将支付宝集成到 react-native 应用中。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gw.alipayobjects.com/zos/skylark/public/files/909cb3a6c0febb5ef77be00e8cbfcdfe.png">
+<meta property="og:image" content="https://gw.alipayobjects.com/os/skylark/public/files/3ebefcabdf8062f717dbb5d866ba7cfb">
+<meta property="og:image" content="http://p0gxdxnc4.bkt.clouddn.com/2017-12-05-16-24-34.png">
+<meta property="og:updated_time" content="2021-05-11T01:52:41.675Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-native 集成支付宝">
+<meta name="twitter:description" content="现在很多 APP 都有集成第三方支付平台的需求，用来支付自己的产品，但是官方一般都没有介绍如何集成到 react-native 的应用中，本篇文章将基于官方提供的集成文档，介绍如何将支付宝集成到 react-native 应用中。">
+<meta name="twitter:image" content="https://gw.alipayobjects.com/zos/skylark/public/files/909cb3a6c0febb5ef77be00e8cbfcdfe.png">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="纸帆|ZevenFang" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>react-native 集成支付宝 | 纸帆|ZevenFang</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">ZevenFang</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:fangfan1997@126.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="http://weibo.com/zevenfang" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ZevenFang" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Meteor/">Meteor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactNative/">ReactNative</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html5/">html5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svn/">svn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wordpress/">wordpress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/树莓派/">树莓派</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">无论任何时候，都不能动摇对胜利的信心。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">ZevenFang</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">ZevenFang</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:fangfan1997@126.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="http://weibo.com/zevenfang" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ZevenFang" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-react-native-集成支付宝" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/05/react-native-集成支付宝/" class="article-date">
+      <time datetime="2017-12-05T01:40:59.000Z" itemprop="datePublished">2017-12-05</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      react-native 集成支付宝
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Front/">Front</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ReactNative/">ReactNative</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>现在很多 APP 都有集成第三方支付平台的需求，用来支付自己的产品，但是官方一般都没有介绍如何集成到 react-native 的应用中，本篇文章将基于官方提供的集成文档，介绍如何将支付宝集成到 react-native 应用中。</p>
+<h2 id="场景介绍"><a href="#场景介绍" class="headerlink" title="场景介绍"></a>场景介绍</h2><blockquote>
+<p>适用于商家在App应用中集成支付宝支付功能。<br>商家APP调用支付宝提供的SDK，SDK再调用支付宝APP内的支付模块。如果用户已安装支付宝APP，商家APP会跳转到支付宝中完成支付，支付完后跳回到商家APP内，最后展示支付结果。如果用户没有安装支付宝APP，商家APP内会调起支付宝网页支付收银台，用户登录支付宝账户，支付完后展示支付结果。<br>目前支持手机系统有：iOS（苹果）、Android（安卓）。</p>
+</blockquote>
+<h2 id="集成SDK"><a href="#集成SDK" class="headerlink" title="集成SDK"></a>集成SDK</h2><h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><ol>
+<li>将alipaySdk-xxxxxxxx.jar包放入<code>android/app/libs</code>目录下，如下图。<br><img src="https://gw.alipayobjects.com/zos/skylark/public/files/909cb3a6c0febb5ef77be00e8cbfcdfe.png" alt></li>
+<li>将libs目录下的alipaySDK-xxxxxxxx.jar导入，在<code>android/app/build.gradle</code>里添加如下代码：<pre class="line-numbers language-js"><code class="language-js">dependencies <span class="token punctuation">{</span>
+ <span class="token operator">...</span><span class="token operator">...</span>
+ compile <span class="token function">files</span><span class="token punctuation">(</span><span class="token string">'libs/alipaySdk-20170725.jar'</span><span class="token punctuation">)</span>
+ <span class="token operator">...</span><span class="token operator">...</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在<code>android/app/src/AndroidManifest.xml</code>文件里面添加声明：<pre class="line-numbers language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- 支付宝 activity 声明 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>activity</span>
+ <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>com.alipay.sdk.app.H5PayActivity<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>configChanges</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>orientation|keyboardHidden|navigation|screenSize<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>exported</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>screenOrientation</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>behind<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>windowSoftInputMode</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>adjustResize|stateHidden<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>activity</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>activity</span>
+ <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>com.alipay.sdk.app.H5AuthActivity<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>configChanges</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>orientation|keyboardHidden|navigation<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>exported</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>screenOrientation</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>behind<span class="token punctuation">"</span></span>
+ <span class="token attr-name"><span class="token namespace">android:</span>windowSoftInputMode</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>adjustResize|stateHidden<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>activity</span><span class="token punctuation">></span></span>
+<span class="token comment" spellcheck="true">&lt;!-- 支付宝权限声明 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>uses-permission</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.INTERNET<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>uses-permission</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.ACCESS_NETWORK_STATE<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>uses-permission</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.ACCESS_WIFI_STATE<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>uses-permission</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.READ_PHONE_STATE<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>uses-permission</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.WRITE_EXTERNAL_STORAGE<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在<code>android/app/proguard-rules.pro</code>添加混淆规则<pre class="line-numbers language-java"><code class="language-java"><span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>IAlixPay</span><span class="token punctuation">{</span><span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>IAlixPay</span>$Stub<span class="token punctuation">{</span><span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>IRemoteServiceCallback</span><span class="token punctuation">{</span><span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>IRemoteServiceCallback</span>$Stub<span class="token punctuation">{</span><span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>sdk<span class="token punctuation">.</span>app<span class="token punctuation">.</span>PayTask</span><span class="token punctuation">{</span> <span class="token keyword">public</span> <span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>sdk<span class="token punctuation">.</span>app<span class="token punctuation">.</span>AuthTask</span><span class="token punctuation">{</span> <span class="token keyword">public</span> <span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>sdk<span class="token punctuation">.</span>app<span class="token punctuation">.</span>H5PayCallback</span> <span class="token punctuation">{</span>
+ <span class="token operator">&lt;</span>fields<span class="token operator">></span><span class="token punctuation">;</span>
+ <span class="token operator">&lt;</span>methods<span class="token operator">></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>android<span class="token punctuation">.</span>phone<span class="token punctuation">.</span>mrpc<span class="token punctuation">.</span>core<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>apmobilesecuritysdk<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>mobile<span class="token punctuation">.</span>framework<span class="token punctuation">.</span>service<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>mobilesecuritysdk<span class="token punctuation">.</span>face<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>tscenter<span class="token punctuation">.</span>biz<span class="token punctuation">.</span>rpc<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">org<span class="token punctuation">.</span>json<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>tscenter<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>ta<span class="token punctuation">.</span>utdid2<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token operator">-</span>keep <span class="token keyword">class</span> <span class="token class-name">com<span class="token punctuation">.</span>ut<span class="token punctuation">.</span>device<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">{</span> <span class="token operator">*</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在<code>com.xx.xx</code>创建包名<code>alipay</code></li>
+<li><p>编写 Module，在<code>com.xx.xx.alipay</code>包下创建<code>AlipayModule.java</code>，代码如下：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>alipay<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>alipay<span class="token punctuation">.</span>sdk<span class="token punctuation">.</span>app<span class="token punctuation">.</span>PayTask<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>Arguments<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>Promise<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactApplicationContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactContextBaseJavaModule<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactMethod<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>WritableMap<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Map<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AlipayModule</span> <span class="token keyword">extends</span> <span class="token class-name">ReactContextBaseJavaModule</span> <span class="token punctuation">{</span>
+
+ <span class="token keyword">public</span> <span class="token function">AlipayModule</span><span class="token punctuation">(</span>ReactApplicationContext reactContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">super</span><span class="token punctuation">(</span>reactContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> String <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token string">"Alipay"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@ReactMethod</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">pay</span><span class="token punctuation">(</span><span class="token keyword">final</span> String orderInfo<span class="token punctuation">,</span> <span class="token keyword">final</span> Promise promise<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   Runnable payRunnable <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token annotation punctuation">@Override</span>
+     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       WritableMap map <span class="token operator">=</span> Arguments<span class="token punctuation">.</span><span class="token function">createMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       PayTask alipay <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PayTask</span><span class="token punctuation">(</span><span class="token function">getCurrentActivity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> String<span class="token operator">></span> result <span class="token operator">=</span> alipay<span class="token punctuation">.</span><span class="token function">payV2</span><span class="token punctuation">(</span>orderInfo<span class="token punctuation">,</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">for</span> <span class="token punctuation">(</span>Map<span class="token punctuation">.</span>Entry<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> String<span class="token operator">></span> entry<span class="token operator">:</span> result<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         map<span class="token punctuation">.</span><span class="token function">putString</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>map<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span><span class="token punctuation">;</span>
+   <span class="token comment" spellcheck="true">// 必须异步调用</span>
+   Thread payThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>payRunnable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   payThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>编写 Package，在<code>com.xx.xx.alipay</code>包下创建<code>AlipayPackage.java</code>，代码如下：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>alipay<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>ReactPackage<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>NativeModule<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactApplicationContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>uimanager<span class="token punctuation">.</span>ViewManager<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Collections<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AlipayPackage</span> <span class="token keyword">implements</span> <span class="token class-name">ReactPackage</span> <span class="token punctuation">{</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> List<span class="token operator">&lt;</span>ViewManager<span class="token operator">></span> <span class="token function">createViewManagers</span><span class="token punctuation">(</span>ReactApplicationContext reactContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> Collections<span class="token punctuation">.</span><span class="token function">emptyList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> List<span class="token operator">&lt;</span>NativeModule<span class="token operator">></span> <span class="token function">createNativeModules</span><span class="token punctuation">(</span>
+         ReactApplicationContext reactContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   List<span class="token operator">&lt;</span>NativeModule<span class="token operator">></span> modules <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   modules<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AlipayModule</span><span class="token punctuation">(</span>reactContext<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">return</span> modules<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>最后在 Android 这边要做的最后一件事就是注册这个模块，在<code>com.xx.xx.MainApplication</code>中注册模块：<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> List<span class="token operator">&lt;</span>ReactPackage<span class="token operator">></span> <span class="token function">getPackages</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token keyword">return</span> Arrays<span class="token punctuation">.</span>&lt;ReactPackage<span class="token operator">></span><span class="token function">asList</span><span class="token punctuation">(</span>
+     <span class="token keyword">new</span> <span class="token class-name">MainReactPackage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+     <span class="token comment" spellcheck="true">// ...other packages</span>
+     <span class="token keyword">new</span> <span class="token class-name">AlipayPackage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// &lt;-- 注册模块</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><ol>
+<li>启动IDE（如Xcode），把<a href="https://docs.open.alipay.com/54/104509" target="_blank" rel="noopener">iOS包</a>中的压缩文件中以下文件拷贝到项目文件夹下，并导入到项目工程中。<br>AlipaySDK.bundle<br>AlipaySDK.framework</li>
+<li>在Build Phases选项卡的Link Binary With Libraries中，增加以下依赖：<br><img src="https://gw.alipayobjects.com/os/skylark/public/files/3ebefcabdf8062f717dbb5d866ba7cfb" alt><ul>
+<li>如果是Xcode 7.0之后的版本，需要添加libc++.tbd、libz.tbd；</li>
+<li>如果是Xcode 7.0之前的版本，需要添加libc++.dylib、libz.dylib。</li>
+</ul>
+</li>
+<li>在项目目录下创建Group <code>Alipay</code>，并创建<code>AlipayModule</code>模块，如下图所示：<br><img src="http://p0gxdxnc4.bkt.clouddn.com/2017-12-05-16-24-34.png" alt="2017-12-05-16-24-34"></li>
+<li><p>编写<code>AlipayModule.h</code>代码如下：</p>
+<pre class="line-numbers language-objectivec"><code class="language-objectivec"><span class="token macro property">#<span class="token directive keyword">import</span> &lt;React/RCTBridgeModule.h></span>
+<span class="token macro property">#<span class="token directive keyword">import</span> &lt;React/RCTLog.h></span>
+
+<span class="token keyword">@interface</span> AlipayModule <span class="token punctuation">:</span> NSObject <span class="token operator">&lt;</span>RCTBridgeModule<span class="token operator">></span>
+<span class="token keyword">@end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>编写<code>AlipayModule.m</code>代码如下：</p>
+<pre class="line-numbers language-objectivec"><code class="language-objectivec"><span class="token macro property">#<span class="token directive keyword">import</span> "AlipayModule.h"</span>
+<span class="token macro property">#<span class="token directive keyword">import</span> &lt;AlipaySDK/AlipaySDK.h></span>
+
+<span class="token keyword">@implementation</span> AlipayModule
+
+<span class="token function">RCT_EXPORT_METHOD</span><span class="token punctuation">(</span>pay<span class="token punctuation">:</span><span class="token punctuation">(</span>NSString <span class="token operator">*</span><span class="token punctuation">)</span>orderInfo
+ resolver<span class="token punctuation">:</span><span class="token punctuation">(</span>RCTPromiseResolveBlock<span class="token punctuation">)</span>resolve
+ rejecter<span class="token punctuation">:</span><span class="token punctuation">(</span>RCTPromiseRejectBlock<span class="token punctuation">)</span>reject<span class="token punctuation">)</span><span class="token punctuation">{</span>
+ <span class="token comment" spellcheck="true">//应用注册scheme,在AliSDKDemo-Info.plist定义URL types</span>
+ NSString <span class="token operator">*</span>appScheme <span class="token operator">=</span> <span class="token string">@"alisdkdemo"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">[</span><span class="token punctuation">[</span>AlipaySDK defaultService<span class="token punctuation">]</span> payOrder<span class="token punctuation">:</span>orderInfo fromScheme<span class="token punctuation">:</span>appScheme callback<span class="token punctuation">:</span><span class="token operator">^</span><span class="token punctuation">(</span>NSDictionary <span class="token operator">*</span>resultDic<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token function">resolve</span><span class="token punctuation">(</span>resultDic<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">RCT_EXPORT_MODULE</span><span class="token punctuation">(</span>Alipay<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">@end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>至此，iOS端支付宝SDK集成成功</li>
+</ol>
+<h3 id="React-Native"><a href="#React-Native" class="headerlink" title="React-Native"></a>React-Native</h3><ol>
+<li>修改原生代码后，需要重新打包运行程序：<pre class="line-numbers language-shell"><code class="language-shell">react-native run-android # 运行Android端
+react-native run-ios # 运行iOS端
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>编写<code>Alipay.js</code>工具类<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> NativeModules <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-native'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> NativeModules<span class="token punctuation">.</span>Alipay<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>调用<code>Alipay</code>模块发起支付宝支付：<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">import</span> Alipay <span class="token keyword">from</span> <span class="token string">'./your/path/to/Alipay'</span><span class="token punctuation">;</span>
+<span class="token keyword">async</span> <span class="token function">pay</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// params 为后端提供的参数</span>
+<span class="token keyword">let</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">call</span><span class="token punctuation">(</span>getOrderInfo<span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 从后端获取签名字串，参考支付接口调用</span>
+<span class="token keyword">let</span> ret <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">call</span><span class="token punctuation">(</span>Alipay<span class="token punctuation">.</span>pay<span class="token punctuation">,</span> res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 调起支付宝，发起支付</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>ret<span class="token punctuation">.</span>resultStatus <span class="token operator">===</span> <span class="token string">'9000'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token comment" spellcheck="true">// 支付成功回调</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+ <span class="token comment" spellcheck="true">// 支付失败回调</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>支付接口调用参考<a href="https://docs.open.alipay.com/204/105296/#s3" target="_blank" rel="noopener">支付接口调用</a>和<a href="https://docs.open.alipay.com/204/105465/" target="_blank" rel="noopener">支付请求参数说明</a>，本篇将不做赘述。</li>
+</ol>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>后面会继续介绍 <a href="http://fangzf.me/2017/12/11/react-native-%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/">react-native 微信支付的集成</a>，相比支付宝集成，微信支付集成会麻烦很多，比如处理回调、应用签名机制、注册scheme等都提高了集成的复杂度。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://docs.open.alipay.com/204/105296/" target="_blank" rel="noopener">App支付Android集成流程</a></li>
+<li><a href="https://docs.open.alipay.com/204/105295/" target="_blank" rel="noopener">App支付iOS集成流程</a></li>
+<li><a href="http://reactnative.cn/docs/0.50/native-modules-android.html" target="_blank" rel="noopener">Android调用原生模块</a></li>
+<li><a href="http://reactnative.cn/docs/0.50/native-modules-ios.html" target="_blank" rel="noopener">iOS调用原生模块</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/12/11/react-native-集成微信支付/">
+                    react-native 集成微信支付
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/12/04/一行命令创建和删除-git-分支/">
+                    一行命令创建和删除 git 分支
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#场景介绍"><span class="toc-number">1.</span> <span class="toc-text">场景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集成SDK"><span class="toc-number">2.</span> <span class="toc-text">集成SDK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Android"><span class="toc-number">2.1.</span> <span class="toc-text">Android</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS"><span class="toc-number">2.2.</span> <span class="toc-text">iOS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#React-Native"><span class="toc-number">2.3.</span> <span class="toc-text">React-Native</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后记"><span class="toc-number">2.4.</span> <span class="toc-text">后记</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文档"><span class="toc-number">3.</span> <span class="toc-text">参考文档</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"react-native 集成支付宝　| 纸帆|ZevenFang　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<style>
+    #lv-container{
+        margin-left: 30px;
+        margin-right: 30px
+    }
+    @media screen and (max-width: 800px) {
+        #lv-container{
+            margin-left: 10px;
+            margin-right: 10px
+        }
+    }
+</style>
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODMxNC80ODg2" >
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/12/11/react-native-集成微信支付/" title="上一篇: react-native 集成微信支付">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/12/04/一行命令创建和删除-git-分支/" title="下一篇: 一行命令创建和删除 git 分支">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/openwrt安装git/">openwrt安装git</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/30/Nginx使用try-files和proxy-pass部署前端应用到oss上/">Nginx使用try_files和proxy_pass部署前端应用到oss上</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/29/Linux使用命令清理硬盘空间/">Linux使用命令清理硬盘空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/28/spring-cloud-打包指定模块生产环境jar包/">spring cloud 打包指定模块生产环境jar包</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/使用docker发布单页-spa-应用/">使用docker发布单页(spa)应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/nmap根据mac查找ip地址/">nmap根据mac查找ip地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/14/使用Docker运行SpringBoot项目/">使用Docker运行SpringBoot项目</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/20/git-clone-设置代理/">git clone 设置临时代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/19/npm自动切换国内源/">npm自动切换国内源</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/01/electron安装问题/">electron安装问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/27/如何在NPM安装期间使用不同版本的python/">如何在NPM安装期间使用不同版本的python</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/19/Docker直接指定镜像地址下载/">Docker直接指定镜像地址下载</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/01/解决WordPress开启https后资源文件还是访问http问题/">解决WordPress开启https后资源文件还是访问http问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/27/Gradle-使用阿里云镜像源/">Gradle 使用阿里云镜像源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/16/yarn-国内加速镜像源/">yarn 国内加速镜像源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/15/Gradle-设置全局代理/">Gradle 设置全局代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/15/Homebrew国内安装脚本/">Homebrew国内安装脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/06/利用docker快速在当前目录创建ftp账户/">利用docker快速在当前目录创建ftp账户</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/06/Android-SDKManager-自动授权同意证书/">Android SDKManager 自动授权同意证书</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/20/树莓派修改DNS/">树莓派修改DNS</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/树莓派自定义屏幕分辨率/">树莓派自定义屏幕分辨率</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/网页设置科幻感背景/">网页设置科幻感背景</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/21/使用openssl生成rsa私钥、公钥和证书/">使用openssl生成rsa私钥、公钥和证书</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/10/树莓派旋转电容触摸方向/">树莓派旋转电容触摸方向</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/21/使用yrm更换yarn源/">使用yrm更换yarn源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/20/pidcat查看logcat日志/">pidcat查看logcat日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/19/wget整站下载命令/">wget整站下载命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/14/chromium-browser常用命令/">chromium-browser常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/12/MongoDB转换ObjectId为String字段/">MongoDB转换ObjectId为String字段</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/30/ufw防火墙命令/">ufw防火墙命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/06/开启Android无线ADB/">开启Android无线ADB</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/15/树莓派GPIO引脚图/">树莓派GPIO引脚图</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/14/树莓派读取DHT11温湿度模块-Python/">树莓派读取DHT11温湿度模块-Python</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/11/wordpress-替换-google-fonts-字体/">wordpress 替换 google fonts 字体</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/28/Linux一行命令查找并杀掉进程/">Linux一行命令查找并杀掉进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/03/shadow-kcptun/">Shadowsocks Kcptun</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Base64-转-文件下载/">Base64 转 文件下载</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/28/Gitlab出现502异常解决方法/">Gitlab出现502异常解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/nmap-实用技巧/">nmap 实用技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/22/Nginx-配置-SSL-虚拟主机/">Nginx 配置 SSL 虚拟主机</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/16/使用-frp-实现内网穿透/">使用 frp 实现内网穿透</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/11/react-native-集成微信支付/">react-native 集成微信支付</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/05/react-native-集成支付宝/">react-native 集成支付宝</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/04/一行命令创建和删除-git-分支/">一行命令创建和删除 git 分支</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/React-Native-Modal-点击遮罩层关闭/">React Native Modal 点击遮罩层关闭</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/30/解决黑苹果活动监视器意外退出问题/">解决黑苹果活动监视器意外退出问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/node-调用命令行程序/">node 调用命令行程序</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/20/使用脚本来改变某个repo的Git历史/">使用脚本来改变某个repo的Git历史</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/15/使用node-http-proxy代理调试接口/">使用node-http-proxy代理调试接口</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/13/使用-Chrome-调试-ReactNative-接口/">使用 Chrome 调试 ReactNative 接口</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Nginx解决跨域请求/">Nginx解决跨域请求</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/28/Docker镜像导入导出/">Docker镜像导入导出</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/24/常用前端校验工具类/">常用前端校验工具类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/13/使用-Gradle-自动签名发布-Android-应用/">使用 Gradle 自动签名发布 Android 应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/02/部署Meteor应用到服务器/">部署 Meteor 应用到服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/15/使用-Blob-下载文件流/">使用 Blob 下载文件流</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/15/判断-iframe-是否加载完成/">判断 iframe 是否加载完成</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/13/使用-FormData-上传文件/">使用 FormData 上传文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/08/让-Zsh-终端走代理/">让 Zsh 终端走代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/04/使用-XMLHttpRequest-发送-Ajax/">使用 XMLHttpRequest 发送 Ajax</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/25/Finder-在当前目录打开-iTerm2/">Finder 在当前目录打开 iTerm2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/21/Xcode-离线下载地址/">Xcode 离线下载地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/19/让Finder标题显示当前路径/">让Finder标题显示当前路径</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/17/更新Github-fork后的项目代码/">更新Github fork后的项目代码</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/21/Android应用签名/">Android应用签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/21/连接Redux调试服务器/">连接Redux调试服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/22/ReactNative从设备上访问开发服务器/">ReactNative从设备上访问开发服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/02/ubuntu搭建svn服务器/">ubuntu搭建svn服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/mongodb的基本操作（CRUD）/">mongodb的基本操作（CRUD）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/简易搭建mongodb/">简易搭建mongodb</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/Ubuntu常用命令及快捷键/">Ubuntu常用命令及快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/html5自定义表单提示/">html5自定义表单提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/PHP-header-函数/">PHP header()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/PHP防盗链技术/">PHP防盗链技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/MySQL触发器/">MySQL触发器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/MySQL用户授权/">MySQL用户授权</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/前端技术资源合集/">前端技术资源合集</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/ubuntu搭建git服务器/">ubuntu搭建git服务器</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i>
+                2015-2021 ZevenFang
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/zh-cn" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="ZevenFang">
+
+
+
+<meta name="description" content="上篇文章已经介绍过 react-native 集成支付宝，本篇文章将基于微信支付官方提供的集成文档，介绍如何将微信支付集成到 react-native 应用中。">
+<meta name="keywords" content="React,ReactNative">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-native 集成微信支付">
+<meta property="og:url" content="http://fangzf.me/2017/12/11/react-native-集成微信支付/index.html">
+<meta property="og:site_name" content="纸帆|ZevenFang">
+<meta property="og:description" content="上篇文章已经介绍过 react-native 集成支付宝，本篇文章将基于微信支付官方提供的集成文档，介绍如何将微信支付集成到 react-native 应用中。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_2.png">
+<meta property="og:image" content="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_3.png">
+<meta property="og:image" content="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_1.png">
+<meta property="og:image" content="http://p0gxdxnc4.bkt.clouddn.com/2017-12-11-14-28-10.png">
+<meta property="og:image" content="http://p0gxdxnc4.bkt.clouddn.com/2017-12-11-14-30-54.png">
+<meta property="og:image" content="http://p0gxdxnc4.bkt.clouddn.com/2017-12-11-15-05-34.png">
+<meta property="og:updated_time" content="2021-05-11T01:52:41.675Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-native 集成微信支付">
+<meta name="twitter:description" content="上篇文章已经介绍过 react-native 集成支付宝，本篇文章将基于微信支付官方提供的集成文档，介绍如何将微信支付集成到 react-native 应用中。">
+<meta name="twitter:image" content="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_2.png">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="纸帆|ZevenFang" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>react-native 集成微信支付 | 纸帆|ZevenFang</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">ZevenFang</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:fangfan1997@126.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="http://weibo.com/zevenfang" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ZevenFang" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Meteor/">Meteor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactNative/">ReactNative</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html5/">html5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svn/">svn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wordpress/">wordpress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/树莓派/">树莓派</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">无论任何时候，都不能动摇对胜利的信心。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">ZevenFang</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">ZevenFang</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:fangfan1997@126.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="http://weibo.com/zevenfang" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ZevenFang" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-react-native-集成微信支付" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/11/react-native-集成微信支付/" class="article-date">
+      <time datetime="2017-12-11T01:39:45.000Z" itemprop="datePublished">2017-12-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      react-native 集成微信支付
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Front/">Front</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ReactNative/">ReactNative</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>上篇文章已经介绍过 <a href="http://fangzf.me/2017/12/05/react-native-%E9%9B%86%E6%88%90%E6%94%AF%E4%BB%98%E5%AE%9D/">react-native 集成支付宝</a>，本篇文章将基于微信支付官方提供的集成文档，介绍如何将微信支付集成到 react-native 应用中。</p>
+<h2 id="场景介绍"><a href="#场景介绍" class="headerlink" title="场景介绍"></a>场景介绍</h2><blockquote>
+<p>适用于商户在移动端APP中集成微信支付功能。<br>商户APP调用微信提供的SDK调用微信支付模块，商户APP会跳转到微信中完成支付。<br>支付完后跳回到商户APP内，最后展示支付结果。<br>目前微信支付支持手机系统有：IOS（苹果）、Android（安卓）和WP（Windows Phone）。</p>
+</blockquote>
+<h2 id="集成SDK"><a href="#集成SDK" class="headerlink" title="集成SDK"></a>集成SDK</h2><p>获取APPID：商户在<a href="https://open.weixin.qq.com/" target="_blank" rel="noopener">微信开放平台</a>申请开发APP应用后，微信开放平台会生成APP的唯一标识APPID。</p>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><ol>
+<li>后台设置<br>商户在微信开放平台申请开发应用后，微信开放平台会生成APP的唯一标识APPID。由于需要保证支付安全，需要在开放平台绑定商户应用包名和应用签名，设置好后才能正常发起支付。设置界面在【开放平台】中的栏目【管理中心 / 修改应用 / 修改开发信息】里面，如下图红框内所示。<br><img src="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_2.png" alt><br>应用签名获取可以使用：<a href="https://open.weixin.qq.com/zh_CN/htmledition/res/dev/download/sdk/Gen_Signature_Android.apk" target="_blank" rel="noopener">应用签名获取工具</a>，将安装包安装到手机里，输入应用包名即可获取到签名。<br><img src="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_3.png" alt><br>这里有个调试技巧，可以将应用的签名改为 debug 版本的签名，等支付调试完成后再改为生产环境的签名。</li>
+<li>导入微信SDK，修改<code>android/app/build.gradle</code>添加如下代码：<pre class="line-numbers language-js"><code class="language-js">dependencies <span class="token punctuation">{</span>
+ <span class="token operator">...</span><span class="token operator">...</span>
+ compile <span class="token string">"com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+"</span>
+ <span class="token operator">...</span><span class="token operator">...</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在<code>com.xx.xx</code>创建包名<code>wxapi</code>，<strong>注意此处包名一定要为<code>wxapi</code>，否则后续将无法处理回调</strong></li>
+<li><p>编写 Module，在<code>com.xx.xx.wxapi</code>包下创建<code>WxpayModule.java</code>，代码如下：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>wxapi<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>Promise<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactApplicationContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactContextBaseJavaModule<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactMethod<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReadableMap<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>modelpay<span class="token punctuation">.</span>PayReq<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>openapi<span class="token punctuation">.</span>IWXAPI<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>openapi<span class="token punctuation">.</span>WXAPIFactory<span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">WxpayModule</span> <span class="token keyword">extends</span> <span class="token class-name">ReactContextBaseJavaModule</span> <span class="token punctuation">{</span>
+
+ <span class="token keyword">private</span> IWXAPI api<span class="token punctuation">;</span>
+ <span class="token keyword">static</span> String APP_ID <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+ <span class="token keyword">static</span> Promise promise <span class="token operator">=</span> null<span class="token punctuation">;</span>
+
+ <span class="token function">WxpayModule</span><span class="token punctuation">(</span>ReactApplicationContext reactContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">super</span><span class="token punctuation">(</span>reactContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   api <span class="token operator">=</span> WXAPIFactory<span class="token punctuation">.</span><span class="token function">createWXAPI</span><span class="token punctuation">(</span>reactContext<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> String <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token string">"Wxpay"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@ReactMethod</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerApp</span><span class="token punctuation">(</span>String APP_ID<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 向微信注册</span>
+   WxpayModule<span class="token punctuation">.</span>APP_ID <span class="token operator">=</span> APP_ID<span class="token punctuation">;</span>
+   api<span class="token punctuation">.</span><span class="token function">registerApp</span><span class="token punctuation">(</span>APP_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@ReactMethod</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">pay</span><span class="token punctuation">(</span><span class="token keyword">final</span> ReadableMap order<span class="token punctuation">,</span> Promise promise<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   WxpayModule<span class="token punctuation">.</span>promise <span class="token operator">=</span> promise<span class="token punctuation">;</span>
+   PayReq request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PayReq</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>appId <span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"appid"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>partnerId <span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"partnerid"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>prepayId<span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"prepayid"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>packageValue <span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"package"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>nonceStr<span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"noncestr"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>timeStamp<span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span><span class="token string">"timestamp"</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">""</span><span class="token punctuation">;</span>
+   request<span class="token punctuation">.</span>sign<span class="token operator">=</span> order<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"sign"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   api<span class="token punctuation">.</span><span class="token function">sendReq</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@ReactMethod</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">isSupported</span><span class="token punctuation">(</span>Promise promise<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 判断是否支持调用微信SDK</span>
+   <span class="token keyword">boolean</span> isSupported <span class="token operator">=</span> api<span class="token punctuation">.</span><span class="token function">isWXAppInstalled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>isSupported<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>编写 Package，在<code>com.xx.xx.wxapi</code>包下创建<code>WxpayPackage.java</code>，代码如下：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>wxapi<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>ReactPackage<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>NativeModule<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>ReactApplicationContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>uimanager<span class="token punctuation">.</span>ViewManager<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Collections<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WxpayPackage</span> <span class="token keyword">implements</span> <span class="token class-name">ReactPackage</span> <span class="token punctuation">{</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> List<span class="token operator">&lt;</span>ViewManager<span class="token operator">></span> <span class="token function">createViewManagers</span><span class="token punctuation">(</span>ReactApplicationContext reactContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> Collections<span class="token punctuation">.</span><span class="token function">emptyList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> List<span class="token operator">&lt;</span>NativeModule<span class="token operator">></span> <span class="token function">createNativeModules</span><span class="token punctuation">(</span>
+         ReactApplicationContext reactContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   List<span class="token operator">&lt;</span>NativeModule<span class="token operator">></span> modules <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   modules<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WxpayModule</span><span class="token punctuation">(</span>reactContext<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">return</span> modules<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>编写 WXPayEntryActivity 处理微信支付回调，在<code>com.xx.xx.wxapi</code>包下创建<code>WXPayEntryActivity.java</code>，<strong>注意包名或类名不一致会造成无法回调</strong>，代码如下：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>xx<span class="token punctuation">.</span>wxapi<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>Activity<span class="token punctuation">;</span>
+<span class="token keyword">import</span> android<span class="token punctuation">.</span>content<span class="token punctuation">.</span>Intent<span class="token punctuation">;</span>
+<span class="token keyword">import</span> android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Bundle<span class="token punctuation">;</span>
+<span class="token keyword">import</span> android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Log<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>Arguments<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>react<span class="token punctuation">.</span>bridge<span class="token punctuation">.</span>WritableMap<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>constants<span class="token punctuation">.</span>ConstantsAPI<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>modelbase<span class="token punctuation">.</span>BaseReq<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>modelbase<span class="token punctuation">.</span>BaseResp<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>openapi<span class="token punctuation">.</span>IWXAPI<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>openapi<span class="token punctuation">.</span>IWXAPIEventHandler<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>tencent<span class="token punctuation">.</span>mm<span class="token punctuation">.</span>opensdk<span class="token punctuation">.</span>openapi<span class="token punctuation">.</span>WXAPIFactory<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WXPayEntryActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token keyword">implements</span> <span class="token class-name">IWXAPIEventHandler</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String TAG <span class="token operator">=</span> <span class="token string">"WXPayEntryActivity"</span><span class="token punctuation">;</span>
+   <span class="token keyword">private</span> IWXAPI api<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     api <span class="token operator">=</span> WXAPIFactory<span class="token punctuation">.</span><span class="token function">createWXAPI</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> WxpayModule<span class="token punctuation">.</span>APP_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       api<span class="token punctuation">.</span><span class="token function">handleIntent</span><span class="token punctuation">(</span><span class="token function">getIntent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onNewIntent</span><span class="token punctuation">(</span>Intent intent<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onNewIntent</span><span class="token punctuation">(</span>intent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token function">setIntent</span><span class="token punctuation">(</span>intent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       api<span class="token punctuation">.</span><span class="token function">handleIntent</span><span class="token punctuation">(</span>intent<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onReq</span><span class="token punctuation">(</span>BaseReq req<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onResp</span><span class="token punctuation">(</span>BaseResp resp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"onPayFinish, errCode = "</span> <span class="token operator">+</span> resp<span class="token punctuation">.</span>errCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>resp<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> ConstantsAPI<span class="token punctuation">.</span>COMMAND_PAY_BY_WX<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     WritableMap map <span class="token operator">=</span> Arguments<span class="token punctuation">.</span><span class="token function">createMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     map<span class="token punctuation">.</span><span class="token function">putInt</span><span class="token punctuation">(</span><span class="token string">"errCode"</span><span class="token punctuation">,</span> resp<span class="token punctuation">.</span>errCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     WxpayModule<span class="token punctuation">.</span>promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>map<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token function">finish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>最后在 Android 这边要做的最后一件事就是注册这个模块，在<code>com.xx.xx.MainApplication</code>中注册模块：<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> List<span class="token operator">&lt;</span>ReactPackage<span class="token operator">></span> <span class="token function">getPackages</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> Arrays<span class="token punctuation">.</span>&lt;ReactPackage<span class="token operator">></span><span class="token function">asList</span><span class="token punctuation">(</span>
+       <span class="token keyword">new</span> <span class="token class-name">MainReactPackage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+       <span class="token comment" spellcheck="true">// ...other packages</span>
+       <span class="token keyword">new</span> <span class="token class-name">WxpayPackage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// &lt;-- 注册模块</span>
+   <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3></li>
+<li>项目设置APPID，在Xcode中打开项目，设置项目属性中的URL Schemes为你的APPID。如图标红位置所示：<br><img src="https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_5_1.png" alt></li>
+<li>添加微信白名单<br><code>info.plist</code> –&gt; 右击 –&gt; <code>open as</code>  –&gt; <code>source Code</code> –&gt; 添加白名单，如下图所示：<br><img src="http://p0gxdxnc4.bkt.clouddn.com/2017-12-11-14-28-10.png" alt="2017-12-11-14-28-10"><br>代码如下：<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>key</span><span class="token punctuation">></span></span>LSApplicationQueriesSchemes<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>key</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>array</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">></span></span>wechat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>string</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">></span></span>weixin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>string</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>array</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>key</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>导入必要的库文件，如下图所示：<br><img src="http://p0gxdxnc4.bkt.clouddn.com/2017-12-11-14-30-54.png" alt="2017-12-11-14-30-54"></li>
+<li>在项目目录下创建Group <code>Wxapi</code>，并创建<code>WxpayModule</code>模块</li>
+<li>下载开发工具包（<a href="https://res.wx.qq.com/op_res/qNjut2h9J8oE9o2zeJTAYdCTgB7hM5pHAkJz1rNNCOnSyKA2bwzBv3fQILqbD_c1" target="_blank" rel="noopener">SDK</a>），导入<code>Wxapi</code>中，最终如下图所示：<br><img src="http://p0gxdxnc4.bkt.clouddn.com/2017-12-11-15-05-34.png" alt="2017-12-11-15-05-34"></li>
+<li><p>编写<code>WxpayModule.h</code>代码如下：</p>
+<pre class="line-numbers language-objectivec"><code class="language-objectivec"><span class="token macro property">#<span class="token directive keyword">import</span> &lt;React/RCTBridgeModule.h></span>
+<span class="token macro property">#<span class="token directive keyword">import</span> &lt;React/RCTLog.h></span>
+<span class="token macro property">#<span class="token directive keyword">import</span> "WXApiObject.h"</span>
+<span class="token macro property">#<span class="token directive keyword">import</span> "WXApi.h"</span>
+
+<span class="token keyword">@interface</span> WxpayModule <span class="token punctuation">:</span> NSObject <span class="token operator">&lt;</span>RCTBridgeModule<span class="token punctuation">,</span> WXApiDelegate<span class="token operator">></span>
+<span class="token keyword">@end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>编写<code>WxpayModule.m</code>代码如下：</p>
+<pre class="line-numbers language-objectivec"><code class="language-objectivec"><span class="token macro property">#<span class="token directive keyword">import</span> "WxpayModule.h"</span>
+
+<span class="token keyword">@implementation</span> WxpayModule
+
+RCTPromiseResolveBlock resolveBlock <span class="token operator">=</span> nil<span class="token punctuation">;</span>
+
+<span class="token operator">-</span> <span class="token punctuation">(</span>instancetype<span class="token punctuation">)</span>init
+<span class="token punctuation">{</span>
+ <span class="token keyword">self</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token keyword">super</span> init<span class="token punctuation">]</span><span class="token punctuation">;</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token punctuation">[</span><span class="token punctuation">[</span>NSNotificationCenter defaultCenter<span class="token punctuation">]</span> addObserver<span class="token punctuation">:</span><span class="token keyword">self</span> selector<span class="token punctuation">:</span><span class="token keyword">@selector</span><span class="token punctuation">(</span>handleWXPay<span class="token punctuation">:</span><span class="token punctuation">)</span> name<span class="token punctuation">:</span><span class="token string">@"WXPay"</span> object<span class="token punctuation">:</span>nil<span class="token punctuation">]</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">return</span> <span class="token keyword">self</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>dealloc
+<span class="token punctuation">{</span>
+ <span class="token punctuation">[</span><span class="token punctuation">[</span>NSNotificationCenter defaultCenter<span class="token punctuation">]</span> removeObserver<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>handleWXPay<span class="token punctuation">:</span><span class="token punctuation">(</span>NSNotification <span class="token operator">*</span><span class="token punctuation">)</span>aNotification
+<span class="token punctuation">{</span>
+ NSString <span class="token operator">*</span> errCode <span class="token operator">=</span>  <span class="token punctuation">[</span>aNotification userInfo<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">@"errCode"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ <span class="token function">resolveBlock</span><span class="token punctuation">(</span><span class="token operator">@</span><span class="token punctuation">{</span><span class="token string">@"errCode"</span><span class="token punctuation">:</span> errCode<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">RCT_EXPORT_METHOD</span><span class="token punctuation">(</span>registerApp<span class="token punctuation">:</span><span class="token punctuation">(</span>NSString <span class="token operator">*</span><span class="token punctuation">)</span>APP_ID<span class="token punctuation">)</span><span class="token punctuation">{</span>
+ <span class="token punctuation">[</span>WXApi registerApp<span class="token punctuation">:</span> APP_ID<span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//向微信注册</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">RCT_EXPORT_METHOD</span><span class="token punctuation">(</span>pay<span class="token punctuation">:</span><span class="token punctuation">(</span>NSDictionary <span class="token operator">*</span><span class="token punctuation">)</span>order
+                 resolver<span class="token punctuation">:</span><span class="token punctuation">(</span>RCTPromiseResolveBlock<span class="token punctuation">)</span>resolve
+                 rejecter<span class="token punctuation">:</span><span class="token punctuation">(</span>RCTPromiseRejectBlock<span class="token punctuation">)</span>reject<span class="token punctuation">)</span><span class="token punctuation">{</span>
+ resolveBlock <span class="token operator">=</span> resolve<span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true">//调起微信支付</span>
+ PayReq <span class="token operator">*</span>req <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>PayReq alloc<span class="token punctuation">]</span> init<span class="token punctuation">]</span><span class="token punctuation">;</span>
+ req<span class="token punctuation">.</span>partnerId <span class="token operator">=</span> <span class="token punctuation">[</span>order objectForKey<span class="token punctuation">:</span><span class="token string">@"partnerid"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ req<span class="token punctuation">.</span>prepayId <span class="token operator">=</span> <span class="token punctuation">[</span>order objectForKey<span class="token punctuation">:</span><span class="token string">@"prepayid"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ req<span class="token punctuation">.</span>nonceStr <span class="token operator">=</span> <span class="token punctuation">[</span>order objectForKey<span class="token punctuation">:</span><span class="token string">@"noncestr"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ req<span class="token punctuation">.</span>timeStamp <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>order objectForKey<span class="token punctuation">:</span><span class="token string">@"timestamp"</span><span class="token punctuation">]</span> intValue<span class="token punctuation">]</span><span class="token punctuation">;</span>
+ req<span class="token punctuation">.</span>package <span class="token operator">=</span> <span class="token punctuation">[</span>order objectForKey<span class="token punctuation">:</span><span class="token string">@"package"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ req<span class="token punctuation">.</span>sign <span class="token operator">=</span> <span class="token punctuation">[</span>order objectForKey<span class="token punctuation">:</span><span class="token string">@"sign"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ <span class="token punctuation">[</span>WXApi sendReq<span class="token punctuation">:</span>req<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">RCT_REMAP_METHOD</span><span class="token punctuation">(</span>isSupported<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 判断是否支持调用微信SDK</span>
+                 resolver<span class="token punctuation">:</span><span class="token punctuation">(</span>RCTPromiseResolveBlock<span class="token punctuation">)</span>resolve
+                 rejecter<span class="token punctuation">:</span><span class="token punctuation">(</span>RCTPromiseRejectBlock<span class="token punctuation">)</span>reject<span class="token punctuation">)</span><span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">[</span>WXApi isWXAppInstalled<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token operator">@</span>NO<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span> <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token operator">@</span>YES<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">RCT_EXPORT_MODULE</span><span class="token punctuation">(</span>Wxpay<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">@end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>处理微信支付回调，在<code>AppDelegate.m</code>中添加如下代码：</p>
+<pre class="line-numbers language-objectivec"><code class="language-objectivec"><span class="token comment" spellcheck="true">//支付回调9以后</span>
+<span class="token operator">-</span> <span class="token punctuation">(</span>BOOL<span class="token punctuation">)</span>application<span class="token punctuation">:</span><span class="token punctuation">(</span>UIApplication <span class="token operator">*</span><span class="token punctuation">)</span>app openURL<span class="token punctuation">:</span><span class="token punctuation">(</span>NSURL <span class="token operator">*</span><span class="token punctuation">)</span>url options<span class="token punctuation">:</span><span class="token punctuation">(</span>NSDictionary<span class="token operator">*</span><span class="token punctuation">)</span>options <span class="token punctuation">{</span>
+ <span class="token keyword">return</span>  <span class="token punctuation">[</span>WXApi handleOpenURL<span class="token punctuation">:</span>url delegate<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//支付回调9以前</span>
+<span class="token operator">-</span> <span class="token punctuation">(</span>BOOL<span class="token punctuation">)</span>application<span class="token punctuation">:</span><span class="token punctuation">(</span>UIApplication <span class="token operator">*</span><span class="token punctuation">)</span>application handleOpenURL<span class="token punctuation">:</span><span class="token punctuation">(</span>NSURL <span class="token operator">*</span><span class="token punctuation">)</span>url <span class="token punctuation">{</span>
+ <span class="token keyword">return</span>  <span class="token punctuation">[</span>WXApi handleOpenURL<span class="token punctuation">:</span>url delegate<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//ios9以后的方法</span>
+<span class="token operator">-</span> <span class="token punctuation">(</span>BOOL<span class="token punctuation">)</span>application<span class="token punctuation">:</span><span class="token punctuation">(</span>UIApplication <span class="token operator">*</span><span class="token punctuation">)</span>application openURL<span class="token punctuation">:</span><span class="token punctuation">(</span>NSURL <span class="token operator">*</span><span class="token punctuation">)</span>url sourceApplication<span class="token punctuation">:</span><span class="token punctuation">(</span>NSString <span class="token operator">*</span><span class="token punctuation">)</span>sourceApplication annotation<span class="token punctuation">:</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span>annotation <span class="token punctuation">{</span>
+ <span class="token keyword">return</span> <span class="token punctuation">[</span>WXApi handleOpenURL<span class="token punctuation">:</span>url delegate<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token macro property">#<span class="token directive keyword">pragma</span> mark - wx callback</span>
+
+<span class="token operator">-</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> onReq<span class="token punctuation">:</span><span class="token punctuation">(</span>BaseReq<span class="token operator">*</span><span class="token punctuation">)</span>req
+<span class="token punctuation">{</span>
+ <span class="token comment" spellcheck="true">// TODO Something</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>onResp<span class="token punctuation">:</span><span class="token punctuation">(</span>BaseResp <span class="token operator">*</span><span class="token punctuation">)</span>resp
+<span class="token punctuation">{</span>
+ <span class="token comment" spellcheck="true">//判断是否是微信支付回调 (注意是PayResp 而不是PayReq)</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">[</span>resp isKindOfClass<span class="token punctuation">:</span><span class="token punctuation">[</span>PayResp class<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+   <span class="token comment" spellcheck="true">//发出通知 从微信回调回来之后,发一个通知,让请求支付的页面接收消息,并且展示出来,或者进行一些自定义的展示或者跳转</span>
+   NSNotification <span class="token operator">*</span> notification <span class="token operator">=</span> <span class="token punctuation">[</span>NSNotification notificationWithName<span class="token punctuation">:</span><span class="token string">@"WXPay"</span> object<span class="token punctuation">:</span>nil userInfo<span class="token punctuation">:</span><span class="token operator">@</span><span class="token punctuation">{</span><span class="token string">@"errCode"</span><span class="token punctuation">:</span><span class="token operator">@</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>errCode<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+   <span class="token punctuation">[</span><span class="token punctuation">[</span>NSNotificationCenter defaultCenter<span class="token punctuation">]</span> postNotification<span class="token punctuation">:</span>notification<span class="token punctuation">]</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>至此，iOS端微信SDK集成成功</li>
+</ol>
+<h3 id="React-Native"><a href="#React-Native" class="headerlink" title="React-Native"></a>React-Native</h3><ol>
+<li>修改原生代码后，需要重新打包运行程序：<pre class="line-numbers language-shell"><code class="language-shell">react-native run-android # 运行Android端
+react-native run-ios # 运行iOS端
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>编写<code>Wxpay.js</code>工具类<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> NativeModules <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-native'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> NativeModules<span class="token punctuation">.</span>Wxpay<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>在入口文件<code>index.js</code>向微信注册应用<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">import</span> Wxpay <span class="token keyword">from</span> <span class="token string">'./your/path/to/Wxpay'</span><span class="token punctuation">;</span>
+Wxpay<span class="token punctuation">.</span><span class="token function">registerApp</span><span class="token punctuation">(</span>APPID<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//向微信注册</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>调用<code>Wxpay</code>模块发起微信支付：<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">import</span> Wxpay <span class="token keyword">from</span> <span class="token string">'./your/path/to/Wxpay'</span><span class="token punctuation">;</span>
+<span class="token keyword">async</span> <span class="token function">pay</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// params 为后端提供的参数</span>
+ <span class="token keyword">let</span> isSupported <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">call</span><span class="token punctuation">(</span>Payway<span class="token punctuation">.</span>isSupported<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isSupported<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 判断是否支持微信支付</span>
+     message<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token string">'找不到微信应用，请安装最新版微信'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">let</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">call</span><span class="token punctuation">(</span>getOrderInfo<span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 从后端获取签名对象，参考支付接口调用</span>
+ <span class="token keyword">let</span> ret <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">call</span><span class="token punctuation">(</span>Wxpay<span class="token punctuation">.</span>pay<span class="token punctuation">,</span> res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 调起微信客户端，发起支付</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>ret<span class="token punctuation">.</span>errCode <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token comment" spellcheck="true">// 支付成功回调</span>
+ <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+     <span class="token comment" spellcheck="true">// 支付失败回调</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>    
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>支付接口调用参考<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_12" target="_blank" rel="noopener">调起支付接口</a>和<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1" target="_blank" rel="noopener">统一下单</a>，本篇将不做赘述。</li>
+</ol>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_5" target="_blank" rel="noopener">APP端开发步骤</a></li>
+<li><a href="http://reactnative.cn/docs/0.50/native-modules-android.html" target="_blank" rel="noopener">Android调用原生模块</a></li>
+<li><a href="http://reactnative.cn/docs/0.50/native-modules-ios.html" target="_blank" rel="noopener">iOS调用原生模块</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/12/16/使用-frp-实现内网穿透/">
+                    使用 frp 实现内网穿透
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/12/05/react-native-集成支付宝/">
+                    react-native 集成支付宝
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#场景介绍"><span class="toc-number">1.</span> <span class="toc-text">场景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集成SDK"><span class="toc-number">2.</span> <span class="toc-text">集成SDK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Android"><span class="toc-number">2.1.</span> <span class="toc-text">Android</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS"><span class="toc-number">2.2.</span> <span class="toc-text">iOS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#React-Native"><span class="toc-number">2.3.</span> <span class="toc-text">React-Native</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文档"><span class="toc-number">3.</span> <span class="toc-text">参考文档</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"react-native 集成微信支付　| 纸帆|ZevenFang　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<style>
+    #lv-container{
+        margin-left: 30px;
+        margin-right: 30px
+    }
+    @media screen and (max-width: 800px) {
+        #lv-container{
+            margin-left: 10px;
+            margin-right: 10px
+        }
+    }
+</style>
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODMxNC80ODg2" >
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/12/16/使用-frp-实现内网穿透/" title="上一篇: 使用 frp 实现内网穿透">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/12/05/react-native-集成支付宝/" title="下一篇: react-native 集成支付宝">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/openwrt安装git/">openwrt安装git</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/30/Nginx使用try-files和proxy-pass部署前端应用到oss上/">Nginx使用try_files和proxy_pass部署前端应用到oss上</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/29/Linux使用命令清理硬盘空间/">Linux使用命令清理硬盘空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/28/spring-cloud-打包指定模块生产环境jar包/">spring cloud 打包指定模块生产环境jar包</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/使用docker发布单页-spa-应用/">使用docker发布单页(spa)应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/nmap根据mac查找ip地址/">nmap根据mac查找ip地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/14/使用Docker运行SpringBoot项目/">使用Docker运行SpringBoot项目</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/20/git-clone-设置代理/">git clone 设置临时代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/19/npm自动切换国内源/">npm自动切换国内源</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/03/01/electron安装问题/">electron安装问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/27/如何在NPM安装期间使用不同版本的python/">如何在NPM安装期间使用不同版本的python</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/19/Docker直接指定镜像地址下载/">Docker直接指定镜像地址下载</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/02/01/解决WordPress开启https后资源文件还是访问http问题/">解决WordPress开启https后资源文件还是访问http问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/27/Gradle-使用阿里云镜像源/">Gradle 使用阿里云镜像源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/16/yarn-国内加速镜像源/">yarn 国内加速镜像源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/15/Gradle-设置全局代理/">Gradle 设置全局代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/15/Homebrew国内安装脚本/">Homebrew国内安装脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/06/利用docker快速在当前目录创建ftp账户/">利用docker快速在当前目录创建ftp账户</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/06/Android-SDKManager-自动授权同意证书/">Android SDKManager 自动授权同意证书</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/20/树莓派修改DNS/">树莓派修改DNS</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/树莓派自定义屏幕分辨率/">树莓派自定义屏幕分辨率</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/网页设置科幻感背景/">网页设置科幻感背景</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/21/使用openssl生成rsa私钥、公钥和证书/">使用openssl生成rsa私钥、公钥和证书</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/10/树莓派旋转电容触摸方向/">树莓派旋转电容触摸方向</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/21/使用yrm更换yarn源/">使用yrm更换yarn源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/20/pidcat查看logcat日志/">pidcat查看logcat日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/19/wget整站下载命令/">wget整站下载命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/14/chromium-browser常用命令/">chromium-browser常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/12/MongoDB转换ObjectId为String字段/">MongoDB转换ObjectId为String字段</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/30/ufw防火墙命令/">ufw防火墙命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/06/开启Android无线ADB/">开启Android无线ADB</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/15/树莓派GPIO引脚图/">树莓派GPIO引脚图</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/14/树莓派读取DHT11温湿度模块-Python/">树莓派读取DHT11温湿度模块-Python</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/11/wordpress-替换-google-fonts-字体/">wordpress 替换 google fonts 字体</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/28/Linux一行命令查找并杀掉进程/">Linux一行命令查找并杀掉进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/03/shadow-kcptun/">Shadowsocks Kcptun</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Base64-转-文件下载/">Base64 转 文件下载</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/28/Gitlab出现502异常解决方法/">Gitlab出现502异常解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/nmap-实用技巧/">nmap 实用技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/22/Nginx-配置-SSL-虚拟主机/">Nginx 配置 SSL 虚拟主机</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/16/使用-frp-实现内网穿透/">使用 frp 实现内网穿透</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/11/react-native-集成微信支付/">react-native 集成微信支付</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/05/react-native-集成支付宝/">react-native 集成支付宝</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/04/一行命令创建和删除-git-分支/">一行命令创建和删除 git 分支</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/React-Native-Modal-点击遮罩层关闭/">React Native Modal 点击遮罩层关闭</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/30/解决黑苹果活动监视器意外退出问题/">解决黑苹果活动监视器意外退出问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/node-调用命令行程序/">node 调用命令行程序</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/20/使用脚本来改变某个repo的Git历史/">使用脚本来改变某个repo的Git历史</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/15/使用node-http-proxy代理调试接口/">使用node-http-proxy代理调试接口</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/13/使用-Chrome-调试-ReactNative-接口/">使用 Chrome 调试 ReactNative 接口</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Nginx解决跨域请求/">Nginx解决跨域请求</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/28/Docker镜像导入导出/">Docker镜像导入导出</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/24/常用前端校验工具类/">常用前端校验工具类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/13/使用-Gradle-自动签名发布-Android-应用/">使用 Gradle 自动签名发布 Android 应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/02/部署Meteor应用到服务器/">部署 Meteor 应用到服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/15/使用-Blob-下载文件流/">使用 Blob 下载文件流</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/15/判断-iframe-是否加载完成/">判断 iframe 是否加载完成</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/13/使用-FormData-上传文件/">使用 FormData 上传文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/08/让-Zsh-终端走代理/">让 Zsh 终端走代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/04/使用-XMLHttpRequest-发送-Ajax/">使用 XMLHttpRequest 发送 Ajax</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/25/Finder-在当前目录打开-iTerm2/">Finder 在当前目录打开 iTerm2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/21/Xcode-离线下载地址/">Xcode 离线下载地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/19/让Finder标题显示当前路径/">让Finder标题显示当前路径</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/17/更新Github-fork后的项目代码/">更新Github fork后的项目代码</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/21/Android应用签名/">Android应用签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/21/连接Redux调试服务器/">连接Redux调试服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/22/ReactNative从设备上访问开发服务器/">ReactNative从设备上访问开发服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/02/ubuntu搭建svn服务器/">ubuntu搭建svn服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/mongodb的基本操作（CRUD）/">mongodb的基本操作（CRUD）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/简易搭建mongodb/">简易搭建mongodb</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/25/Ubuntu常用命令及快捷键/">Ubuntu常用命令及快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/html5自定义表单提示/">html5自定义表单提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/PHP-header-函数/">PHP header()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/PHP防盗链技术/">PHP防盗链技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/MySQL触发器/">MySQL触发器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/MySQL用户授权/">MySQL用户授权</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/前端技术资源合集/">前端技术资源合集</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/24/ubuntu搭建git服务器/">ubuntu搭建git服务器</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i>
+                2015-2021 ZevenFang
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>

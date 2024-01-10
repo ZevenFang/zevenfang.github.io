@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>纸帆|ZevenFang</title>
+  
+  <subtitle>我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://fangzf.me/"/>
+  <updated>2024-01-10T02:50:23.874Z</updated>
+  <id>http://fangzf.me/</id>
+  
+  <author>
+    <name>ZevenFang</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用node-gyp编译electron的C模块</title>
+    <link href="http://fangzf.me/2024/01/10/%E4%BD%BF%E7%94%A8node-gyp%E7%BC%96%E8%AF%91electron%E7%9A%84C%E6%A8%A1%E5%9D%97/"/>
+    <id>http://fangzf.me/2024/01/10/使用node-gyp编译electron的C模块/</id>
+    <published>2024-01-10T02:44:59.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>在对应模块下运行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node-gyp rebuild --target=25.9.7 --<span class="built_in">arch</span>=ia32 --dist-url=https://electronjs.org/headers</span><br></pre></td></tr></table></figure></p><p><code>target</code>换成对应的Electron版本</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在对应模块下运行：&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;
+      
+    
+    </summary>
+    
+      <category term="Front" scheme="http://fangzf.me/categories/Front/"/>
+    
+    
+      <category term="Electron" scheme="http://fangzf.me/tags/Electron/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>设置 npm 和 yarn 的镜像源为淘宝镜像源</title>
+    <link href="http://fangzf.me/2023/12/01/%E8%AE%BE%E7%BD%AE-npm-%E5%92%8C-yarn-%E7%9A%84%E9%95%9C%E5%83%8F%E6%BA%90%E4%B8%BA%E6%B7%98%E5%AE%9D%E9%95%9C%E5%83%8F%E6%BA%90/"/>
+    <id>http://fangzf.me/2023/12/01/设置-npm-和-yarn-的镜像源为淘宝镜像源/</id>
+    <published>2023-12-01T02:07:49.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ==========================================================</span></span><br><span class="line"><span class="comment"># NPM</span></span><br><span class="line"><span class="comment"># ==========================================================</span></span><br><span class="line"></span><br><span class="line">npm <span class="built_in">set</span> registry https://registry.npmmirror.com <span class="comment"># 注册模块镜像</span></span><br><span class="line">npm <span class="built_in">set</span> disturl https://npmmirror.com/mirrors/node <span class="comment"># node-gyp 编译依赖的 node 源码镜像</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 以下选择添加</span></span><br><span class="line">npm <span class="built_in">set</span> sass_binary_site https://registry.npmmirror.com/mirrors/node-sass <span class="comment"># node-sass 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> electron_mirror https://registry.npmmirror.com/mirrors/electron/ <span class="comment"># electron 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> puppeteer_download_host https://registry.npmmirror.com/mirrors <span class="comment"># puppeteer 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> chromedriver_cdnurl https://registry.npmmirror.com/mirrors/chromedriver <span class="comment"># chromedriver 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> operadriver_cdnurl https://registry.npmmirror.com/mirrors/operadriver <span class="comment"># operadriver 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> phantomjs_cdnurl https://registry.npmmirror.com/mirrors/phantomjs <span class="comment"># phantomjs 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> selenium_cdnurl https://registry.npmmirror.com/mirrors/selenium <span class="comment"># selenium 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> node_inspector_cdnurl https://registry.npmmirror.com/mirrors/node-inspector <span class="comment"># node-inspector 二进制包镜像</span></span><br><span class="line">npm <span class="built_in">set</span> sentrycli_cdnurl https://registry.npmmirror.com/mirrors/sentry-cli <span class="comment"># sentry-cli</span></span><br><span class="line"></span><br><span class="line">npm cache clean --force <span class="comment"># 清空缓存</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ==========================================================</span></span><br><span class="line"><span class="comment"># YARN</span></span><br><span class="line"><span class="comment"># ==========================================================</span></span><br><span class="line"></span><br><span class="line">yarn config <span class="built_in">set</span> registry https://registry.npmmirror.com <span class="comment"># 注册模块镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> disturl https://npmmirror.com/mirrors/node <span class="comment"># node-gyp 编译依赖的 node 源码镜像</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 以下选择添加</span></span><br><span class="line">yarn config <span class="built_in">set</span> sass_binary_site https://registry.npmmirror.com/mirrors/node-sass <span class="comment"># node-sass 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> electron_mirror https://registry.npmmirror.com/mirrors/electron/ <span class="comment"># electron 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> puppeteer_download_host https://registry.npmmirror.com/mirrors <span class="comment"># puppeteer 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> chromedriver_cdnurl https://registry.npmmirror.com/mirrors/chromedriver <span class="comment"># chromedriver 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> operadriver_cdnurl https://registry.npmmirror.com/mirrors/operadriver <span class="comment"># operadriver 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> phantomjs_cdnurl https://registry.npmmirror.com/mirrors/phantomjs <span class="comment"># phantomjs 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> selenium_cdnurl https://registry.npmmirror.com/mirrors/selenium <span class="comment"># selenium 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> node_inspector_cdnurl https://registry.npmmirror.com/mirrors/node-inspector <span class="comment"># node-inspector 二进制包镜像</span></span><br><span class="line">yarn config <span class="built_in">set</span> sentrycli_cdnurl https://registry.npmmirror.com/mirrors/sentry-cli <span class="comment"># sentry-cli</span></span><br><span class="line"></span><br><span class="line">yarn cache clean <span class="comment"># 清空缓存</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>electron屏幕自动适配</title>
+    <link href="http://fangzf.me/2022/08/31/electron%E5%B1%8F%E5%B9%95%E8%87%AA%E5%8A%A8%E9%80%82%E9%85%8D/"/>
+    <id>http://fangzf.me/2022/08/31/electron屏幕自动适配/</id>
+    <published>2022-08-31T08:46:41.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>在前端代码里面添加：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> devInnerWidth= <span class="number">1920.0</span> <span class="comment">// 开发时的InnerWidth</span></span><br><span class="line"><span class="keyword">const</span> zoomFactor =  <span class="variable language_">window</span>.<span class="property">innerWidth</span> / devInnerWidth;</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;electron&#x27;</span>).<span class="property">webFrame</span>.<span class="title function_">setZoomFactor</span>(zoomFactor);</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在前端代码里面添加：&lt;br&gt;&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>centos安装yate服务器</title>
+    <link href="http://fangzf.me/2022/08/11/centos%E5%AE%89%E8%A3%85yate%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <id>http://fangzf.me/2022/08/11/centos安装yate服务器/</id>
+    <published>2022-08-11T10:16:25.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum install -y gcc gcc-c++</span><br><span class="line">wget https://zmgo.oss-cn-shenzhen.aliyuncs.com/public/server/yate6.tar.gz</span><br><span class="line">tar -zxvf yate6.tar.gz</span><br><span class="line"><span class="built_in">cd</span> yate</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">./run -vvvvv -CDo <span class="comment">#调试模式运行</span></span><br><span class="line">./run -d <span class="comment">#后台运行</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>centos安装mysql-community-devel</title>
+    <link href="http://fangzf.me/2022/08/11/centos%E5%AE%89%E8%A3%85mysql-community-devel/"/>
+    <id>http://fangzf.me/2022/08/11/centos安装mysql-community-devel/</id>
+    <published>2022-08-11T09:18:46.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.mysql.com/yum/mysql-5.7-community/el/7/x86_64/mysql-community-common-5.7.39-1.el7.x86_64.rpm</span><br><span class="line">wget https://repo.mysql.com/yum/mysql-5.7-community/el/7/x86_64/mysql-community-libs-5.7.39-1.el7.x86_64.rpm</span><br><span class="line">wget https://repo.mysql.com/yum/mysql-5.7-community/el/7/x86_64/mysql-community-devel-5.7.39-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-common-5.7.39-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-libs-5.7.39-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-devel-5.7.39-1.el7.x86_64.rpm</span><br><span class="line">yum install -y mysql-community-devel</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>docker容器apache安装rewrite模块</title>
+    <link href="http://fangzf.me/2022/05/12/docker%E5%AE%B9%E5%99%A8apache%E5%AE%89%E8%A3%85rewrite%E6%A8%A1%E5%9D%97/"/>
+    <id>http://fangzf.me/2022/05/12/docker容器apache安装rewrite模块/</id>
+    <published>2022-05-12T04:27:19.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>进入容器内部：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a2enmod rewrite <span class="comment"># 安装模块</span></span><br><span class="line">service apache2 restart <span class="comment"># 重启容器</span></span><br></pre></td></tr></table></figure></p><p>编辑<code>.htaccess</code>文件：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">IfModule</span> <span class="attr">mod_rewrite.c</span>&gt;</span></span><br><span class="line">  Options +FollowSymlinks -Multiviews</span><br><span class="line">  RewriteEngine On</span><br><span class="line"></span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-d</span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-f</span><br><span class="line">  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">IfModule</span>&gt;</span></span><br></pre></td></tr></table></figure></p><p>查看是否开启成功：<br>执行<code>phpinfo()</code>函数，搜索<code>mod_rewrite</code></p><p>使用镜像：<br><a href="https://hub.docker.com/repository/docker/zevenfang/docker-apache-php7">zevenfang/docker-apache-php7</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;进入容器内部：&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;b
+      
+    
+    </summary>
+    
+      <category term="Docker" scheme="http://fangzf.me/categories/Docker/"/>
+    
+    
+      <category term="docker" scheme="http://fangzf.me/tags/docker/"/>
+    
+      <category term="apache" scheme="http://fangzf.me/tags/apache/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用grep全目录全文搜索字符串</title>
+    <link href="http://fangzf.me/2022/03/30/%E4%BD%BF%E7%94%A8grep%E5%85%A8%E7%9B%AE%E5%BD%95%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    <id>http://fangzf.me/2022/03/30/使用grep全目录全文搜索字符串/</id>
+    <published>2022-03-30T02:52:24.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>搜索etc下面的文件，包含所有目录下的文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -lr <span class="string">&#x27;string&#x27;</span> /etc/</span><br></pre></td></tr></table></figure><br>搜索当前目录下面的文件，不包含子目录下的文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -l <span class="string">&#x27;string&#x27;</span> .</span><br></pre></td></tr></table></figure><br>-i，忽略大小写<br>-l，找出含有这个字符串的文件<br>-r，不放过子目录</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;搜索etc下面的文件，包含所有目录下的文件：&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://fangzf.me/categories/Linux/"/>
+    
+    
+      <category term="bash" scheme="http://fangzf.me/tags/bash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一行代码让网站变灰</title>
+    <link href="http://fangzf.me/2022/03/21/%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AE%A9%E7%BD%91%E7%AB%99%E5%8F%98%E7%81%B0/"/>
+    <id>http://fangzf.me/2022/03/21/一行代码让网站变灰/</id>
+    <published>2022-03-21T10:54:11.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>全站变灰，整站页面根元素加样式：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">filter</span>: <span class="built_in">grayscale</span>(<span class="number">100%</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><style>body {    filter: grayscale(100%);}    </style>]]></content>
+    
+    <summary type="html">
+    
+      网站页面根元素加样式，点击【阅读全文】看效果
+    
+    </summary>
+    
+      <category term="Front" scheme="http://fangzf.me/categories/Front/"/>
+    
+    
+      <category term="css" scheme="http://fangzf.me/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>正确清空删除nginx日志log文件</title>
+    <link href="http://fangzf.me/2022/03/21/%E6%AD%A3%E7%A1%AE%E6%B8%85%E7%A9%BA%E5%88%A0%E9%99%A4nginx%E6%97%A5%E5%BF%97log%E6%96%87%E4%BB%B6/"/>
+    <id>http://fangzf.me/2022/03/21/正确清空删除nginx日志log文件/</id>
+    <published>2022-03-21T09:43:31.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>nginx日志如果不加限制，会把服务器空间写满，这时候如果直接rm删除log文件，磁盘空间不会直接释放。</p><p>未释放磁盘空间原因：<br>在Linux或者Unix系统中，通过rm或者文件管理器删除文件将会从文件系统的目录结构上解除链接(unlink).然而如果文件是被打开的（有一个进程正在使用），那么进程将仍然可以读取该文件，磁盘空间也一直被占用。而我删除的是nginx的log文件删除的时候文件应该正在被使用。</p><p>解决方法：<br>重启<code>nginx</code>服务，或者用<code>echo &quot;&quot; &gt; /usr/local/nginx/logs/access.log</code>清空日志文件，而不是直接删除。<br><code>/usr/local/nginx</code>路径替换成实际的<code>nginx</code>路径。<br>该解决方法对其它应用产生的日志文件也有效</p><p>如果已经删除文件，<code>nginx -s reload</code>不会生效，需要：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s stop &amp;&amp; nginx <span class="comment">#重启nginx</span></span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      nginx日志如果不加限制，会把服务器空间写满，这时候如果直接rm删除log文件，磁盘空间不会直接释放。
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://fangzf.me/categories/Linux/"/>
+    
+    
+      <category term="nginx" scheme="http://fangzf.me/tags/nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用docker直接运行composer安装php的依赖</title>
+    <link href="http://fangzf.me/2022/03/10/%E4%BD%BF%E7%94%A8docker%E7%9B%B4%E6%8E%A5%E8%BF%90%E8%A1%8Ccomposer%E5%AE%89%E8%A3%85php%E7%9A%84%E4%BE%9D%E8%B5%96/"/>
+    <id>http://fangzf.me/2022/03/10/使用docker直接运行composer安装php的依赖/</id>
+    <published>2022-03-10T11:24:41.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --<span class="built_in">rm</span> --interactive --<span class="built_in">tty</span> --volume <span class="variable">$PWD</span>:/app composer install</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span clas
+      
+    
+    </summary>
+    
+      <category term="Backend" scheme="http://fangzf.me/categories/Backend/"/>
+    
+    
+      <category term="php" scheme="http://fangzf.me/tags/php/"/>
+    
+      <category term="docker" scheme="http://fangzf.me/tags/docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS安装VeryNginx</title>
+    <link href="http://fangzf.me/2022/03/10/CentOS%E5%AE%89%E8%A3%85VeryNginx/"/>
+    <id>http://fangzf.me/2022/03/10/CentOS安装VeryNginx/</id>
+    <published>2022-03-10T10:26:35.000Z</published>
+    <updated>2024-01-10T02:50:23.870Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum install -y pcre-devel openssl openssl-devel <span class="comment">#安装依赖</span></span><br><span class="line">useradd nginx <span class="comment">#添加nginx用户</span></span><br><span class="line">git <span class="built_in">clone</span> https://ghproxy.com/https://github.com/alexazhou/VeryNginx verynginx <span class="comment">#下载</span></span><br><span class="line"><span class="built_in">cd</span> verynginx</span><br><span class="line">python install.py install <span class="comment">#安装</span></span><br><span class="line"><span class="built_in">ln</span> -s /opt/verynginx/openresty/nginx /root/server/nginx <span class="comment">#目录软链接</span></span><br><span class="line"><span class="built_in">ln</span> -s /opt/verynginx/openresty/nginx/sbin/nginx /usr/bin/nginx <span class="comment">#软链接</span></span><br><span class="line">nginx <span class="comment">#运行</span></span><br><span class="line">nginx -s stop <span class="comment">#停止</span></span><br><span class="line">nginx -s reload <span class="comment">#重载</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;安装步骤&quot;&gt;&lt;a href=&quot;#安装步骤&quot; class=&quot;headerlink&quot; title=&quot;安装步骤&quot;&gt;&lt;/a&gt;安装步骤&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://fangzf.me/categories/Linux/"/>
+    
+    
+      <category term="Centos" scheme="http://fangzf.me/tags/Centos/"/>
+    
+      <category term="nginx" scheme="http://fangzf.me/tags/nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用killall指令来关闭进程</title>
+    <link href="http://fangzf.me/2022/02/24/%E4%BD%BF%E7%94%A8killall%E6%8C%87%E4%BB%A4%E6%9D%A5%E5%85%B3%E9%97%AD%E8%BF%9B%E7%A8%8B/"/>
+    <id>http://fangzf.me/2022/02/24/使用killall指令来关闭进程/</id>
+    <published>2022-02-24T03:05:33.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux <code>killall</code> 用于杀死一个进程，与 <code>kill</code> 不同的是它会杀死指定名字的所有进程。<br><code>kill</code> 命令杀死指定进程 <code>PID</code>，需要配合 <code>ps</code> 使用，而 <code>killall</code> 直接对进程对名字进行操作，更加方便。</p><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y psmisc</span><br></pre></td></tr></table></figure><h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Usage: killall [-Z 上下文] [-u 用户名] [ -eIgiqrvw ] [ -信号 ] 程序名...</span><br><span class="line">       killall -l, --list</span><br><span class="line">       killall -V, --version</span><br><span class="line"></span><br><span class="line">  -e,--exact          进程需要和名字完全相符</span><br><span class="line">  -I,--ignore-case    忽略大小写</span><br><span class="line">  -g,--process-group  结束进程组</span><br><span class="line">  -y,--younger-than   仅匹配指定时间之后的进程，与-o选项相反</span><br><span class="line">  -o,--older-than     仅匹配指定时间之前（在指定时间之前开始）的进程。单位s、m、h、d、w（周）、M、y</span><br><span class="line">  -i,--interactive    结束之前询问</span><br><span class="line">  -l,--list           列出所有的信号名称</span><br><span class="line">  -q,--quiet          进程没有结束时，不输出任何信息</span><br><span class="line">  -r,--regexp         将进程名模式解释为扩展的正则表达式</span><br><span class="line">  -s,--signal SIGNAL  发送指定信号</span><br><span class="line">  -u,--user USER      结束指定用户的进程</span><br><span class="line">  -v,--verbose        显示详细执行过程</span><br><span class="line">  -V,--version        显示详细执行过程</span><br><span class="line">  -w,--wait           等待所有的进程都结束</span><br><span class="line">  -Z,--context 正则表达式 仅杀死含有指定上下文的进程</span><br><span class="line">                          (必须在其他参数前使用)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      Linux killall 用于杀死一个进程，与 kill 不同的是它会杀死指定名字的所有进程。
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://fangzf.me/categories/Linux/"/>
+    
+    
+      <category term="Centos" scheme="http://fangzf.me/tags/Centos/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Github使用代理clone仓库</title>
+    <link href="http://fangzf.me/2022/02/09/Github%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86clone%E4%BB%93%E5%BA%93/"/>
+    <id>http://fangzf.me/2022/02/09/Github使用代理clone仓库/</id>
+    <published>2022-02-09T06:28:07.000Z</published>
+    <updated>2024-01-10T02:50:23.870Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>Github</code>在国内访问很慢，有时clone仓库半天都下不来，这时候可以通过代理网站<code>ghproxy.com</code>下载：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://ghproxy.com/https://github.com/GithubUser/Repo.git</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;code&gt;Github&lt;/code&gt;在国内访问很慢，有时clone仓库半天都下不来，这时候可以通过代理网站&lt;code&gt;ghproxy.com&lt;/code&gt;下载：&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td 
+      
+    
+    </summary>
+    
+      <category term="Git" scheme="http://fangzf.me/categories/Git/"/>
+    
+    
+      <category term="Github" scheme="http://fangzf.me/tags/Github/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用jsdelivr映射GitHub文件</title>
+    <link href="http://fangzf.me/2022/02/08/%E4%BD%BF%E7%94%A8jsdelivr%E6%98%A0%E5%B0%84GitHub%E6%96%87%E4%BB%B6/"/>
+    <id>http://fangzf.me/2022/02/08/使用jsdelivr映射GitHub文件/</id>
+    <published>2022-02-08T02:10:55.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>raw.githubusercontent.com</code>国内访问非常慢，可以使用，<code>cdn.jsdelivr.net</code>做代理映射，如下链接：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/gh/GithubUser/Repo@master/your/file/path.js</span><br></pre></td></tr></table></figure><p>例如：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/gh/ZevenFang/zevencourse@master/src/main/java/com/zeven/course/model/Dept.java</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;code&gt;raw.githubusercontent.com&lt;/code&gt;国内访问非常慢，可以使用，&lt;code&gt;cdn.jsdelivr.net&lt;/code&gt;做代理映射，如下链接：&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;tabl
+      
+    
+    </summary>
+    
+      <category term="Git" scheme="http://fangzf.me/categories/Git/"/>
+    
+    
+      <category term="Github" scheme="http://fangzf.me/tags/Github/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用ffplay播放音频</title>
+    <link href="http://fangzf.me/2022/01/10/%E4%BD%BF%E7%94%A8ffplay%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/"/>
+    <id>http://fangzf.me/2022/01/10/使用ffplay播放音频/</id>
+    <published>2022-01-10T08:34:09.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ffmpeg <span class="comment"># 安装ffmpeg后，自带ffplay</span></span><br><span class="line">ffplay -nodisp -autoexit audio.aac</span><br></pre></td></tr></table></figure><p><code>nodisp</code>不输出视频，不弹出视频窗口<br><code>autoexit</code>播放完成后，自动退出</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://fangzf.me/categories/Linux/"/>
+    
+    
+      <category term="ffmpeg" scheme="http://fangzf.me/tags/ffmpeg/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>yarn不检查node版本</title>
+    <link href="http://fangzf.me/2021/12/17/yarn%E4%B8%8D%E6%A3%80%E6%9F%A5node%E7%89%88%E6%9C%AC/"/>
+    <id>http://fangzf.me/2021/12/17/yarn不检查node版本/</id>
+    <published>2021-12-17T08:49:39.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>设置全局生效<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config set ignore-engines true</span><br></pre></td></tr></table></figure></p><p>指定当前命令生效<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn install --ignore-engines</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;设置全局生效&lt;br&gt;&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;cod
+      
+    
+    </summary>
+    
+      <category term="Front" scheme="http://fangzf.me/categories/Front/"/>
+    
+    
+      <category term="yarn" scheme="http://fangzf.me/tags/yarn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go mod 下载依赖包代理设置</title>
+    <link href="http://fangzf.me/2021/12/14/Go-mod-%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE/"/>
+    <id>http://fangzf.me/2021/12/14/Go-mod-下载依赖包代理设置/</id>
+    <published>2021-12-14T07:17:49.000Z</published>
+    <updated>2024-01-10T02:50:23.870Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">env</span> -w GOPROXY=https://goproxy.cn</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=
+      
+    
+    </summary>
+    
+      <category term="Backend" scheme="http://fangzf.me/categories/Backend/"/>
+    
+    
+      <category term="go" scheme="http://fangzf.me/tags/go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>苹果mac近期TNT破解软件“意外退出”解决方案</title>
+    <link href="http://fangzf.me/2021/12/08/%E8%8B%B9%E6%9E%9Cmac%E8%BF%91%E6%9C%9FTNT%E7%A0%B4%E8%A7%A3%E8%BD%AF%E4%BB%B6%E2%80%9C%E6%84%8F%E5%A4%96%E9%80%80%E5%87%BA%E2%80%9D%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"/>
+    <id>http://fangzf.me/2021/12/08/苹果mac近期TNT破解软件“意外退出”解决方案/</id>
+    <published>2021-12-08T03:17:14.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h3><p>Apple删除了TNT的证书，因此诸多应用程序将在2019年7月12日之后崩溃，出现“意外退出”，无法打开的情况。</p><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>使用<code>codesign</code>自己签名</p><h3 id="命令行代码"><a href="#命令行代码" class="headerlink" title="命令行代码"></a>命令行代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 终端中安装xcode小开发工具，如果已经安装可跳过</span></span><br><span class="line">xcode-select --install</span><br><span class="line"><span class="comment"># name替换成你无法打开的软件名，例如 DaisyDisk.app</span></span><br><span class="line">codesign --force --deep --sign - /Applications/name.app</span><br><span class="line"><span class="comment"># 软件后缀有空格的软件需要用 \ 替换空格，例如：CleanMyMac X   →  CleanMyMac\ X</span></span><br><span class="line">codesign --force --deep --sign - /Applications/CleanMyMac\ X.app</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      Apple删除了TNT的证书，因此诸多应用程序将在2019年7月12日之后崩溃，出现“意外退出”，无法打开的情况。
+    
+    </summary>
+    
+      <category term="Mac" scheme="http://fangzf.me/categories/Mac/"/>
+    
+    
+      <category term="xcode" scheme="http://fangzf.me/tags/xcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JeecgBoot下拉搜索框异步加载数据</title>
+    <link href="http://fangzf.me/2021/11/16/JeecgBoot%E4%B8%8B%E6%8B%89%E6%90%9C%E7%B4%A2%E6%A1%86%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE/"/>
+    <id>http://fangzf.me/2021/11/16/JeecgBoot下拉搜索框异步加载数据/</id>
+    <published>2021-11-16T09:48:11.000Z</published>
+    <updated>2024-01-10T02:50:23.870Z</updated>
+    
+    <content type="html"><![CDATA[<p>JeecgBoot当数据量非常大的时候，下拉搜索框会一次性带出所有数据，导致前端页面卡死，解决办法如下：</p><ol><li>打开前端项目，找到下拉搜索组件，路径：src/components/dict/JSearchSelectTag.vue</li><li>将<code>props</code>里面的参数<code>async: Boolean</code>改成<code>async: &#123;type:Boolean,default:true&#125;</code></li><li>重新编译打包后发布到生产，系统内所有的在线生成的表单下拉搜索组件会变成异步加载。</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      JeecgBoot当数据量非常大的时候，下拉搜索框会一次性带出所有数据，导致前端页面卡死，解决办法如下
+    
+    </summary>
+    
+      <category term="Backend" scheme="http://fangzf.me/categories/Backend/"/>
+    
+    
+      <category term="SpringBoot" scheme="http://fangzf.me/tags/SpringBoot/"/>
+    
+      <category term="JeecgBoot" scheme="http://fangzf.me/tags/JeecgBoot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>docker在当前目录运行sftp服务器</title>
+    <link href="http://fangzf.me/2021/06/25/docker%E5%9C%A8%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E8%BF%90%E8%A1%8Csftp%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <id>http://fangzf.me/2021/06/25/docker在当前目录运行sftp服务器/</id>
+    <published>2021-06-25T06:15:50.000Z</published>
+    <updated>2024-01-10T02:50:23.874Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="一行代码启动"><a href="#一行代码启动" class="headerlink" title="一行代码启动"></a>一行代码启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name my_sftp -v `<span class="built_in">pwd</span>`:/home/foo -dp 2222:22 --restart always atmoz/sftp foo:pass:1001</span><br></pre></td></tr></table></figure><h3 id="连接FTP服务器"><a href="#连接FTP服务器" class="headerlink" title="连接FTP服务器"></a>连接FTP服务器</h3><p>创建成功后，通过以下账户即可访问SFTP：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">端口：2222</span><br><span class="line">用户名：foo</span><br><span class="line">密码：pass</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;一行代码启动&quot;&gt;&lt;a href=&quot;#一行代码启动&quot; class=&quot;headerlink&quot; title=&quot;一行代码启动&quot;&gt;&lt;/a&gt;一行代码启动&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutt
+      
+    
+    </summary>
+    
+      <category term="Docker" scheme="http://fangzf.me/categories/Docker/"/>
+    
+    
+      <category term="docker" scheme="http://fangzf.me/tags/docker/"/>
+    
+  </entry>
+  
+</feed>

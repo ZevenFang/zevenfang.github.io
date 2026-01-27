@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android要求所有应用都有一个数字签名才会被允许安装在用户手机上，所以在把应用发布到类似应用市场之前，你需要先生成一个签名的APK包。本指南旨在提供一个简化的签名和打包js的操作步骤，不会涉及太多理论。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Gradle 自动签名发布 Android 应用">
+<meta property="og:url" content="https://zevenfang.github.io/2017/06/13/%E4%BD%BF%E7%94%A8-Gradle-%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%90%8D%E5%8F%91%E5%B8%83-Android-%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="纸帆|ZevenFang">
+<meta property="og:description" content="Android要求所有应用都有一个数字签名才会被允许安装在用户手机上，所以在把应用发布到类似应用市场之前，你需要先生成一个签名的APK包。本指南旨在提供一个简化的签名和打包js的操作步骤，不会涉及太多理论。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-06-13T02:18:22.000Z">
+<meta property="article:modified_time" content="2026-01-27T09:58:05.113Z">
+<meta property="article:author" content="ZevenFang">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zevenfang.github.io/2017/06/13/%E4%BD%BF%E7%94%A8-Gradle-%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%90%8D%E5%8F%91%E5%B8%83-Android-%E5%BA%94%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用 Gradle 自动签名发布 Android 应用 | 纸帆|ZevenFang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">纸帆|ZevenFang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">41</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">101</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2017/06/13/%E4%BD%BF%E7%94%A8-Gradle-%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%90%8D%E5%8F%91%E5%B8%83-Android-%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ZevenFang">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="纸帆|ZevenFang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Gradle 自动签名发布 Android 应用<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/%E4%BD%BF%E7%94%A8-Gradle-%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%90%8D%E5%8F%91%E5%B8%83-Android-%E5%BA%94%E7%94%A8.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-13 10:18:22" itemprop="dateCreated datePublished" datetime="2017-06-13T10:18:22+08:00">2017-06-13</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">Android要求所有应用都有一个数字签名才会被允许安装在用户手机上，所以在把应用发布到类似应用市场之前，你需要先生成一个签名的APK包。本指南旨在提供一个简化的签名和打包js的操作步骤，不会涉及太多理论。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android要求所有应用都有一个数字签名才会被允许安装在用户手机上，所以在把应用发布到类似应用市场之前，你需要先生成一个签名的APK包。Android开发者官网上的<a target="_blank" rel="noopener" href="https://developer.android.com/tools/publishing/app-signing.html">如何给你的应用签名</a>文档描述了签名的细节。本指南旨在提供一个简化的签名和打包js的操作步骤，不会涉及太多理论。</p>
+<h3 id="生成一个签名密钥"><a href="#生成一个签名密钥" class="headerlink" title="生成一个签名密钥"></a>生成一个签名密钥</h3><p>你可以用keytool命令生成一个私有密钥。在Windows上keytool命令放在JDK的bin目录中（比如C:\Program Files\Java\jdkx.x.x_x\bin），你可能需要在命令行中先进入那个目录才能执行此命令。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -v -keystore my-release-key.keystore -<span class="built_in">alias</span> my-key-alias -keyalg RSA -keysize 2048 -validity 10000</span><br></pre></td></tr></table></figure><br>这条命令会要求你输入密钥库（keystore）和对应密钥的密码，然后设置一些发行相关的信息。最后它会生成一个叫做my-release-key.keystore的密钥库文件。</p>
+<p>在运行上面这条语句之后，密钥库里应该已经生成了一个单独的密钥，有效期为10000天。–alias参数后面的别名是你将来为应用签名时所需要用到的，所以记得记录这个别名。</p>
+<p><strong>注意：请记得妥善地保管好你的密钥库文件，不要上传到版本库或者其它的地方。</strong></p>
+<h3 id="设置gradle变量"><a href="#设置gradle变量" class="headerlink" title="设置gradle变量"></a>设置gradle变量</h3><ol>
+<li>把my-release-key.keystore文件放到你工程中的android/app文件夹下。</li>
+<li>编辑~/.gradle/gradle.properties（没有这个文件你就创建一个），添加如下的代码（注意把其中的<em>**</em>替换为相应密码）</li>
+</ol>
+<p><strong>注意：~表示用户目录，比如windows上可能是C:\Users\用户名，而mac上可能是/Users/用户名。</strong><br><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">MYAPP_RELEASE_STORE_FILE</span>=<span class="string">my-release-key.keystore</span></span><br><span class="line"><span class="attr">MYAPP_RELEASE_KEY_ALIAS</span>=<span class="string">my-key-alias</span></span><br><span class="line"><span class="attr">MYAPP_RELEASE_STORE_PASSWORD</span>=<span class="string">*****</span></span><br><span class="line"><span class="attr">MYAPP_RELEASE_KEY_PASSWORD</span>=<span class="string">*****</span></span><br></pre></td></tr></table></figure><br>上面的这些会作为全局的gradle变量，我们在后面的步骤中可以用来给应用签名。</p>
+<blockquote>
+<p><strong>关于密钥库的注意事项:</strong><br>一旦你在应用市场发布了你的应用，如果想修改签名，就必须用一个不同的包名来重新发布你的应用（这样也会丢失所有的下载数和评分）。所以请务必备份好你的密钥库和密码。</p>
+</blockquote>
+<p>提示：如果你不想以明文方式保存密码，同时你使用的是macOS系统，那么你也可以把密码保存到钥匙串（Keychain）中。这样一来你就可以省略掉上面配置中的后两行（即MYAPP_RELEASE_STORE_PASSWORD和MYAPP_RELEASE_KEY_PASSWORD）。</p>
+<h3 id="添加签名到项目的gradle配置文件"><a href="#添加签名到项目的gradle配置文件" class="headerlink" title="添加签名到项目的gradle配置文件"></a>添加签名到项目的gradle配置文件</h3><p>编辑你项目目录下的<code>android/app/build.gradle</code>，添加如下的签名配置：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">    defaultConfig &#123; ... &#125;</span><br><span class="line">    signingConfigs &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            storeFile <span class="title function_">file</span><span class="params">(MYAPP_RELEASE_STORE_FILE)</span></span><br><span class="line">            storePassword MYAPP_RELEASE_STORE_PASSWORD</span><br><span class="line">            keyAlias MYAPP_RELEASE_KEY_ALIAS</span><br><span class="line">            keyPassword MYAPP_RELEASE_KEY_PASSWORD</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            ...</span><br><span class="line">            signingConfig signingConfigs.release</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h3 id="生成发行APK包"><a href="#生成发行APK包" class="headerlink" title="生成发行APK包"></a>生成发行APK包</h3><p>在Android项目目录下，只需在终端中运行以下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew assembleRelease</span><br></pre></td></tr></table></figure><br>注：./gradlew assembleRelease在macOS和Linux系统中表示执行当前目录下的名为gradlew的脚本文件，运行参数为assembleRelease，注意这个./不可省略；而在windows命令行下则需要去掉./。</p>
+<p>生成的APK文件位于<code>app/build/outputs/apk/app-release.apk</code>，它已经可以用来发布了。</p>
+<h3 id="测试应用的发行版本"><a href="#测试应用的发行版本" class="headerlink" title="测试应用的发行版本"></a>测试应用的发行版本</h3><p>在把发行版本提交到应用市场之前，你应该做一次最终测试。输入以下命令可以在设备上安装发行版本：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew installRelease</span><br></pre></td></tr></table></figure><br>注意<code>installRelease</code>参数只能在你完成了上面的签名配置之后才可以使用。</p>
+<blockquote>
+<p>在debug和release版本间来回切换安装时可能会报错签名不匹配，此时需要先卸载前一个版本再尝试安装。</p>
+</blockquote>
+<h3 id="启用Proguard代码混淆来缩小APK文件的大小（可选）"><a href="#启用Proguard代码混淆来缩小APK文件的大小（可选）" class="headerlink" title="启用Proguard代码混淆来缩小APK文件的大小（可选）"></a>启用Proguard代码混淆来缩小APK文件的大小（可选）</h3><p>Proguard是一个Java字节码混淆压缩工具，它可以移除掉没有被使用到的部分，最终有效的减少APK的大小。</p>
+<p>重要：启用Proguard之后，你必须再次全面地测试你的应用。Proguard有时候需要为你引入的每个原生库做一些额外的配置。参见<code>app/proguard-rules.pro</code>文件。</p>
+<p>要启用Proguard，设置<code>minifyEnabled</code>选项为<code>true</code>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在release发行版中启用Proguard来减小 to shrink the Java bytecode in release builds.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">def</span> <span class="variable">enableProguardInReleaseBuilds</span> <span class="operator">=</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/02/%E9%83%A8%E7%BD%B2Meteor%E5%BA%94%E7%94%A8%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="prev" title="部署 Meteor 应用到服务器">
+      <i class="fa fa-chevron-left"></i> 部署 Meteor 应用到服务器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/24/%E5%B8%B8%E7%94%A8%E5%89%8D%E7%AB%AF%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%E7%B1%BB/" rel="next" title="常用前端校验工具类">
+      常用前端校验工具类 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC8yODMxNC80ODg2"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AA%E7%AD%BE%E5%90%8D%E5%AF%86%E9%92%A5"><span class="nav-number">1.</span> <span class="nav-text">生成一个签名密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEgradle%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">设置gradle变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%AD%BE%E5%90%8D%E5%88%B0%E9%A1%B9%E7%9B%AE%E7%9A%84gradle%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">添加签名到项目的gradle配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8F%91%E8%A1%8CAPK%E5%8C%85"><span class="nav-number">4.</span> <span class="nav-text">生成发行APK包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%BA%94%E7%94%A8%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">测试应用的发行版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8Proguard%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86%E6%9D%A5%E7%BC%A9%E5%B0%8FAPK%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%A7%E5%B0%8F%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">启用Proguard代码混淆来缩小APK文件的大小（可选）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZevenFang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ZevenFang</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZevenFang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

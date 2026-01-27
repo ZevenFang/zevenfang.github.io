@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前端验证，是为了区别后端验证而这样说的，主要是用 js 来验证数据的合法性，来增强用户体验的，比如，鼠标移上去会有提示效果，鼠标离开，就会马上告诉你数据是否合法等等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用前端校验工具类">
+<meta property="og:url" content="https://zevenfang.github.io/2017/06/24/%E5%B8%B8%E7%94%A8%E5%89%8D%E7%AB%AF%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%E7%B1%BB/index.html">
+<meta property="og:site_name" content="纸帆|ZevenFang">
+<meta property="og:description" content="前端验证，是为了区别后端验证而这样说的，主要是用 js 来验证数据的合法性，来增强用户体验的，比如，鼠标移上去会有提示效果，鼠标离开，就会马上告诉你数据是否合法等等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-06-24T01:51:40.000Z">
+<meta property="article:modified_time" content="2026-01-27T09:58:05.114Z">
+<meta property="article:author" content="ZevenFang">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zevenfang.github.io/2017/06/24/%E5%B8%B8%E7%94%A8%E5%89%8D%E7%AB%AF%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%E7%B1%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>常用前端校验工具类 | 纸帆|ZevenFang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">纸帆|ZevenFang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们终其一生寻找的无非是那个甘愿为你停下脚步，为你驻足的人。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">41</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">101</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2017/06/24/%E5%B8%B8%E7%94%A8%E5%89%8D%E7%AB%AF%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ZevenFang">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="纸帆|ZevenFang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常用前端校验工具类<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/%E5%B8%B8%E7%94%A8%E5%89%8D%E7%AB%AF%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%E7%B1%BB.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-24 09:51:40" itemprop="dateCreated datePublished" datetime="2017-06-24T09:51:40+08:00">2017-06-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Front/" itemprop="url" rel="index"><span itemprop="name">Front</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">前端验证，是为了区别后端验证而这样说的，主要是用 js 来验证数据的合法性，来增强用户体验的，比如，鼠标移上去会有提示效果，鼠标离开，就会马上告诉你数据是否合法等等。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>前端验证，是为了区别后端验证而这样说的，主要是用 js 来验证数据的合法性，来增强用户体验的，比如，鼠标移上去会有提示效果，鼠标离开，就会马上告诉你数据是否合法等等。<br>数据验证其实就是数据的合法性校验，例如：用户添加的邮件地址是不是正确啊，是不是太长了等等。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://cdn.rawgit.com/ZevenFang/assets/96cdbd3e/fangzf.me/files/Validator.js" download="Validator.js"><i>Validator.js</i></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Validator</span> = &#123;</span><br><span class="line">	<span class="title class_">Require</span> : <span class="regexp">/.+/</span>,</span><br><span class="line">	<span class="title class_">Email</span> : <span class="regexp">/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/</span>,</span><br><span class="line">	<span class="title class_">Phone</span> : <span class="regexp">/^((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?(\(0\d&#123;2,3&#125;\)|0\d&#123;2,3&#125;-)?[1-9]\d&#123;6,7&#125;(\-\d&#123;1,4&#125;)?$/</span>,</span><br><span class="line">	<span class="title class_">Mobile</span> : <span class="regexp">/^(((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?13\d&#123;9&#125;)|(((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?15\d&#123;9&#125;)|(((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?18\d&#123;9&#125;)$/</span>,</span><br><span class="line">	<span class="title class_">PhoneM</span> : <span class="regexp">/^(((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?(\(0\d&#123;2,3&#125;\)|0\d&#123;2,3&#125;-)?[1-9]\d&#123;6,7&#125;(\-\d&#123;1,4&#125;)?)|((((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?13\d&#123;9&#125;)|(((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?15\d&#123;9&#125;))|(((\(\d&#123;2,3&#125;\))|(\d&#123;3&#125;\-))?18\d&#123;9&#125;)$/</span>,</span><br><span class="line">	<span class="title class_">Url</span> : <span class="regexp">/^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&amp;_~`@[\]\&#x27;:+!]*([^&lt;&gt;\&quot;\&quot;])*$/</span>,</span><br><span class="line">	<span class="title class_">Html</span>: <span class="regexp">/^&lt;(.*)&gt;.*&lt;\/\1&gt;|&lt;(.*)[\/]?&gt;/</span>,</span><br><span class="line">	<span class="title class_">IdCard</span> : <span class="string">&quot;this.IsIdCard(value)&quot;</span>,</span><br><span class="line">	<span class="title class_">DaoyouZH</span>:<span class="regexp">/^[D|d]&#123;0,1&#125;[-]?(\d)&#123;1,5&#125;([-]?(\d)&#123;1,7&#125;)$/g</span>,</span><br><span class="line">	<span class="title class_">Orid</span>: <span class="string">&quot;this.IsOrid(value)&quot;</span>,</span><br><span class="line">	<span class="title class_">Zfid</span>: <span class="string">&quot;this.IsZfid(value)&quot;</span>,</span><br><span class="line">	<span class="title class_">Currency</span> : <span class="regexp">/^\d+(\.\d+)?$/</span>,</span><br><span class="line">	<span class="title class_">Amount</span> : <span class="regexp">/^\d+(\.\d&#123;1,2&#125;)?$/</span>,</span><br><span class="line">	<span class="title class_">Number</span> : <span class="regexp">/^\d+$/</span>,</span><br><span class="line">	<span class="title class_">NumberM</span> : <span class="regexp">/^[0-9]*[1-9][0-9]*$/</span>,</span><br><span class="line">	<span class="title class_">Shengao</span> : <span class="regexp">/^[1-2]&#123;1&#125;[0-9]&#123;2&#125;$/</span>,</span><br><span class="line">	<span class="title class_">Code</span> : <span class="regexp">/^[0-9]\w&#123;3&#125;$/</span>,</span><br><span class="line">	<span class="title class_">Zip</span> : <span class="regexp">/^[0-9]\d&#123;5&#125;$/</span>,</span><br><span class="line">	<span class="variable constant_">QQ</span> : <span class="regexp">/^[1-9]\d&#123;4,12&#125;$/</span>,</span><br><span class="line">	<span class="title class_">Integer</span> : <span class="regexp">/^[-\+]?\d+$/</span>,</span><br><span class="line">	<span class="title class_">Double</span> : <span class="regexp">/^[-\+]?\d+(\.\d+)?$/</span>,</span><br><span class="line">	<span class="title class_">English</span> : <span class="regexp">/^[A-Za-z]+$/</span>,</span><br><span class="line">	<span class="title class_">EnglishNumber</span> : <span class="regexp">/^[A-Za-z0-9]+$/</span>,</span><br><span class="line">	<span class="title class_">Chinese</span> :  <span class="regexp">/^[\u0391-\uFFE5]+$/</span>,</span><br><span class="line">	<span class="title class_">Lname</span>:<span class="regexp">/^(([\u0391-\uFFE5]+)|([A-Za-z]+\s*[A-Za-z]+))$/</span>,</span><br><span class="line">	<span class="title class_">Username</span> : <span class="regexp">/^([A-Za-z]&#123;1&#125;?[A-Za-z0-9_]+)$/i</span>,</span><br><span class="line">	<span class="title class_">Password</span> : <span class="regexp">/^[A-Za-z0-9]\w&#123;7,14&#125;$/i</span>,</span><br><span class="line">	<span class="title class_">PasswordSys</span> : <span class="regexp">/^[A-Za-z0-9]\w&#123;5,14&#125;$/i</span>,</span><br><span class="line">	<span class="title class_">UnSafe</span> : <span class="regexp">/^(([A-Za-z0-9]*|\d*|[-_\~!@#\$%\^&amp;\*\.\(\)\[\]\&#123;\&#125;&lt;&gt;\?\\\/\&#x27;\&quot;]*)|.&#123;0,5&#125;)$|\s/</span>,</span><br><span class="line">	<span class="title class_">IsSafe</span> : <span class="keyword">function</span>(<span class="params">str</span>)&#123;<span class="keyword">return</span> !<span class="variable language_">this</span>.<span class="property">UnSafe</span>.<span class="title function_">test</span>(str);&#125;,</span><br><span class="line">	<span class="title class_">SafeString</span> : <span class="string">&quot;this.IsSafe(value)&quot;</span>,</span><br><span class="line">	<span class="title class_">Filter</span> : <span class="string">&quot;this.DoFilter(value, getAttribute(&#x27;accept&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">Limit</span> : <span class="string">&quot;this.limit(value.length,getAttribute(&#x27;min&#x27;),  getAttribute(&#x27;max&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">LimitB</span> : <span class="string">&quot;this.limit(this.LenB(value), getAttribute(&#x27;min&#x27;), getAttribute(&#x27;max&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">Date</span> : <span class="string">&quot;this.IsDate(value, getAttribute(&#x27;min&#x27;), getAttribute(&#x27;format&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">Repeat</span> : <span class="string">&quot;value == document.getElementsByName(getAttribute(&#x27;to&#x27;))[0].value&quot;</span>,</span><br><span class="line">	<span class="title class_">Range</span> : <span class="string">&quot;getAttribute(&#x27;min&#x27;) &lt; (value|0) &amp;&amp; (value|0) &lt; getAttribute(&#x27;max&#x27;)&quot;</span>,</span><br><span class="line">	<span class="title class_">Compare</span> : <span class="string">&quot;this.compare(value,getAttribute(&#x27;operator&#x27;),getAttribute(&#x27;to&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">Between</span> : <span class="string">&quot;this.between(value,getAttribute(&#x27;operator&#x27;),getAttribute(&#x27;min&#x27;),  getAttribute(&#x27;max&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">Custom</span> : <span class="string">&quot;this.Exec(value, getAttribute(&#x27;regexp&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">Group</span> : <span class="string">&quot;this.MustChecked(getAttribute(&#x27;name&#x27;), getAttribute(&#x27;min&#x27;), getAttribute(&#x27;max&#x27;))&quot;</span>,</span><br><span class="line">	<span class="title class_">ErrorItem</span> : [<span class="variable language_">document</span>.<span class="property">forms</span>[<span class="number">0</span>]],</span><br><span class="line">	<span class="title class_">ErrorMessage</span> : [errTitle+<span class="string">&quot;\n \t\t\t\t&quot;</span>],</span><br><span class="line">	<span class="title class_">Validate</span> : <span class="keyword">function</span>(<span class="params">theForm, mode,anoId</span>)&#123;</span><br><span class="line">		<span class="keyword">var</span> obj = theForm || event.<span class="property">srcElement</span>;</span><br><span class="line">		<span class="keyword">var</span> mode = mode || <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">var</span> count = obj.<span class="property">elements</span>.<span class="property">length</span>;</span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="property">length</span> = <span class="number">1</span>;</span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">ErrorItem</span>.<span class="property">length</span> = <span class="number">1</span>;</span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[<span class="number">0</span>] = obj;</span><br><span class="line">		<span class="comment">//usname*?!guest|admin|ectrip|manager|bbs|trip|blog|ticket|hotel|destination|shop|business|travel|line|jingqu|help|my|pay|oa</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;count;i++)&#123;</span><br><span class="line">			<span class="title function_">with</span>(<span class="params">obj.elements[i]</span>)&#123;</span><br><span class="line">				<span class="keyword">var</span> _dataType = <span class="title function_">getAttribute</span>(<span class="string">&quot;dataType&quot;</span>);</span><br><span class="line">				<span class="keyword">if</span>(<span class="title function_">typeof</span>(_dataType) == <span class="string">&quot;object&quot;</span> || <span class="title function_">typeof</span>(<span class="variable language_">this</span>[_dataType]) == <span class="string">&quot;undefined&quot;</span>)  <span class="keyword">continue</span>;</span><br><span class="line">				<span class="variable language_">this</span>.<span class="title class_">ClearState</span>(obj.<span class="property">elements</span>[i]);</span><br><span class="line">				<span class="keyword">if</span>(<span class="title function_">getAttribute</span>(<span class="string">&quot;require&quot;</span>) == <span class="string">&quot;false&quot;</span> &amp;&amp; value == <span class="string">&quot;&quot;</span>) <span class="keyword">continue</span>;</span><br><span class="line">				<span class="keyword">switch</span>(_dataType)&#123;</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;IdCard&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Orid&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Date&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Repeat&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Range&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Compare&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Between&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Custom&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Group&quot;</span> : </span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Limit&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;LimitB&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;SafeString&quot;</span> :</span><br><span class="line">					<span class="keyword">case</span> <span class="string">&quot;Filter&quot;</span> :</span><br><span class="line">						<span class="keyword">if</span>(!<span class="built_in">eval</span>(<span class="variable language_">this</span>[_dataType]))	&#123;</span><br><span class="line">							<span class="variable language_">this</span>.<span class="title class_">AddError</span>(i, <span class="title function_">getAttribute</span>(<span class="string">&quot;msg&quot;</span>),mode);</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="keyword">break</span>;</span><br><span class="line">					<span class="keyword">default</span> :</span><br><span class="line">						<span class="keyword">if</span>((!<span class="variable language_">this</span>[_dataType].<span class="title function_">test</span>(value))||(_dataType==<span class="string">&quot;Require&quot;</span>&amp;&amp;value==<span class="string">&quot;00&quot;</span>))&#123;</span><br><span class="line">							<span class="comment">//value==&quot;00&quot; 为了省份判断</span></span><br><span class="line">							<span class="keyword">if</span> ((_dataType==<span class="string">&quot;DaoyouZH&quot;</span>)&amp;&amp;(<span class="variable language_">this</span>[_dataType].<span class="title function_">test</span>(value).<span class="title function_">toString</span>()==<span class="string">&quot;false&quot;</span>))&#123;</span><br><span class="line">							<span class="variable language_">this</span>.<span class="title class_">AddError</span>(i, <span class="title function_">getAttribute</span>(<span class="string">&quot;msg&quot;</span>),mode);</span><br><span class="line">							&#125;<span class="keyword">else</span> <span class="keyword">if</span> (_dataType!=<span class="string">&quot;DaoyouZH&quot;</span>)&#123;</span><br><span class="line">							<span class="variable language_">this</span>.<span class="title class_">AddError</span>(i, <span class="title function_">getAttribute</span>(<span class="string">&quot;msg&quot;</span>),mode);</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="property">length</span> &gt; <span class="number">1</span>)&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">var</span> errCount = <span class="variable language_">this</span>.<span class="property">ErrorItem</span>.<span class="property">length</span>;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">switch</span>(mode)&#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="number">3</span> :</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>;i&lt;errCount;i++)&#123;</span><br><span class="line">					<span class="keyword">var</span> thisErrorItem=<span class="title function_">jQuery</span>(<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[i]);</span><br><span class="line">					<span class="keyword">var</span> textareaYes=<span class="string">&quot;span&quot;</span>;</span><br><span class="line">					</span><br><span class="line">					<span class="keyword">if</span>(thisErrorItem.<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;text&quot;</span>||thisErrorItem.<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;password&quot;</span>||thisErrorItem[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;TEXTAREA&quot;</span>)&#123;</span><br><span class="line">						thisErrorItem.<span class="title function_">removeClass</span>(<span class="string">&quot;input_ok&quot;</span>);</span><br><span class="line">						thisErrorItem.<span class="title function_">addClass</span>(<span class="string">&quot;input_err&quot;</span>);</span><br><span class="line">						<span class="keyword">if</span>(thisErrorItem[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;TEXTAREA&quot;</span>) textareaYes=<span class="string">&quot;div&quot;</span>;</span><br><span class="line">					&#125;</span><br><span class="line">					</span><br><span class="line">					<span class="keyword">try</span>&#123;					</span><br><span class="line">						<span class="keyword">var</span> thisErrorItemN=thisErrorItem.<span class="title function_">next</span>();</span><br><span class="line">						<span class="keyword">var</span> thisErrorText=<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>[i].<span class="title function_">replace</span>(<span class="regexp">/\d+:/</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line">						</span><br><span class="line">						<span class="keyword">if</span>(thisErrorItemN.<span class="property">length</span>==<span class="number">0</span>)&#123;</span><br><span class="line">							thisErrorItem.<span class="title function_">after</span>(<span class="string">&quot;&lt;&quot;</span>+textareaYes+<span class="string">&quot; class=&#x27;red __ErrorMessagePanel input_err_info&#x27;&gt;&quot;</span>+thisErrorText+<span class="string">&quot;&lt;/&quot;</span>+textareaYes+<span class="string">&quot;&gt;&quot;</span>);	</span><br><span class="line">						&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">							<span class="keyword">if</span>(thisErrorItemN.<span class="title function_">text</span>()!=<span class="string">&quot;*&quot;</span>)&#123;</span><br><span class="line">								thisErrorItem.<span class="title function_">siblings</span>(<span class="string">&quot;:last&quot;</span>).<span class="title function_">after</span>(<span class="string">&quot;&lt;&quot;</span>+textareaYes+<span class="string">&quot; class=&#x27;red __ErrorMessagePanel input_err_info&#x27;&gt;&quot;</span>+thisErrorText+<span class="string">&quot;&lt;/&quot;</span>+textareaYes+<span class="string">&quot;&gt;&quot;</span>);</span><br><span class="line">							&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">								thisErrorItemN.<span class="title function_">addClass</span>(<span class="string">&quot;red __ErrorMessagePanel input_err_info&quot;</span>);</span><br><span class="line">								thisErrorItemN.<span class="title function_">attr</span>(<span class="string">&quot;delete&quot;</span>,<span class="string">&quot;false&quot;</span>);</span><br><span class="line">								thisErrorItemN.<span class="title function_">html</span>(thisErrorText);</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;	</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">catch</span>(e)&#123;<span class="title function_">alert</span>(<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="title function_">join</span>(<span class="string">&quot;\n&quot;</span>));&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">try</span>&#123;<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[<span class="number">1</span>].<span class="title function_">focus</span>();&#125;<span class="keyword">catch</span>(e)&#123;&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> <span class="number">4</span> :</span><br><span class="line">				<span class="keyword">var</span> errid = <span class="title function_">jQuery</span>(<span class="string">&quot;#main_errors&quot;</span>);</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span> ( <span class="keyword">typeof</span> anoId != <span class="string">&quot;undefined&quot;</span> )&#123;</span><br><span class="line">				<span class="keyword">if</span> ( anoId!= <span class="string">&quot;&quot;</span> )</span><br><span class="line">				errid=<span class="title function_">jQuery</span>(<span class="string">&quot;#&quot;</span>+anoId);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">var</span> errinfoArr=<span class="keyword">new</span> <span class="title class_">Array</span>();</span><br><span class="line">				</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>;i&lt;errCount;i++)&#123;</span><br><span class="line">					<span class="keyword">try</span>&#123;</span><br><span class="line">						<span class="keyword">var</span> thisErrorItem=<span class="title function_">jQuery</span>(<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[i]);</span><br><span class="line">						<span class="keyword">if</span>(thisErrorItem.<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;text&quot;</span>||thisErrorItem.<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;password&quot;</span>||thisErrorItem[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;TEXTAREA&quot;</span>)&#123;</span><br><span class="line">							thisErrorItem.<span class="title function_">removeClass</span>(<span class="string">&quot;input_ok&quot;</span>);</span><br><span class="line">							thisErrorItem.<span class="title function_">addClass</span>(<span class="string">&quot;input_err&quot;</span>);</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="keyword">if</span>(thisErrorItem[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;SELECT&quot;</span>)&#123;</span><br><span class="line">							<span class="keyword">var</span> thisErrorItemN=thisErrorItem.<span class="title function_">next</span>();</span><br><span class="line">							</span><br><span class="line">							<span class="keyword">if</span>(thisErrorItemN.<span class="property">length</span>==<span class="number">0</span>)&#123;</span><br><span class="line">								thisErrorItem.<span class="title function_">after</span>(<span class="string">&quot;&lt;span class=&#x27;red __ErrorMessagePanel&#x27;&gt;*&lt;/span&gt;&quot;</span>);	</span><br><span class="line">							&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">								<span class="keyword">if</span>(thisErrorItemN.<span class="title function_">text</span>()!=<span class="string">&quot;*&quot;</span>)&#123;</span><br><span class="line">								thisErrorItem.<span class="title function_">siblings</span>(<span class="string">&quot;:last&quot;</span>).<span class="title function_">after</span>(<span class="string">&quot;&lt;span class=&#x27;red __ErrorMessagePanel&#x27;&gt;*&lt;/span&gt;&quot;</span>);</span><br><span class="line">								&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">								thisErrorItemN.<span class="title function_">addClass</span>(<span class="string">&quot;red __ErrorMessagePanel&quot;</span>);</span><br><span class="line">								thisErrorItemN.<span class="title function_">attr</span>(<span class="string">&quot;delete&quot;</span>,<span class="string">&quot;false&quot;</span>);</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;					</span><br><span class="line">						</span><br><span class="line">						errinfoArr.<span class="title function_">push</span>(<span class="string">&quot;&lt;li&gt;&quot;</span>+<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>[i].<span class="title function_">replace</span>(<span class="regexp">/\d+:/</span>,<span class="string">&quot;&quot;</span>)+<span class="string">&quot;&lt;/li&gt;&quot;</span>);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">						errinfoArr.<span class="title function_">push</span>(<span class="string">&quot;&lt;li&gt;&quot;</span>+<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>[i].<span class="title function_">replace</span>(<span class="regexp">/\d+:/</span>,<span class="string">&quot;&quot;</span>)+<span class="string">&quot;&lt;/li&gt;&quot;</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span> (i&gt;<span class="number">1</span>)&#123;</span><br><span class="line">				<span class="keyword">try</span>&#123;</span><br><span class="line">					</span><br><span class="line">					<span class="title function_">jQuery</span>(<span class="string">&quot;.main_errors[id!=&#x27;&quot;</span>+errid.<span class="title function_">attr</span>(<span class="string">&#x27;id&#x27;</span>)+<span class="string">&quot;&#x27;]&quot;</span>).<span class="title function_">hide</span>();</span><br><span class="line">					<span class="keyword">if</span> (errid.<span class="title function_">css</span>(<span class="string">&quot;display&quot;</span>)!=<span class="string">&quot;block&quot;</span>) errid.<span class="title function_">fadeIn</span>();</span><br><span class="line">					<span class="comment">//errid.slideDown(&quot;fast&quot;);</span></span><br><span class="line">					</span><br><span class="line">					</span><br><span class="line">					<span class="keyword">if</span> ( <span class="keyword">typeof</span> anoId != <span class="string">&quot;undefined&quot;</span> )&#123;</span><br><span class="line">					<span class="keyword">if</span> ( anoId!= <span class="string">&quot;&quot;</span> )</span><br><span class="line">					<span class="title function_">jQuery</span>(<span class="string">&quot;#main_errors&quot;</span>).<span class="title function_">hide</span>();</span><br><span class="line">					&#125;</span><br><span class="line">					errid.<span class="title function_">html</span>(<span class="string">&quot;&lt;div class=\&quot;main_errors_title\&quot;&gt;&quot;</span>+errTitle+<span class="string">&quot;&lt;/div&gt;&lt;ul&gt;&lt;li style=\&quot;height:1px; display:none; list-style:none;overflow:hidden; border:0px; padding:0px; margin:0px; margin-top:-2px;\&quot;&gt;&lt;/li&gt;&quot;</span>+errinfoArr.<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>).<span class="title function_">toString</span>()+<span class="string">&quot;&lt;/ul&gt;&quot;</span>);</span><br><span class="line">					top.<span class="property">window</span>.<span class="property">location</span>=<span class="string">&quot;#main_errors&quot;</span>;</span><br><span class="line">				&#125;</span><br><span class="line">					<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">						<span class="title function_">alert</span>(<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="title function_">join</span>(<span class="string">&quot;\n&quot;</span>));</span><br><span class="line">					&#125;<span class="comment">//创建错误，弹出显示</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">try</span>&#123;<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[<span class="number">1</span>].<span class="title function_">focus</span>();&#125;<span class="keyword">catch</span>(e)&#123;&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">default</span> :</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>;i&lt;errCount;i++)&#123;</span><br><span class="line">					<span class="keyword">var</span> thisErrorItem=<span class="title function_">jQuery</span>(<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[i]);</span><br><span class="line">					<span class="keyword">if</span>(thisErrorItem.<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;text&quot;</span>||thisErrorItem.<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;password&quot;</span>||thisErrorItem[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;TEXTAREA&quot;</span>)&#123;</span><br><span class="line">						thisErrorItem.<span class="title function_">removeClass</span>(<span class="string">&quot;input_ok&quot;</span>);</span><br><span class="line">						thisErrorItem.<span class="title function_">addClass</span>(<span class="string">&quot;input_err&quot;</span>);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span>(thisErrorItem[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;SELECT&quot;</span>)&#123;</span><br><span class="line">						<span class="keyword">var</span> thisErrorItemN=thisErrorItem.<span class="title function_">next</span>();</span><br><span class="line">						<span class="keyword">if</span>(thisErrorItemN.<span class="property">length</span>==<span class="number">0</span>)&#123;</span><br><span class="line">							thisErrorItem.<span class="title function_">after</span>(<span class="string">&quot;&lt;span class=&#x27;red __ErrorMessagePanel&#x27;&gt;*&lt;/span&gt;&quot;</span>);	</span><br><span class="line">						&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">							<span class="keyword">if</span>(thisErrorItemN.<span class="title function_">text</span>()!=<span class="string">&quot;*&quot;</span>)&#123;</span><br><span class="line">							thisErrorItem.<span class="title function_">siblings</span>(<span class="string">&quot;:last&quot;</span>).<span class="title function_">after</span>(<span class="string">&quot;&lt;span class=&#x27;red __ErrorMessagePanel&#x27;&gt;*&lt;/span&gt;&quot;</span>);</span><br><span class="line">							&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">							thisErrorItemN.<span class="title function_">addClass</span>(<span class="string">&quot;red __ErrorMessagePanel&quot;</span>);</span><br><span class="line">							thisErrorItemN.<span class="title function_">attr</span>(<span class="string">&quot;delete&quot;</span>,<span class="string">&quot;false&quot;</span>);</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span>(<span class="keyword">typeof</span> systemUI!= <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">					<span class="keyword">var</span> _this = <span class="variable language_">this</span>;</span><br><span class="line">					<span class="keyword">var</span> errStrArr = <span class="keyword">new</span> <span class="title class_">Array</span>();</span><br><span class="line">						errStrArr = <span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="title function_">slice</span>(<span class="number">1</span>);</span><br><span class="line">						<span class="title function_">errorMsg</span>(errStrArr, <span class="number">0</span>, <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">							<span class="keyword">try</span>&#123;</span><br><span class="line">								_this.<span class="property">ErrorItem</span>[<span class="number">1</span>].<span class="title function_">select</span>();</span><br><span class="line">							&#125;<span class="keyword">catch</span>(e)&#123;&#125;</span><br><span class="line">						&#125;);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;	</span><br><span class="line">					<span class="title function_">alert</span>(<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="title function_">join</span>(<span class="string">&quot;\n&quot;</span>));</span><br><span class="line">					<span class="keyword">try</span>&#123;<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[<span class="number">1</span>].<span class="title function_">select</span>();  &#125;<span class="keyword">catch</span>(e)&#123;&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(mode==<span class="number">4</span>)&#123;</span><br><span class="line">			<span class="comment">//正确直接隐藏错误信息 xyb 2007-07-26</span></span><br><span class="line">			<span class="keyword">var</span> errid = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;main_errors&quot;</span>);</span><br><span class="line">			<span class="keyword">if</span> ( <span class="keyword">typeof</span> anoId != <span class="string">&quot;undefined&quot;</span> )&#123;</span><br><span class="line">				<span class="keyword">if</span> ( anoId!= <span class="string">&quot;&quot;</span> )</span><br><span class="line">				errid=<span class="variable language_">document</span>.<span class="title function_">getElementById</span>(anoId);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(<span class="keyword">typeof</span> jQuery!= <span class="string">&quot;undefined&quot;</span>)&#123;</span><br><span class="line">				<span class="title function_">jQuery</span>(<span class="string">&quot;.main_errors&quot;</span>).<span class="title function_">hide</span>();</span><br><span class="line">				<span class="title function_">jQuery</span>(<span class="string">&quot;#main_errors&quot;</span>).<span class="title function_">hide</span>();</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				errid.<span class="property">style</span>.<span class="property">display</span>=<span class="string">&quot;none&quot;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> ( <span class="keyword">typeof</span> anoId != <span class="string">&quot;undefined&quot;</span> )&#123;</span><br><span class="line">				<span class="keyword">if</span> ( anoId!= <span class="string">&quot;&quot;</span> )</span><br><span class="line">				<span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;main_errors&quot;</span>).<span class="property">style</span>.<span class="property">display</span>=<span class="string">&quot;none&quot;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//正确直接隐藏错误信息 xyb 2007-07-26</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	&#125;,</span><br><span class="line">	limit : <span class="keyword">function</span>(<span class="params">len,min, max</span>)&#123;</span><br><span class="line">		min = min || <span class="number">0</span>;</span><br><span class="line">		max = max || <span class="title class_">Number</span>.<span class="property">MAX_VALUE</span>;</span><br><span class="line">		<span class="keyword">return</span> min &lt;= len &amp;&amp; len &lt;= max;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">LenB</span> : <span class="keyword">function</span>(<span class="params">str</span>)&#123;</span><br><span class="line">		<span class="keyword">return</span> str.<span class="title function_">replace</span>(<span class="regexp">/[^\x00-\xff]/g</span>,<span class="string">&quot;*&quot;</span>).<span class="title function_">replace</span>(<span class="regexp">/\s/g</span>,<span class="string">&quot;&quot;</span>).<span class="title function_">replace</span>(<span class="regexp">/\n/m</span>,<span class="string">&quot;&quot;</span>).<span class="property">length</span>;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">ClearState</span> : <span class="keyword">function</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">		<span class="title function_">with</span>(<span class="params">jQuery(elem)</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;text&quot;</span>||<span class="title function_">attr</span>(<span class="string">&quot;type&quot;</span>)==<span class="string">&quot;password&quot;</span>||<span class="title function_">jQuery</span>(elem)[<span class="number">0</span>].<span class="property">nodeName</span>==<span class="string">&quot;TEXTAREA&quot;</span>)&#123;</span><br><span class="line">				<span class="title function_">addClass</span>(<span class="string">&quot;input_ok&quot;</span>);</span><br><span class="line">				<span class="title function_">removeClass</span>(<span class="string">&quot;input_err&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">var</span> par=<span class="title function_">parent</span>();</span><br><span class="line">			par.<span class="title function_">find</span>(<span class="string">&quot;.__ErrorMessagePanel[delete!=&#x27;false&#x27;]&quot;</span>).<span class="title function_">remove</span>();</span><br><span class="line">			<span class="keyword">var</span> deleteSpan=par.<span class="title function_">find</span>(<span class="string">&quot;.__ErrorMessagePanel[delete=&#x27;false&#x27;]&quot;</span>);</span><br><span class="line">			</span><br><span class="line">			deleteSpan.<span class="title function_">text</span>(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">			deleteSpan.<span class="title function_">removeClass</span>(<span class="string">&quot;__ErrorMessagePanel&quot;</span>);</span><br><span class="line">			deleteSpan.<span class="title function_">removeClass</span>(<span class="string">&quot;input_err_info&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">AddError</span> : <span class="keyword">function</span>(<span class="params">index, str,mode</span>)&#123;</span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">ErrorItem</span>[<span class="variable language_">this</span>.<span class="property">ErrorItem</span>.<span class="property">length</span>] = <span class="variable language_">this</span>.<span class="property">ErrorItem</span>[<span class="number">0</span>].<span class="property">elements</span>[index];</span><br><span class="line">		<span class="keyword">if</span> (mode==<span class="number">3</span>||mode==<span class="number">4</span> || <span class="keyword">typeof</span> systemUI!= <span class="string">&quot;undefined&quot;</span>)</span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>[<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="property">length</span>] = str;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>[<span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="property">length</span>] = <span class="variable language_">this</span>.<span class="property">ErrorMessage</span>.<span class="property">length</span> + <span class="string">&quot;、&quot;</span> + str;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">Exec</span> : <span class="keyword">function</span>(<span class="params">op, reg</span>)&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RegExp</span>(reg,<span class="string">&quot;g&quot;</span>).<span class="title function_">test</span>(op);</span><br><span class="line">	&#125;,</span><br><span class="line">	compare : <span class="keyword">function</span>(<span class="params">op1,operator,op2</span>)&#123;</span><br><span class="line">		<span class="keyword">switch</span> (operator) &#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;NotEqual&quot;</span>:</span><br><span class="line">				<span class="keyword">return</span> (op1 != op2);</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;GreaterThan&quot;</span>:</span><br><span class="line">				<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(op1) &gt; <span class="built_in">parseFloat</span>(op2));</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;GreaterThanEqual&quot;</span>:</span><br><span class="line">				<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(op1) &gt;= <span class="built_in">parseFloat</span>(op2));</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;LessThan&quot;</span>:</span><br><span class="line">				<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(op1) &lt; <span class="built_in">parseFloat</span>(op2));</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;LessThanEqual&quot;</span>:</span><br><span class="line">				<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(op1) &lt;= <span class="built_in">parseFloat</span>(op2));</span><br><span class="line">			<span class="attr">default</span>:</span><br><span class="line">				<span class="keyword">return</span> (op1 == op2);            </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">between</span>: <span class="keyword">function</span>(<span class="params">nameValue,operator, min, max</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(nameValue!=<span class="string">&quot;&quot;</span>&amp;&amp;nameValue!=<span class="literal">null</span>&amp;&amp;<span class="variable language_">this</span>.<span class="property">Amount</span>.<span class="title function_">test</span>(nameValue))&#123;</span><br><span class="line">			<span class="keyword">switch</span> (operator) &#123;</span><br><span class="line">				<span class="keyword">case</span> <span class="string">&quot;GreaterThenLess&quot;</span>:</span><br><span class="line">					<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(max)&gt;=<span class="built_in">parseFloat</span>(nameValue)&amp;&amp;<span class="built_in">parseFloat</span>(nameValue) &gt; <span class="built_in">parseFloat</span>(min));    </span><br><span class="line">				<span class="keyword">case</span> <span class="string">&quot;GreaterLessThen&quot;</span>:</span><br><span class="line">					<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(max)&gt;<span class="built_in">parseFloat</span>(nameValue)&amp;&amp;<span class="built_in">parseFloat</span>(nameValue) &gt;= <span class="built_in">parseFloat</span>(min));    </span><br><span class="line">				<span class="keyword">case</span> <span class="string">&quot;GreaterThenLessThen&quot;</span>:</span><br><span class="line">					<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(max)&gt;=<span class="built_in">parseFloat</span>(nameValue)&amp;&amp;<span class="built_in">parseFloat</span>(nameValue) &gt;= <span class="built_in">parseFloat</span>(min));    </span><br><span class="line">				<span class="attr">default</span>:</span><br><span class="line">					<span class="keyword">return</span> (<span class="built_in">parseFloat</span>(max)&gt;<span class="built_in">parseFloat</span>(nameValue)&amp;&amp;<span class="built_in">parseFloat</span>(nameValue) &gt; <span class="built_in">parseFloat</span>(min));       </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">MustChecked</span> : <span class="keyword">function</span>(<span class="params">name, min, max</span>)&#123;</span><br><span class="line">		<span class="keyword">var</span> groups = <span class="variable language_">document</span>.<span class="title function_">getElementsByName</span>(name);</span><br><span class="line">		<span class="keyword">var</span> hasChecked = <span class="number">0</span>;</span><br><span class="line">		min = min || <span class="number">1</span>;</span><br><span class="line">		max = max || groups.<span class="property">length</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i=groups.<span class="property">length</span>-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">			<span class="keyword">if</span>(groups[i].<span class="property">checked</span>) hasChecked++;</span><br><span class="line">			</span><br><span class="line">		<span class="keyword">return</span> min &lt;= hasChecked &amp;&amp; hasChecked &lt;= max;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">DoFilter</span> : <span class="keyword">function</span>(<span class="params">input, filter</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&quot;^.+\.(?=EXT)(EXT)$&quot;</span>.<span class="title function_">replace</span>(<span class="regexp">/EXT/g</span>, filter.<span class="title function_">split</span>(<span class="regexp">/\s*-\s*/</span>).<span class="title function_">join</span>(<span class="string">&quot;|&quot;</span>)), <span class="string">&quot;gi&quot;</span>).<span class="title function_">test</span>(input);</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">IsIdCard</span> : <span class="keyword">function</span>(<span class="params">number</span>)&#123;</span><br><span class="line">		<span class="keyword">var</span> date, <span class="title class_">Ai</span>;</span><br><span class="line">		<span class="keyword">var</span> verify = <span class="string">&quot;10x98765432&quot;</span>;</span><br><span class="line">		<span class="keyword">var</span> <span class="title class_">Wi</span> = [<span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>];</span><br><span class="line">		<span class="keyword">var</span> area = [<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;北京&#x27;</span>,<span class="string">&#x27;天津&#x27;</span>,<span class="string">&#x27;河北&#x27;</span>,<span class="string">&#x27;山西&#x27;</span>,<span class="string">&#x27;内蒙古&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;辽宁&#x27;</span>,<span class="string">&#x27;吉林&#x27;</span>,<span class="string">&#x27;黑龙江&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;上海&#x27;</span>,<span class="string">&#x27;江苏&#x27;</span>,<span class="string">&#x27;浙江&#x27;</span>,<span class="string">&#x27;安微&#x27;</span>,<span class="string">&#x27;福建&#x27;</span>,<span class="string">&#x27;江西&#x27;</span>,<span class="string">&#x27;山东&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;河南&#x27;</span>,<span class="string">&#x27;湖北&#x27;</span>,<span class="string">&#x27;湖南&#x27;</span>,<span class="string">&#x27;广东&#x27;</span>,<span class="string">&#x27;广西&#x27;</span>,<span class="string">&#x27;海南&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;重庆&#x27;</span>,<span class="string">&#x27;四川&#x27;</span>,<span class="string">&#x27;贵州&#x27;</span>,<span class="string">&#x27;云南&#x27;</span>,<span class="string">&#x27;西藏&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;陕西&#x27;</span>,<span class="string">&#x27;甘肃&#x27;</span>,<span class="string">&#x27;青海&#x27;</span>,<span class="string">&#x27;宁夏&#x27;</span>,<span class="string">&#x27;新疆&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;台湾&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;香港&#x27;</span>,<span class="string">&#x27;澳门&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;国外&#x27;</span>];</span><br><span class="line">		<span class="keyword">var</span> re = number.<span class="title function_">match</span>(<span class="regexp">/^(\d&#123;2&#125;)\d&#123;4&#125;(((\d&#123;2&#125;)(\d&#123;2&#125;)(\d&#123;2&#125;)(\d&#123;3&#125;))|((\d&#123;4&#125;)(\d&#123;2&#125;)(\d&#123;2&#125;)(\d&#123;3&#125;[x\d])))$/i</span>);</span><br><span class="line">		<span class="keyword">if</span>(re == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">if</span>(re[<span class="number">1</span>] &gt;= area.<span class="property">length</span> || area[re[<span class="number">1</span>]] == <span class="string">&quot;&quot;</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">if</span>(re[<span class="number">2</span>].<span class="property">length</span> == <span class="number">12</span>)&#123;</span><br><span class="line">			<span class="title class_">Ai</span> = number.<span class="title function_">substr</span>(<span class="number">0</span>, <span class="number">17</span>);</span><br><span class="line">			date = [re[<span class="number">9</span>], re[<span class="number">10</span>], re[<span class="number">11</span>]].<span class="title function_">join</span>(<span class="string">&quot;-&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="title class_">Ai</span> = number.<span class="title function_">substr</span>(<span class="number">0</span>, <span class="number">6</span>) + <span class="string">&quot;19&quot;</span> + number.<span class="title function_">substr</span>(<span class="number">6</span>);</span><br><span class="line">			date = [<span class="string">&quot;19&quot;</span> + re[<span class="number">4</span>], re[<span class="number">5</span>], re[<span class="number">6</span>]].<span class="title function_">join</span>(<span class="string">&quot;-&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(!<span class="variable language_">this</span>.<span class="title class_">IsDate</span>(date, <span class="string">&quot;ymd&quot;</span>)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;=<span class="number">16</span>;i++)&#123;</span><br><span class="line">			sum += <span class="title class_">Ai</span>.<span class="title function_">charAt</span>(i) * <span class="title class_">Wi</span>[i];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="title class_">Ai</span> +=  verify.<span class="title function_">charAt</span>(sum%<span class="number">11</span>);</span><br><span class="line">		<span class="keyword">return</span> (number.<span class="property">length</span> ==<span class="number">15</span> || number.<span class="property">length</span> == <span class="number">18</span> &amp;&amp; number == <span class="title class_">Ai</span>);</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="title class_">IsDate</span> : <span class="keyword">function</span>(<span class="params">op,daymin,formatString</span>)&#123;</span><br><span class="line">		formatString = formatString || <span class="string">&quot;ymd&quot;</span>;</span><br><span class="line">		<span class="keyword">var</span> m, year, month, day;</span><br><span class="line">		<span class="keyword">switch</span>(formatString)&#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;md&quot;</span> :<span class="comment">//适合没有年份的判断</span></span><br><span class="line">				m = op.<span class="title function_">match</span>(<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&quot;^(\\d&#123;1,2&#125;)([-./])(\\d&#123;1,2&#125;)$&quot;</span>));</span><br><span class="line">				<span class="keyword">if</span>(m == <span class="literal">null</span> ) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">				day = m[<span class="number">3</span>];</span><br><span class="line">				month = m[<span class="number">1</span>]*<span class="number">1</span>;</span><br><span class="line">				<span class="keyword">var</span> now = <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">				year =now.<span class="title function_">getYear</span>().<span class="title function_">toString</span>();</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;ymd&quot;</span> :</span><br><span class="line">				m = op.<span class="title function_">match</span>(<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&quot;^((\\d&#123;4&#125;)|(\\d&#123;2&#125;))([-./])(\\d&#123;1,2&#125;)\\4(\\d&#123;1,2&#125;)$&quot;</span>));</span><br><span class="line">				<span class="keyword">if</span>(m == <span class="literal">null</span> ) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">				day = m[<span class="number">6</span>];</span><br><span class="line">				month = m[<span class="number">5</span>]*<span class="number">1</span>;</span><br><span class="line">				year =  (m[<span class="number">2</span>].<span class="property">length</span> == <span class="number">4</span>) ? m[<span class="number">2</span>] : <span class="title class_">GetFullYear</span>(<span class="built_in">parseInt</span>(m[<span class="number">3</span>], <span class="number">10</span>));</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&quot;dmy&quot;</span> :</span><br><span class="line">				m = op.<span class="title function_">match</span>(<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&quot;^(\\d&#123;1,2&#125;)([-./])(\\d&#123;1,2&#125;)\\2((\\d&#123;4&#125;)|(\\d&#123;2&#125;))$&quot;</span>));</span><br><span class="line">				<span class="keyword">if</span>(m == <span class="literal">null</span> ) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">				day = m[<span class="number">1</span>];</span><br><span class="line">				month = m[<span class="number">3</span>]*<span class="number">1</span>;</span><br><span class="line">				year = (m[<span class="number">5</span>].<span class="property">length</span> == <span class="number">4</span>) ? m[<span class="number">5</span>] : <span class="title class_">GetFullYear</span>(<span class="built_in">parseInt</span>(m[<span class="number">6</span>], <span class="number">10</span>));</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">default</span> :</span><br><span class="line">				m = op.<span class="title function_">match</span>(<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&quot;^((\\d&#123;4&#125;)|(\\d&#123;2&#125;))([-./])(\\d&#123;1,2&#125;)\\4(\\d&#123;1,2&#125;)$&quot;</span>));</span><br><span class="line">				<span class="keyword">if</span>(m == <span class="literal">null</span> ) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">				day = m[<span class="number">6</span>];</span><br><span class="line">				month = m[<span class="number">5</span>]*<span class="number">1</span>;</span><br><span class="line">				year =  (m[<span class="number">2</span>].<span class="property">length</span> == <span class="number">4</span>) ? m[<span class="number">2</span>] : <span class="title class_">GetFullYear</span>(<span class="built_in">parseInt</span>(m[<span class="number">3</span>], <span class="number">10</span>));</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(!<span class="built_in">parseInt</span>(month)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		month = month==<span class="number">0</span> ?<span class="number">12</span>:month;</span><br><span class="line">		<span class="keyword">var</span> date = <span class="keyword">new</span> <span class="title class_">Date</span>(year, month-<span class="number">1</span>, day);</span><br><span class="line">        <span class="keyword">return</span> (<span class="title function_">typeof</span>(date) == <span class="string">&quot;object&quot;</span> &amp;&amp; year == date.<span class="title function_">getFullYear</span>() &amp;&amp; month == (date.<span class="title function_">getMonth</span>()+<span class="number">1</span>) &amp;&amp; day == date.<span class="title function_">getDate</span>());</span><br><span class="line">		<span class="keyword">function</span> <span class="title function_">GetFullYear</span>(<span class="params">y</span>)&#123;<span class="keyword">return</span> ((y&lt;<span class="number">30</span> ? <span class="string">&quot;20&quot;</span> : <span class="string">&quot;19&quot;</span>) + y)|<span class="number">0</span>;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/13/%E4%BD%BF%E7%94%A8-Gradle-%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%90%8D%E5%8F%91%E5%B8%83-Android-%E5%BA%94%E7%94%A8/" rel="prev" title="使用 Gradle 自动签名发布 Android 应用">
+      <i class="fa fa-chevron-left"></i> 使用 Gradle 自动签名发布 Android 应用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/28/Docker%E9%95%9C%E5%83%8F%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/" rel="next" title="Docker镜像导入导出">
+      Docker镜像导入导出 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC8yODMxNC80ODg2"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZevenFang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ZevenFang</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZevenFang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

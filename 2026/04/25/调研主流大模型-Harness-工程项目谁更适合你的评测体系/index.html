@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="比较 lm-eval、HELM、OpenCompass、LightEval 的定位、优劣势与选型建议。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="调研主流大模型 Harness 工程项目：谁更适合你的评测体系？">
+<meta property="og:url" content="https://zevenfang.github.io/2026/04/25/%E8%B0%83%E7%A0%94%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%A8%A1%E5%9E%8B-Harness-%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84%E8%AF%84%E6%B5%8B%E4%BD%93%E7%B3%BB/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="比较 lm-eval、HELM、OpenCompass、LightEval 的定位、优劣势与选型建议。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zevenfang.github.io/images/wechat-sync/调研主流大模型-Harness-工程项目谁更适合你的评测体系/3006ff8bfb1e1353.jpg">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-04-25T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.761Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="公众号同步">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zevenfang.github.io/images/wechat-sync/调研主流大模型-Harness-工程项目谁更适合你的评测体系/3006ff8bfb1e1353.jpg">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/04/25/%E8%B0%83%E7%A0%94%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%A8%A1%E5%9E%8B-Harness-%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84%E8%AF%84%E6%B5%8B%E4%BD%93%E7%B3%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>调研主流大模型 Harness 工程项目：谁更适合你的评测体系？ | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/04/25/%E8%B0%83%E7%A0%94%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%A8%A1%E5%9E%8B-Harness-%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84%E8%AF%84%E6%B5%8B%E4%BD%93%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          调研主流大模型 Harness 工程项目：谁更适合你的评测体系？<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/%E8%B0%83%E7%A0%94%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%A8%A1%E5%9E%8B-Harness-%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84%E8%AF%84%E6%B5%8B%E4%BD%93%E7%B3%BB.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-25 10:00:00" itemprop="dateCreated datePublished" datetime="2026-04-25T10:00:00+08:00">2026-04-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E5%85%AC%E4%BC%97%E5%8F%B7/" itemprop="url" rel="index"><span itemprop="name">公众号</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">比较 lm-eval、HELM、OpenCompass、LightEval 的定位、优劣势与选型建议。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>原公众号链接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/hbD8jF0XpeYejupJ0JhC-Q">调研主流大模型 Harness 工程项目：谁更适合你的评测体系？</a></p>
+</blockquote>
+<div class="post-content-summary" aria-label="内容摘要"><div class="post-content-summary-title">内容摘要</div><p>比较 lm-eval、HELM、OpenCompass、LightEval 的定位、优劣势与选型建议。</p></div>
+
+<p><img src="/images/wechat-sync/调研主流大模型-Harness-工程项目谁更适合你的评测体系/3006ff8bfb1e1353.jpg" alt=""></p>
+<p>主流大模型评测 Harness 工程项目对比摘要：从 lm-eval、HELM、OpenCompass、LightEval 四个代表项目出发，比较定位、工程特点、优缺点与选型建议。</p>
+<p>这两年，大模型团队几乎都会提到一个词：评测。</p>
+<p>但真正落到工程里，大家碰到的往往不是“跑哪个 benchmark”这么简单，而是另一层问题：到底该选哪套 Harness，才能让评测结果稳定、流程可复用、模型迭代能持续回归？</p>
+<p>如果只把 Harness 理解成“跑分脚本”，很容易低估它的重要性。一个成熟的 Harness，实际上承担的是任务编排、模型接入、提示模板管理、结果汇总、指标计算、复现实验，甚至团队协作接口等工作。</p>
+<p>今天这篇文章，我选了 4 个在业内比较有代表性的项目做对比：</p>
+<ul>
+<li><p>EleutherAI 的 lm-evaluation-harness</p>
+</li>
+<li><p>Stanford CRFM 的 HELM</p>
+</li>
+<li><p>OpenCompass</p>
+</li>
+<li><p>Hugging Face 的 LightEval<br>它们并不是简单替代关系，而是分别代表了 4 种不同的评测工程思路。</p>
+</li>
+</ul>
+<h2 id="一、先说结论：它们分别适合谁？"><a href="#一、先说结论：它们分别适合谁？" class="headerlink" title="一、先说结论：它们分别适合谁？"></a>一、先说结论：它们分别适合谁？</h2><ul>
+<li><p>如果你想要一个“通用、社区共识强、经典 benchmark 覆盖广”的基础评测底座，优先看 lm-evaluation-harness。</p>
+</li>
+<li><p>如果你更在意评测协议的严谨性、多维度分析、对外报告与治理表达，HELM 更合适。</p>
+</li>
+<li><p>如果你是中文或国产模型团队，需要一站式大规模跑很多榜单，OpenCompass 往往更顺手。</p>
+</li>
+<li><p>如果你已经深度使用 Hugging Face、vLLM、TGI，希望把评测嵌进研发流水线，LightEval 的工程体验通常更轻。</p>
+</li>
+</ul>
+<h2 id="二、为什么-Harness-不只是“跑-benchmark”？"><a href="#二、为什么-Harness-不只是“跑-benchmark”？" class="headerlink" title="二、为什么 Harness 不只是“跑 benchmark”？"></a>二、为什么 Harness 不只是“跑 benchmark”？</h2><p>很多团队前期做评测，会先写几段脚本把 MMLU、GSM8K、HumanEval 跑起来。短期当然能用，但很快会遇到 4 类问题：</p>
+<ul>
+<li><p>模型后端越来越多，本地 HF、vLLM、API 服务混在一起，脚本难统一。</p>
+</li>
+<li><p>提示模板、few-shot 设置、答案抽取逻辑到处散落，结果难复现。</p>
+</li>
+<li><p>团队每次换模型、换任务、换 checkpoint，都要重复改流程。</p>
+</li>
+<li><p>最终沉淀不出稳定的“评测系统”，只能得到一堆一次性结果。<br>所以，Harness 的本质价值并不是“帮你把题跑完”，而是“把评测变成可以持续运营的工程系统”。</p>
+</li>
+</ul>
+<h2 id="三、四个主流项目逐个看"><a href="#三、四个主流项目逐个看" class="headerlink" title="三、四个主流项目逐个看"></a>三、四个主流项目逐个看</h2><h3 id="1-lm-evaluation-harness：最像通用评测底座"><a href="#1-lm-evaluation-harness：最像通用评测底座" class="headerlink" title="1. lm-evaluation-harness：最像通用评测底座"></a>1. lm-evaluation-harness：最像通用评测底座</h3><p>lm-evaluation-harness 通常简称 lm-eval，是开源 LLM 评测里最有行业共识的项目之一。它的核心价值，不是发明了多少新 benchmark，而是把大量经典任务、模型接口、提示模板和打分逻辑统一到一套框架中。</p>
+<p>它很像一个“评测底座”：</p>
+<ul>
+<li><p>上层接任务与 benchmark</p>
+</li>
+<li><p>中间接 prompt、few-shot、结果后处理</p>
+</li>
+<li><p>下层接不同模型后端<br>优点：</p>
+</li>
+<li><p>社区共识强，很多论文、模型发布页、榜单流程都会引用它。</p>
+</li>
+<li><p>经典 benchmark 覆盖很广，适合做基线评测和版本回归。</p>
+</li>
+<li><p>后端适配丰富，适合同时比较本地模型与 API 模型。</p>
+</li>
+<li><p>扩展性强，研究团队自定义任务和配置比较方便。<br>缺点：</p>
+</li>
+<li><p>历史包袱较重，新用户第一次接触会觉得配置复杂。</p>
+</li>
+<li><p>不同后端在 chat template、停止词、logprob、system prompt 上并不完全等价，仍需人工校验。</p>
+</li>
+<li><p>对 agent、多轮工具调用、复杂交互环境的评测，不是它的原生强项。<br>适合谁：</p>
+</li>
+<li><p>研究团队</p>
+</li>
+<li><p>开源模型发布团队</p>
+</li>
+<li><p>需要做标准 benchmark 回归测试的 Infra 团队<br>一句话总结：lm-eval 是“最像通用标准件”的 Harness。</p>
+</li>
+</ul>
+<h3 id="2-HELM：最像标准化评测平台"><a href="#2-HELM：最像标准化评测平台" class="headerlink" title="2. HELM：最像标准化评测平台"></a>2. HELM：最像标准化评测平台</h3><p>Stanford CRFM 推出的 HELM，全称是 Holistic Evaluation of Language Models。它最突出的地方，不是“跑得快”，而是“评得全”。</p>
+<p>HELM 的思路是：评测不能只看 accuracy，还要把公平性、鲁棒性、校准、效率、毒性等维度纳入同一套框架里。换句话说，它更强调“整体性评测协议”，而不是单点刷榜。</p>
+<p>优点：</p>
+<ul>
+<li><p>方法论非常强，适合做严谨、可审计、可对外解释的评测。</p>
+</li>
+<li><p>多维度指标设计成熟，不只盯着几个考试集分数。</p>
+</li>
+<li><p>更适合写白皮书、做对外发布、支持治理或合规场景。</p>
+</li>
+<li><p>评测结构化程度高，适合长期维护组织级基准。<br>缺点：</p>
+</li>
+<li><p>框架偏重，上手成本比轻量 Harness 更高。</p>
+</li>
+<li><p>如果只是想快速在本地 GPU 上跑几个 checkpoint，它会显得有点“大材小用”。</p>
+</li>
+<li><p>对纯工程团队而言，日常迭代效率不一定优于更轻的方案。<br>适合谁：</p>
+</li>
+<li><p>高校或研究机构</p>
+</li>
+<li><p>重视评测治理、风险分析、对外报告的团队</p>
+</li>
+<li><p>需要跨模型、跨供应商做标准化对比的平台团队<br>一句话总结：HELM 更像“评测平台”和“方法论框架”，不是单纯的跑分工具。</p>
+</li>
+</ul>
+<h3 id="3-OpenCompass：最像中文生态的一站式评测基础设施"><a href="#3-OpenCompass：最像中文生态的一站式评测基础设施" class="headerlink" title="3. OpenCompass：最像中文生态的一站式评测基础设施"></a>3. OpenCompass：最像中文生态的一站式评测基础设施</h3><h2 id="OpenCompass"><a href="#OpenCompass" class="headerlink" title="OpenCompass"></a>OpenCompass</h2><p>在中文大模型圈的存在感非常高。它不仅支持大量主流 benchmark，也很重视中文和中英双语任务，因此在国产模型团队里尤其常见。</p>
+<p>从工程感觉上看，OpenCompass 更像“一站式评测平台”：配置驱动、大批量运行、统一汇总、适合同时评很多模型和很多任务。</p>
+<p>优点：</p>
+<ul>
+<li><p>中文 benchmark 整合能力强，适合国产模型发布和回归。</p>
+</li>
+<li><p>工程化程度高，适合团队协作和规模化评测。</p>
+</li>
+<li><p>一次性跑很多任务、很多模型、很多配置时，管理体验比较完整。</p>
+</li>
+<li><p>对模型发布前的“集中体检”特别友好。<br>缺点：</p>
+</li>
+<li><p>配置体系较重，学习曲线比轻量工具更陡。</p>
+</li>
+<li><p>如果只做小规模实验，可能会感觉平台化过头。</p>
+</li>
+<li><p>英文社区里的默认标准件地位，不如 lm-eval 那么自然。<br>适合谁：</p>
+</li>
+<li><p>中文大模型团队</p>
+</li>
+<li><p>国产模型评测团队</p>
+</li>
+<li><p>需要中英文 benchmark 混合跑的大规模评测场景<br>一句话总结：OpenCompass 赢在中文生态、平台化能力和批量工程体验。</p>
+</li>
+</ul>
+<h3 id="4-LightEval：最像-Hugging-Face-生态里的轻量评测工具链"><a href="#4-LightEval：最像-Hugging-Face-生态里的轻量评测工具链" class="headerlink" title="4. LightEval：最像 Hugging Face 生态里的轻量评测工具链"></a>4. LightEval：最像 Hugging Face 生态里的轻量评测工具链</h3><p>LightEval 是 Hugging Face 推动的评测工具。它的特点不是“大而全”，而是“轻、清晰、容易嵌入现有研发流程”。</p>
+<p>如果你的模型、推理、部署都已经围绕 Hugging Face、Transformers、vLLM、TGI 展开，那么 LightEval 的集成体验通常会比较自然。</p>
+<p>优点：</p>
+<ul>
+<li><p>和 Hugging Face 生态协同非常顺。</p>
+</li>
+<li><p>更容易嵌入实验脚本、CI/CD、训练后自动验证流程。</p>
+</li>
+<li><p>后端抽象比较现代，适合统一切换不同推理方式。</p>
+</li>
+<li><p>适合复现主流国际 leaderboard 套件。<br>缺点：</p>
+</li>
+<li><p>中文 benchmark 不是它的优势区。</p>
+</li>
+<li><p>如果你需要非常平台化的大矩阵评测和统一报表，OpenCompass 往往更强。</p>
+</li>
+<li><p>某些复杂主观题和 judge-based 场景，仍需要自己仔细定义协议。<br>适合谁：</p>
+</li>
+<li><p>深度使用 Hugging Face 生态的团队</p>
+</li>
+<li><p>想把评测直接塞进研发流水线的工程团队</p>
+</li>
+<li><p>英文 benchmark 优先的模型研发团队<br>一句话总结：LightEval 是“更现代、更轻、更适合集成”的工程派选择。</p>
+</li>
+</ul>
+<h2 id="四、把它们放在一起对比"><a href="#四、把它们放在一起对比" class="headerlink" title="四、把它们放在一起对比"></a>四、把它们放在一起对比</h2><h3 id="1-从定位看"><a href="#1-从定位看" class="headerlink" title="1. 从定位看"></a>1. 从定位看</h3><ul>
+<li><p>lm-eval：通用评测底座</p>
+</li>
+<li><p>HELM：整体性评测平台</p>
+</li>
+<li><p>OpenCompass：中文生态一站式评测基础设施</p>
+</li>
+<li><p>LightEval：HF 生态轻量评测工具链</p>
+</li>
+</ul>
+<h3 id="2-从工程风格看"><a href="#2-从工程风格看" class="headerlink" title="2. 从工程风格看"></a>2. 从工程风格看</h3><ul>
+<li><p>lm-eval 偏研究社区标准件</p>
+</li>
+<li><p>HELM 偏标准化协议与报告系统</p>
+</li>
+<li><p>OpenCompass 偏平台化和批量调度</p>
+</li>
+<li><p>LightEval 偏库化、模块化与流水线集成</p>
+</li>
+</ul>
+<h3 id="3-从中文支持看"><a href="#3-从中文支持看" class="headerlink" title="3. 从中文支持看"></a>3. 从中文支持看</h3><ul>
+<li><p>OpenCompass 最强</p>
+</li>
+<li><p>lm-eval 和 LightEval 更偏国际通用 benchmark</p>
+</li>
+<li><p>HELM 更偏方法论与整体性评价，不以中文任务见长</p>
+</li>
+</ul>
+<h3 id="4-从上手成本看"><a href="#4-从上手成本看" class="headerlink" title="4. 从上手成本看"></a>4. 从上手成本看</h3><ul>
+<li><p>LightEval 相对最轻</p>
+</li>
+<li><p>lm-eval 中等，但历史配置较多</p>
+</li>
+<li><p>OpenCompass 和 HELM 更重，适合成熟团队而不是临时脚本党</p>
+</li>
+</ul>
+<h3 id="5-从适用目标看"><a href="#5-从适用目标看" class="headerlink" title="5. 从适用目标看"></a>5. 从适用目标看</h3><ul>
+<li><p>要做行业通用 benchmark：优先 lm-eval</p>
+</li>
+<li><p>要做多维治理型评测：优先 HELM</p>
+</li>
+<li><p>要做中文大规模发布评测：优先 OpenCompass</p>
+</li>
+<li><p>要做研发流水线集成：优先 LightEval</p>
+</li>
+</ul>
+<h2 id="五、不同团队怎么选？"><a href="#五、不同团队怎么选？" class="headerlink" title="五、不同团队怎么选？"></a>五、不同团队怎么选？</h2><p>如果你是下面 4 类团队，可以这样选：</p>
+<h3 id="1-开源模型团队"><a href="#1-开源模型团队" class="headerlink" title="1. 开源模型团队"></a>1. 开源模型团队</h3><p>最稳妥的起点通常是 lm-eval。因为它的社区共识最强，结果也最容易被外部理解。</p>
+<h3 id="2-大厂平台或研究院"><a href="#2-大厂平台或研究院" class="headerlink" title="2. 大厂平台或研究院"></a>2. 大厂平台或研究院</h3><p>如果你除了追求分数，还需要做责任边界、风险维度、对外解释，那就应该看 HELM，而不是只看轻量 Harness。</p>
+<h3 id="3-国产模型团队"><a href="#3-国产模型团队" class="headerlink" title="3. 国产模型团队"></a>3. 国产模型团队</h3><p>如果中文 benchmark 是核心阵地，而且经常需要集中评很多榜单，OpenCompass 的性价比往往最高。</p>
+<h3 id="4-工程化研发团队"><a href="#4-工程化研发团队" class="headerlink" title="4. 工程化研发团队"></a>4. 工程化研发团队</h3><p>如果你的目标是把评测接进训练、部署、回归和 CI 流程，LightEval 会更贴近现代 MLOps 风格。</p>
+<h2 id="六、一个更现实的判断：很多团队其实不会只用一套"><a href="#六、一个更现实的判断：很多团队其实不会只用一套" class="headerlink" title="六、一个更现实的判断：很多团队其实不会只用一套"></a>六、一个更现实的判断：很多团队其实不会只用一套</h2><p>真实世界里，成熟团队往往不会押注单一 Harness，而会形成“分层组合”：</p>
+<ul>
+<li><p>用 lm-eval 跑行业通用 benchmark，做对外可比的基线</p>
+</li>
+<li><p>用 OpenCompass 补中文和大规模矩阵评测</p>
+</li>
+<li><p>用 LightEval 嵌进内部研发流水线</p>
+</li>
+<li><p>用 HELM 负责更高层的整体性、多维度评测与报告<br>换句话说，Harness 选型不是非此即彼，而是看你想解决哪一层问题。</p>
+</li>
+</ul>
+<h2 id="七、最后总结"><a href="#七、最后总结" class="headerlink" title="七、最后总结"></a>七、最后总结</h2><p>如果只用一句话概括这 4 个项目：</p>
+<ul>
+<li><p>lm-eval 代表“社区标准件”</p>
+</li>
+<li><p>HELM 代表“评测方法论与治理框架”</p>
+</li>
+<li><p>OpenCompass 代表“中文生态的一站式评测基础设施”</p>
+</li>
+<li><p>LightEval 代表“HF 生态里的轻量工程化工具链”<br>对于多数团队来说，真正重要的不是“谁最强”，而是“谁最适合你当前的评测阶段”。</p>
+</li>
+</ul>
+<p>当团队还在搭评测底座时，先追求统一与复现；当团队开始规模化迭代时，再追求批量调度与自动回归；当模型要走向对外发布、治理和可信表达时，再引入更完整的多维评测体系。</p>
+<p>评测这件事，最终比的不是谁会跑分，而是谁能把评测做成长期稳定的工程能力。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/%E5%85%AC%E4%BC%97%E5%8F%B7%E5%90%8C%E6%AD%A5/" rel="tag"># 公众号同步</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/24/%E4%B8%BA%E4%BB%80%E4%B9%88-AI-%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%BC%9A-%E7%82%B9%E7%BD%91%E9%A1%B5-%E8%81%8A%E8%81%8A-Browser-Use-Playwright-MCP-%E5%92%8C%E4%B8%8B%E4%B8%80%E4%BB%A3-Agent/" rel="prev" title="为什么 AI 开始学会“点网页”？聊聊 Browser Use、Playwright MCP 和下一代 Agent">
+      <i class="fa fa-chevron-left"></i> 为什么 AI 开始学会“点网页”？聊聊 Browser Use、Playwright MCP 和下一代 Agent
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/04/26/Token%E4%B8%AD%E8%BD%AC%E7%AB%99%E6%98%AF%E4%BB%80%E4%B9%88-%E4%B8%80%E6%96%87%E8%AE%B2%E6%B8%85%E5%AE%83%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%88%90%E4%B8%BA%E5%BE%88%E5%A4%9A-AI-%E5%BA%94%E7%94%A8%E5%9B%A2%E9%98%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" rel="next" title="Token中转站是什么？一文讲清它为什么会成为很多 AI 应用团队的基础设施">
+      Token中转站是什么？一文讲清它为什么会成为很多 AI 应用团队的基础设施 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%85%88%E8%AF%B4%E7%BB%93%E8%AE%BA%EF%BC%9A%E5%AE%83%E4%BB%AC%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E8%B0%81%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">一、先说结论：它们分别适合谁？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88-Harness-%E4%B8%8D%E5%8F%AA%E6%98%AF%E2%80%9C%E8%B7%91-benchmark%E2%80%9D%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">二、为什么 Harness 不只是“跑 benchmark”？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9B%9B%E4%B8%AA%E4%B8%BB%E6%B5%81%E9%A1%B9%E7%9B%AE%E9%80%90%E4%B8%AA%E7%9C%8B"><span class="nav-number">3.</span> <span class="nav-text">三、四个主流项目逐个看</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-lm-evaluation-harness%EF%BC%9A%E6%9C%80%E5%83%8F%E9%80%9A%E7%94%A8%E8%AF%84%E6%B5%8B%E5%BA%95%E5%BA%A7"><span class="nav-number">3.1.</span> <span class="nav-text">1. lm-evaluation-harness：最像通用评测底座</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-HELM%EF%BC%9A%E6%9C%80%E5%83%8F%E6%A0%87%E5%87%86%E5%8C%96%E8%AF%84%E6%B5%8B%E5%B9%B3%E5%8F%B0"><span class="nav-number">3.2.</span> <span class="nav-text">2. HELM：最像标准化评测平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-OpenCompass%EF%BC%9A%E6%9C%80%E5%83%8F%E4%B8%AD%E6%96%87%E7%94%9F%E6%80%81%E7%9A%84%E4%B8%80%E7%AB%99%E5%BC%8F%E8%AF%84%E6%B5%8B%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="nav-number">3.3.</span> <span class="nav-text">3. OpenCompass：最像中文生态的一站式评测基础设施</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenCompass"><span class="nav-number">4.</span> <span class="nav-text">OpenCompass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-LightEval%EF%BC%9A%E6%9C%80%E5%83%8F-Hugging-Face-%E7%94%9F%E6%80%81%E9%87%8C%E7%9A%84%E8%BD%BB%E9%87%8F%E8%AF%84%E6%B5%8B%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="nav-number">4.1.</span> <span class="nav-text">4. LightEval：最像 Hugging Face 生态里的轻量评测工具链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%8A%8A%E5%AE%83%E4%BB%AC%E6%94%BE%E5%9C%A8%E4%B8%80%E8%B5%B7%E5%AF%B9%E6%AF%94"><span class="nav-number">5.</span> <span class="nav-text">四、把它们放在一起对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BB%8E%E5%AE%9A%E4%BD%8D%E7%9C%8B"><span class="nav-number">5.1.</span> <span class="nav-text">1. 从定位看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BB%8E%E5%B7%A5%E7%A8%8B%E9%A3%8E%E6%A0%BC%E7%9C%8B"><span class="nav-number">5.2.</span> <span class="nav-text">2. 从工程风格看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BB%8E%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81%E7%9C%8B"><span class="nav-number">5.3.</span> <span class="nav-text">3. 从中文支持看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BB%8E%E4%B8%8A%E6%89%8B%E6%88%90%E6%9C%AC%E7%9C%8B"><span class="nav-number">5.4.</span> <span class="nav-text">4. 从上手成本看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BB%8E%E9%80%82%E7%94%A8%E7%9B%AE%E6%A0%87%E7%9C%8B"><span class="nav-number">5.5.</span> <span class="nav-text">5. 从适用目标看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%8D%E5%90%8C%E5%9B%A2%E9%98%9F%E6%80%8E%E4%B9%88%E9%80%89%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">五、不同团队怎么选？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%80%E6%BA%90%E6%A8%A1%E5%9E%8B%E5%9B%A2%E9%98%9F"><span class="nav-number">6.1.</span> <span class="nav-text">1. 开源模型团队</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%A7%E5%8E%82%E5%B9%B3%E5%8F%B0%E6%88%96%E7%A0%94%E7%A9%B6%E9%99%A2"><span class="nav-number">6.2.</span> <span class="nav-text">2. 大厂平台或研究院</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9B%BD%E4%BA%A7%E6%A8%A1%E5%9E%8B%E5%9B%A2%E9%98%9F"><span class="nav-number">6.3.</span> <span class="nav-text">3. 国产模型团队</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%A0%94%E5%8F%91%E5%9B%A2%E9%98%9F"><span class="nav-number">6.4.</span> <span class="nav-text">4. 工程化研发团队</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%B8%80%E4%B8%AA%E6%9B%B4%E7%8E%B0%E5%AE%9E%E7%9A%84%E5%88%A4%E6%96%AD%EF%BC%9A%E5%BE%88%E5%A4%9A%E5%9B%A2%E9%98%9F%E5%85%B6%E5%AE%9E%E4%B8%8D%E4%BC%9A%E5%8F%AA%E7%94%A8%E4%B8%80%E5%A5%97"><span class="nav-number">7.</span> <span class="nav-text">六、一个更现实的判断：很多团队其实不会只用一套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%9C%80%E5%90%8E%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">七、最后总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

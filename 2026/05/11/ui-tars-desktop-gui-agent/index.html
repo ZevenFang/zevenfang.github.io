@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ByteDance 开源的 UI-TARS Desktop 把视觉语言模型、截图识别和鼠标键盘控制组合成原生桌面 Agent。它不只是“会聊天”的助手，而是开始接管浏览器、VS Code 和本地软件里的真实操作。本文用一篇文章看懂它的定位、能力边界和适合上手的场景。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI-TARS Desktop：让 AI 直接操作电脑，GUI Agent 正在从 Demo 走向日常工具">
+<meta property="og:url" content="https://zevenfang.github.io/2026/05/11/ui-tars-desktop-gui-agent/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="ByteDance 开源的 UI-TARS Desktop 把视觉语言模型、截图识别和鼠标键盘控制组合成原生桌面 Agent。它不只是“会聊天”的助手，而是开始接管浏览器、VS Code 和本地软件里的真实操作。本文用一篇文章看懂它的定位、能力边界和适合上手的场景。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zevenfang.github.io/images/wechat-sync/ui-tars-desktop-gui-agent/cover-ui-tars-desktop-gpt-image-2.jpg">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-05-11T07:30:00.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.756Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="UI-TARS">
+<meta property="article:tag" content="GUI Agent">
+<meta property="article:tag" content="AI 自动化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zevenfang.github.io/images/wechat-sync/ui-tars-desktop-gui-agent/cover-ui-tars-desktop-gpt-image-2.jpg">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/05/11/ui-tars-desktop-gui-agent/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UI-TARS Desktop：让 AI 直接操作电脑，GUI Agent 正在从 Demo 走向日常工具 | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/05/11/ui-tars-desktop-gui-agent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UI-TARS Desktop：让 AI 直接操作电脑，GUI Agent 正在从 Demo 走向日常工具<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/ui-tars-desktop-gui-agent.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-11 15:30:00" itemprop="dateCreated datePublished" datetime="2026-05-11T15:30:00+08:00">2026-05-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">ByteDance 开源的 UI-TARS Desktop 把视觉语言模型、截图识别和鼠标键盘控制组合成原生桌面 Agent。它不只是“会聊天”的助手，而是开始接管浏览器、VS Code 和本地软件里的真实操作。本文用一篇文章看懂它的定位、能力边界和适合上手的场景。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/images/wechat-sync/ui-tars-desktop-gui-agent/cover-ui-tars-desktop-gpt-image-2.jpg" alt="文章封面"></p>
+<blockquote>
+<p>ByteDance 开源的 UI-TARS Desktop 把视觉语言模型、截图识别和鼠标键盘控制组合成原生桌面 Agent。它不只是“会聊天”的助手，而是开始接管浏览器、VS Code 和本地软件里的真实操作。本文用一篇文章看懂它的定位、能力边界和适合上手的场景。</p>
+</blockquote>
+<p>如果说过去两年的 AI 应用主线是“让模型理解文本”，那么接下来很长一段时间，重点会变成“让模型进入界面”。</p>
+<p>这也是 UI-TARS Desktop 这个项目值得关注的地方：它不是再做一个聊天窗口，而是把多模态模型放进真实桌面环境里，让 AI 看屏幕、理解界面，并通过鼠标和键盘完成操作。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/bytedance/UI-TARS-desktop">https://github.com/bytedance/UI-TARS-desktop</a></p>
+<h2 id="一、它到底是什么？"><a href="#一、它到底是什么？" class="headerlink" title="一、它到底是什么？"></a>一、它到底是什么？</h2><p>根据官方 README，TARS 是一个多模态 AI Agent Stack，目前包含 Agent TARS 和 UI-TARS Desktop 两个方向。</p>
+<p>Agent TARS 更偏通用 Agent Stack，提供 CLI 和 Web UI，把 GUI Agent、Vision、MCP 工具等能力带到终端、浏览器和产品中。</p>
+<p>UI-TARS Desktop 则更聚焦：它是一个桌面应用，基于 UI-TARS 和 Seed-1.5-VL / 1.6 系列模型，提供原生 GUI Agent 能力，可以在本地计算机、浏览器等环境里执行任务。</p>
+<p>换句话说：</p>
+<ul>
+<li>传统 Chatbot 的输入输出主要是文字。</li>
+<li>RPA 更像按固定脚本点击按钮。</li>
+<li>UI-TARS Desktop 想做的是“能看懂界面、能推理下一步、能实际操作”的桌面 Agent。</li>
+</ul>
+<p>这类产品的价值并不在于某一个炫技 Demo，而在于它把“软件界面”本身变成了模型可操作的对象。</p>
+<h2 id="二、核心能力：看屏幕、理解界面、执行动作"><a href="#二、核心能力：看屏幕、理解界面、执行动作" class="headerlink" title="二、核心能力：看屏幕、理解界面、执行动作"></a>二、核心能力：看屏幕、理解界面、执行动作</h2><p>官方列出的 UI-TARS Desktop 特性很直接：</p>
+<ul>
+<li>由 Vision-Language Model 驱动的自然语言控制</li>
+<li>支持截图和视觉识别</li>
+<li>可以进行精确的鼠标和键盘控制</li>
+<li>支持 Windows、macOS 和 Browser 等跨平台环境</li>
+<li>提供实时反馈和状态显示</li>
+<li>强调私密与安全，本地处理能力更强</li>
+</ul>
+<p>这些能力组合起来，意味着用户可以用自然语言提出任务，而不是逐步告诉 AI “点击这里、输入那里”。</p>
+<p>官方展示的案例包括：</p>
+<ol>
+<li>在 VS Code 设置中打开自动保存，并把自动保存延迟设置为 500 毫秒。</li>
+<li>查看 GitHub 上 UI-TARS Desktop 项目的最新 open issue。</li>
+</ol>
+<p>这两个例子很有代表性。</p>
+<p>前者是典型本地软件操作：需要识别设置入口、搜索配置项、修改具体参数。后者是浏览器任务：需要打开网页、理解 GitHub 页面结构、筛选状态信息。</p>
+<p>对于人来说，这些任务不难，但很琐碎；对于传统自动化来说，它们又容易因为 UI 改版、路径变化而失效。GUI Agent 的理想状态，就是把这类“低认知但多步骤”的操作交出去。</p>
+<h2 id="三、为什么-GUI-Agent-比普通自动化更有想象力？"><a href="#三、为什么-GUI-Agent-比普通自动化更有想象力？" class="headerlink" title="三、为什么 GUI Agent 比普通自动化更有想象力？"></a>三、为什么 GUI Agent 比普通自动化更有想象力？</h2><p>GUI Agent 和传统脚本最大的区别，是它面对的是“视觉界面”，而不是稳定 API。</p>
+<p>这会带来三个变化。</p>
+<ol>
+<li>软件不需要专门适配</li>
+</ol>
+<p>很多软件没有开放 API，或者 API 覆盖不了所有功能。人类依然可以通过界面完成操作，Agent 如果能稳定理解界面，也就有机会使用这些没有 API 的软件。</p>
+<ol start="2">
+<li>工作流更接近人类</li>
+</ol>
+<p>人类完成任务时，不会先问“这个按钮的 CSS selector 是什么”，而是看见页面、判断目标、点击入口、观察反馈。GUI Agent 也在模拟这条路径。</p>
+<p>这也是 Agent TARS 文档里反复强调的方向：通过 GUI Agent、Vision 和 MCP 等工具，让工作流更接近人类完成任务的方式。</p>
+<ol start="3">
+<li>自动化的维护成本可能下降</li>
+</ol>
+<p>传统自动化经常死在 UI 变化上：按钮位置变了、DOM 结构变了、弹窗多了一层，脚本就失效。</p>
+<p>如果 Agent 能通过视觉和语义重新定位目标，自动化流程就不必完全依赖固定坐标或固定选择器。当然，这并不意味着 GUI Agent 已经彻底解决稳定性问题，但它提供了一条新的工程路线。</p>
+<h2 id="四、Agent-TARS-与-UI-TARS-Desktop-的分工"><a href="#四、Agent-TARS-与-UI-TARS-Desktop-的分工" class="headerlink" title="四、Agent TARS 与 UI-TARS Desktop 的分工"></a>四、Agent TARS 与 UI-TARS Desktop 的分工</h2><p>从 README 的描述看，TARS 生态里可以粗略分成两层：</p>
+<ol>
+<li>Agent TARS：更像通用多模态 Agent 框架</li>
+</ol>
+<p>它提供 CLI、Web UI、无头 server、混合 Browser Agent、Event Stream、MCP Integration 等能力。</p>
+<p>如果你想把 Agent 能力接入自己的流程、服务或产品，Agent TARS 是更靠近开发者框架的一侧。</p>
+<ol start="2">
+<li>UI-TARS Desktop：更像面向桌面使用的原生应用</li>
+</ol>
+<p>它聚焦本地电脑和浏览器操作，提供可视化的桌面 Agent 体验。</p>
+<p>如果你关心的是“我能不能直接让 AI 操作电脑做事”，UI-TARS Desktop 会更容易理解和上手。</p>
+<p>这两个方向放在一起，说明项目并不只是做一个桌面 App，而是在搭一个从模型、运行环境、工具协议到用户界面的 Agent Stack。</p>
+<h2 id="五、哪些场景最适合先尝试？"><a href="#五、哪些场景最适合先尝试？" class="headerlink" title="五、哪些场景最适合先尝试？"></a>五、哪些场景最适合先尝试？</h2><p>我会优先把 UI-TARS Desktop 放到以下几类场景里试用：</p>
+<ol>
+<li>重复但不固定的办公操作</li>
+</ol>
+<p>例如软件设置、表单填写、后台页面配置、跨网页信息整理。这类任务通常不是纯脚本能轻松覆盖的，但也不需要高级创造力。</p>
+<ol start="2">
+<li>浏览器中的信息检索与操作</li>
+</ol>
+<p>比如查看 issue、搜索网页、进入后台系统取数、对比页面信息。浏览器既有 DOM，又有视觉界面，是 GUI Agent 很好的试验场。</p>
+<ol start="3">
+<li>本地应用里的辅助操作</li>
+</ol>
+<p>例如编辑器配置、文件管理、简单软件操作。它可以把“帮我设置一下某个选项”变成自然语言任务。</p>
+<ol start="4">
+<li>Agent 产品原型验证</li>
+</ol>
+<p>如果你在做自己的 Agent 产品，TARS 生态里的 CLI、Web UI、MCP、Event Stream 等能力，可以作为观察多模态 Agent 工程化的一组参考。</p>
+<h2 id="六、也要看到它的边界"><a href="#六、也要看到它的边界" class="headerlink" title="六、也要看到它的边界"></a>六、也要看到它的边界</h2><p>GUI Agent 很令人兴奋，但不能把它当成魔法。</p>
+<p>当前这类系统通常仍然会面临几个问题：</p>
+<ul>
+<li>操作稳定性：复杂 UI、动态弹窗、权限提示都可能打断流程。</li>
+<li>成本与延迟：视觉理解和多步推理往往比普通 API 调用更慢。</li>
+<li>安全边界：让 Agent 操作电脑，必须明确哪些动作可执行、哪些需要确认。</li>
+<li>可观测性：一旦任务失败，需要知道它看到了什么、为什么点错、在哪一步偏离目标。</li>
+</ul>
+<p>所以，我更愿意把 UI-TARS Desktop 看成“正在成熟的桌面 Agent 基础设施”，而不是已经可以无脑托管所有电脑操作的万能助手。</p>
+<h2 id="七、为什么这个项目值得关注？"><a href="#七、为什么这个项目值得关注？" class="headerlink" title="七、为什么这个项目值得关注？"></a>七、为什么这个项目值得关注？</h2><p>原因很简单：GUI 是现实世界数字工作的主入口。</p>
+<p>很多人每天的工作，并不是调用 API，而是在浏览器、Excel、VS Code、后台系统、IM、网盘、设计工具之间来回切换。只要 Agent 还不能可靠进入这些界面，它就很难真正接管大量日常任务。</p>
+<p>UI-TARS Desktop 代表的方向，是让模型从“回答问题”继续往前走一步：</p>
+<ul>
+<li>看见软件界面</li>
+<li>理解用户意图</li>
+<li>拆解操作步骤</li>
+<li>执行鼠标键盘动作</li>
+<li>根据反馈继续修正</li>
+</ul>
+<p>这也是我认为 GUI Agent 会成为 AI 应用重要分支的原因。API Agent 解决结构化系统，GUI Agent 连接现有软件世界；两者结合，才更接近真正可用的个人和企业级自动化。</p>
+<h2 id="八、上手建议"><a href="#八、上手建议" class="headerlink" title="八、上手建议"></a>八、上手建议</h2><p>如果你想体验，可以从官方 README 里的 Quick Start 入口开始：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/bytedance/UI-TARS-desktop/blob/main/README.zh-CN.md">https://github.com/bytedance/UI-TARS-desktop/blob/main/README.zh-CN.md</a></p>
+<p>建议先不要一上来就测试复杂任务，而是从“小而明确”的任务开始：</p>
+<ul>
+<li>打开某个软件设置项</li>
+<li>在网页中查找指定信息</li>
+<li>修改一个简单配置</li>
+<li>让它完成两三步以内的浏览器操作</li>
+</ul>
+<p>观察它是否能正确识别界面、是否会在关键步骤停下来确认、失败时反馈是否足够清晰。对于 GUI Agent 来说，“能不能解释自己的操作过程”和“能不能恢复失败”与最终成功率同样重要。</p>
+<p>结语</p>
+<p>UI-TARS Desktop 的意义，不只是又多了一个 AI 桌面应用，而是提醒我们：AI Agent 的下一站，很可能不是一个更大的聊天框，而是一个能进入真实软件环境的操作者。</p>
+<p>当模型开始真正“看见并操作界面”，自动化的边界会被重新划定。现在的 GUI Agent 还在早期，但它已经足够值得开发者和效率工具爱好者认真关注。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/tags/UI-TARS/" rel="tag"># UI-TARS</a>
+              <a href="/tags/GUI-Agent/" rel="tag"># GUI Agent</a>
+              <a href="/tags/AI-%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag"># AI 自动化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/11/%E7%94%A8-Hermes-%E7%94%9F%E6%88%90-PPT-%E4%BB%8E%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%88%B0%E5%8F%AF%E4%BA%A4%E4%BB%98%E6%BC%94%E7%A4%BA%E6%96%87%E7%A8%BF/" rel="prev" title="用 Hermes 生成 PPT：从一句话到可交付演示文稿">
+      <i class="fa fa-chevron-left"></i> 用 Hermes 生成 PPT：从一句话到可交付演示文稿
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/05/13/llm-agent-difference/" rel="next" title="大模型和智能体，到底是什么关系？">
+      大模型和智能体，到底是什么关系？ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%83%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">一、它到底是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E8%83%BD%E5%8A%9B%EF%BC%9A%E7%9C%8B%E5%B1%8F%E5%B9%95%E3%80%81%E7%90%86%E8%A7%A3%E7%95%8C%E9%9D%A2%E3%80%81%E6%89%A7%E8%A1%8C%E5%8A%A8%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">二、核心能力：看屏幕、理解界面、执行动作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88-GUI-Agent-%E6%AF%94%E6%99%AE%E9%80%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9B%B4%E6%9C%89%E6%83%B3%E8%B1%A1%E5%8A%9B%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">三、为什么 GUI Agent 比普通自动化更有想象力？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Agent-TARS-%E4%B8%8E-UI-TARS-Desktop-%E7%9A%84%E5%88%86%E5%B7%A5"><span class="nav-number">4.</span> <span class="nav-text">四、Agent TARS 与 UI-TARS Desktop 的分工</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E6%9C%80%E9%80%82%E5%90%88%E5%85%88%E5%B0%9D%E8%AF%95%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">五、哪些场景最适合先尝试？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%B9%9F%E8%A6%81%E7%9C%8B%E5%88%B0%E5%AE%83%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">6.</span> <span class="nav-text">六、也要看到它的边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%80%BC%E5%BE%97%E5%85%B3%E6%B3%A8%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">七、为什么这个项目值得关注？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E4%B8%8A%E6%89%8B%E5%BB%BA%E8%AE%AE"><span class="nav-number">8.</span> <span class="nav-text">八、上手建议</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

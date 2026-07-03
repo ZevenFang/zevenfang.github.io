@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Google 新一代 Gemini 3.5 Flash 已经亮相：速度快 70%，部分 Agent 场景效率或达数倍提升。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gemini 3.5 Flash 来了：速度快 70％，AI Agent 终于开始“秒回”了">
+<meta property="og:url" content="https://zevenfang.github.io/2026/05/20/gemini-3-5-flash-agent-speed/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="Google 新一代 Gemini 3.5 Flash 已经亮相：速度快 70%，部分 Agent 场景效率或达数倍提升。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-05-20T07:53:59.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.755Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="AI Agent">
+<meta property="article:tag" content="Gemini">
+<meta property="article:tag" content="大模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/05/20/gemini-3-5-flash-agent-speed/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Gemini 3.5 Flash 来了：速度快 70％，AI Agent 终于开始“秒回”了 | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/05/20/gemini-3-5-flash-agent-speed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Gemini 3.5 Flash 来了：速度快 70％，AI Agent 终于开始“秒回”了<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/gemini-3-5-flash-agent-speed.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-20 15:53:59" itemprop="dateCreated datePublished" datetime="2026-05-20T15:53:59+08:00">2026-05-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">Google 新一代 Gemini 3.5 Flash 已经亮相：速度快 70%，部分 Agent 场景效率或达数倍提升。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Gemini 3.5 Flash 来了。</p>
+<p>如果说过去一年大模型的竞争关键词是“更强”，那么 Gemini 3.5 Flash 代表的方向可能是另一个词：</p>
+<p>更快。</p>
+<p>它不是 Google 最顶级的 Pro 级模型，也不是单纯为了刷新跑分而生。恰恰相反，它的定位非常明确：在足够聪明的前提下，把响应速度、工具调用、Agent 工作流体验尽可能拉满。</p>
+<p>对于普通用户来说，这意味着聊天更流畅、写代码更快、长文处理更顺手。</p>
+<p>对于开发者来说，这可能意味着 AI Agent 从“能用”，进一步变成“好用”。</p>
+<h2 id="一、Gemini-3-5-Flash-是什么？"><a href="#一、Gemini-3-5-Flash-是什么？" class="headerlink" title="一、Gemini 3.5 Flash 是什么？"></a>一、Gemini 3.5 Flash 是什么？</h2><p>Gemini 3.5 Flash 是 Google DeepMind 推出的新一代 Flash 系列模型。</p>
+<p>Flash 系列的核心定位，一直不是“最贵、最强、最重”，而是：</p>
+<ul>
+<li>速度快</li>
+<li>成本相对可控</li>
+<li>适合高频调用</li>
+<li>适合实时交互</li>
+<li>适合 Agent 和工具调用场景</li>
+</ul>
+<p>Google 官方模型卡显示，Gemini 3.5 Flash 是 Gemini 3 系列中的下一代高能力、多模态、推理模型，支持文本、图像、音频、视频等输入，最高支持 100 万 token 上下文窗口，输出最高可达 64K token。</p>
+<p>这意味着它不只是一个“聊天模型”，而是可以处理长文档、多媒体内容、代码库、复杂任务流的通用模型。</p>
+<p>更关键的是，它引入了 thinking levels，也就是可以通过不同思考等级，在质量、成本和延迟之间做权衡。</p>
+<p>简单理解：</p>
+<ul>
+<li>想要更快，可以降低思考强度</li>
+<li>想要更准，可以提高思考强度</li>
+<li>想要平衡，就选择中间档</li>
+</ul>
+<p>这正是 Agent 应用最需要的能力。</p>
+<h2 id="二、效率提高了多少？"><a href="#二、效率提高了多少？" class="headerlink" title="二、效率提高了多少？"></a>二、效率提高了多少？</h2><p>根据 Artificial Analysis 的测试，Gemini 3.5 Flash 的输出速度超过 280 tokens/s。</p>
+<p>相比上一代 Gemini 3 Flash，它大约快 70%。</p>
+<p>换算一下，也就是：</p>
+<p>速度约提升 1.7 倍。</p>
+<p>这个数字非常关键。</p>
+<p>因为在实际使用 AI 时，很多人并不是被“模型不够聪明”卡住，而是被“模型太慢”卡住。</p>
+<p>尤其是在这些场景里：</p>
+<ul>
+<li>AI 编程助手连续修改代码</li>
+<li>Agent 调用多个工具完成任务</li>
+<li>长文档总结和问答</li>
+<li>客服机器人实时回复</li>
+<li>搜索、阅读、分析、写作一体化流程</li>
+<li>多轮推理任务</li>
+</ul>
+<p>如果每一步都要等几秒，体验就会明显下降。</p>
+<p>但如果模型能以 280 tokens/s 以上的速度输出，很多任务就会从“等 AI 干活”，变成“AI 跟着你的节奏走”。</p>
+<p>这就是 Flash 模型真正的价值。</p>
+<h2 id="三、为什么有人说“效率提升-4-倍”？"><a href="#三、为什么有人说“效率提升-4-倍”？" class="headerlink" title="三、为什么有人说“效率提升 4 倍”？"></a>三、为什么有人说“效率提升 4 倍”？</h2><p>这里需要把两个概念分开：模型本身的输出速度，和具体业务里的端到端效率。</p>
+<p>如果只看公开测试里的输出速度，Gemini 3.5 Flash 相比 Gemini 3 Flash 大约快 70%，也就是约 1.7 倍。这是比较保守、也更容易核验的口径。</p>
+<p>但有些文章会写“效率提升 4 倍”，通常说的不是裸模型输出速度，而是某些 Agent 场景里的整体效率：比如模型更快返回、工具调用更稳定、缓存命中更高、任务中断更少，叠加之后，一个原本要几分钟的工作流，可能压缩到原来的几分之一。</p>
+<p>换句话说，1.7 倍更接近“模型输出速度”的提升；数倍提升更接近“应用工作流效率”的提升。前者适合写进标题和正文作为明确数据，后者则应该加上“部分 Agent 场景”“可能”“或达”等限定，避免把局部场景夸大成所有场景。</p>
+<h2 id="四、它不只是更快，也更会“干活”"><a href="#四、它不只是更快，也更会“干活”" class="headerlink" title="四、它不只是更快，也更会“干活”"></a>四、它不只是更快，也更会“干活”</h2><p>Gemini 3.5 Flash 的另一个重点，是 Agent 能力。</p>
+<p>所谓 Agent，不是简单聊天，而是让模型自己规划步骤、调用工具、读取文件、操作网页、写代码、运行测试，最后完成一个完整任务。</p>
+<p>这类能力对模型要求很高。</p>
+<p>它不仅要会回答问题，还要能：</p>
+<ul>
+<li>理解任务目标</li>
+<li>拆解步骤</li>
+<li>判断下一步该做什么</li>
+<li>正确使用工具</li>
+<li>减少幻觉</li>
+<li>在多轮过程中保持稳定</li>
+<li>出错后能自我修正</li>
+</ul>
+<p>根据 Artificial Analysis 的测试，Gemini 3.5 Flash 在真实世界 Agent 任务 GDPval-AA 上有明显提升，Elo 分数达到 1656，显著高于 Gemini 3 Flash 的 1204，也高于 Gemini 3.1 Pro 的 1314。</p>
+<p>这说明它不是单纯“说得快”，而是在更复杂的任务场景中，也更能把事情做完。</p>
+<p>这也是为什么 GitHub Copilot 已经开始将 Gemini 3.5 Flash 推给用户。</p>
+<p>GitHub 的说法是，它在早期测试中提供了接近 Pro 级的代码质量，同时保持 Flash 级别的速度和成本特点，适合快速迭代的 Agent 编程工作流。</p>
+<h2 id="五、对开发者意味着什么？"><a href="#五、对开发者意味着什么？" class="headerlink" title="五、对开发者意味着什么？"></a>五、对开发者意味着什么？</h2><p>如果你是开发者，Gemini 3.5 Flash 最值得关注的地方有三个。</p>
+<h3 id="1-编码响应更快"><a href="#1-编码响应更快" class="headerlink" title="1. 编码响应更快"></a>1. 编码响应更快</h3><p>在 AI 编程中，速度非常重要。</p>
+<p>不是因为开发者没有耐心，而是因为编程本身就是高频反馈流程：</p>
+<ul>
+<li>提需求</li>
+<li>看方案</li>
+<li>改代码</li>
+<li>跑测试</li>
+<li>修 bug</li>
+<li>再重构</li>
+<li>再解释</li>
+</ul>
+<p>如果每一轮都很慢，AI 助手就会打断思路。</p>
+<p>Gemini 3.5 Flash 的高输出速度，能让它更适合这种“连续对话 + 连续修改”的工作方式。</p>
+<h3 id="2-工具调用更适合-Agent"><a href="#2-工具调用更适合-Agent" class="headerlink" title="2. 工具调用更适合 Agent"></a>2. 工具调用更适合 Agent</h3><p>现在的 AI 编程助手，已经不是简单生成一段代码，而是越来越像“云端开发助理”。</p>
+<p>它需要读项目、查文档、开 issue、改文件、跑命令、看错误日志。</p>
+<p>这类任务对模型的工具调用能力要求很高。</p>
+<p>Gemini 3.5 Flash 在 Agent 任务上的提升，说明它更适合这类复杂工作流。</p>
+<h3 id="3-长上下文更适合大型项目"><a href="#3-长上下文更适合大型项目" class="headerlink" title="3. 长上下文更适合大型项目"></a>3. 长上下文更适合大型项目</h3><p>100 万 token 上下文窗口，意味着它可以一次性理解更多内容。</p>
+<p>比如：</p>
+<ul>
+<li>一个大型代码仓库</li>
+<li>一整套产品文档</li>
+<li>几十页会议纪要</li>
+<li>长篇论文和报告</li>
+<li>多文件的业务逻辑</li>
+</ul>
+<p>对于开发者和知识工作者来说，长上下文不是噱头，而是实用能力。</p>
+<p>因为很多真实问题，答案并不在一句提示词里，而散落在大量上下文中。</p>
+<h2 id="六、对普通用户有什么用？"><a href="#六、对普通用户有什么用？" class="headerlink" title="六、对普通用户有什么用？"></a>六、对普通用户有什么用？</h2><p>普通用户可能不关心 tokens/s，也不关心 Elo 分数。</p>
+<p>但你会直接感受到几个变化。</p>
+<p>第一，回答更快。</p>
+<p>写邮件、总结文章、生成方案、翻译内容，等待时间会更短。</p>
+<p>第二，处理长内容更稳。</p>
+<p>你可以给它更长的材料，让它帮你总结、提炼、改写、生成结构化内容。</p>
+<p>第三，多模态输入更自然。</p>
+<p>Gemini 3.5 Flash 支持文本、图片、音频、视频输入，这意味着它可以进入更多真实场景。</p>
+<p>比如：</p>
+<ul>
+<li>分析截图</li>
+<li>总结视频</li>
+<li>理解录音</li>
+<li>阅读长文档</li>
+<li>看图写文案</li>
+<li>根据材料生成报告</li>
+</ul>
+<p>第四，AI 助手更像“执行者”。</p>
+<p>未来的 AI 不只是回答“你应该怎么做”，而是直接帮你做：</p>
+<ul>
+<li>整理资料</li>
+<li>写初稿</li>
+<li>生成表格</li>
+<li>规划路线</li>
+<li>分析数据</li>
+<li>调用工具完成任务</li>
+</ul>
+<p>Gemini 3.5 Flash 这类模型，就是在往这个方向推进。</p>
+<h2 id="七、但它也不是完美的"><a href="#七、但它也不是完美的" class="headerlink" title="七、但它也不是完美的"></a>七、但它也不是完美的</h2><p>值得注意的是，Gemini 3.5 Flash 虽然更快、更强，但成本并不一定更低。</p>
+<p>Artificial Analysis 的测试显示，Gemini 3.5 Flash 的价格相比 Gemini 3 Flash 有明显上升，输入价格为 1.50 美元 / 100 万 token，输出价格为 9 美元 / 100 万 token，而 Gemini 3 Flash 是 0.5 / 3 美元。</p>
+<p>也就是说，单 token 价格约为上一代的 3 倍。</p>
+<p>同时，由于它在测试中使用了更多 token，运行完整 Intelligence Index 的成本约为 Gemini 3 Flash 的 5.5 倍。</p>
+<p>所以它的关键词不是“更便宜”，而是：</p>
+<ul>
+<li>更快</li>
+<li>更强</li>
+<li>更适合 Agent</li>
+<li>但成本也更高</li>
+</ul>
+<p>对于个人用户来说，如果只是日常聊天，未必需要一直使用它。</p>
+<p>但对于开发者、企业、AI 应用团队来说，如果它能用更短时间完成更复杂任务，那么整体效率可能仍然是划算的。</p>
+<h2 id="八、Gemini-3-5-Flash-真正的信号"><a href="#八、Gemini-3-5-Flash-真正的信号" class="headerlink" title="八、Gemini 3.5 Flash 真正的信号"></a>八、Gemini 3.5 Flash 真正的信号</h2><p>Gemini 3.5 Flash 的发布，释放了一个很重要的信号：</p>
+<p>大模型竞争正在从“谁最强”，转向“谁最适合干活”。</p>
+<p>过去我们习惯看模型跑分：</p>
+<ul>
+<li>数学强不强？</li>
+<li>代码强不强？</li>
+<li>推理强不强？</li>
+<li>知识准不准？</li>
+</ul>
+<p>这些当然重要。</p>
+<p>但真实世界里，一个模型能不能被频繁使用，还取决于：</p>
+<ul>
+<li>响应速度</li>
+<li>调用成本</li>
+<li>工具使用稳定性</li>
+<li>长上下文能力</li>
+<li>多轮任务可靠性</li>
+<li>是否适合 Agent 流程</li>
+</ul>
+<p>Gemini 3.5 Flash 的定位，正是把这些因素放到一起重新平衡。</p>
+<p>它不是只追求最高智商，而是追求“足够聪明，同时足够快”。</p>
+<p>这可能比单纯的最强模型更有现实意义。</p>
+<h2 id="九、总结：1-7-倍速度提升背后，是-AI-应用形态的变化"><a href="#九、总结：1-7-倍速度提升背后，是-AI-应用形态的变化" class="headerlink" title="九、总结：1.7 倍速度提升背后，是 AI 应用形态的变化"></a>九、总结：1.7 倍速度提升背后，是 AI 应用形态的变化</h2><p>Gemini 3.5 Flash 最直观的亮点，是速度。</p>
+<p>相比 Gemini 3 Flash，它输出速度约提升 70%，也就是约 1.7 倍。</p>
+<p>但更重要的是，这种速度提升不是孤立存在的。</p>
+<p>它同时伴随着：</p>
+<ul>
+<li>更强的 Agent 能力</li>
+<li>更好的工具调用体验</li>
+<li>更长的上下文窗口</li>
+<li>更适合编程和复杂任务流</li>
+<li>更灵活的 thinking levels 控制</li>
+</ul>
+<p>这说明 AI 模型正在进入一个新阶段。</p>
+<p>以前我们关心的是：</p>
+<p>AI 会不会回答？</p>
+<p>现在我们更关心的是：</p>
+<p>AI 能不能快速、稳定、连续地把事情做完？</p>
+<p>Gemini 3.5 Flash 的意义，正在这里。</p>
+<p>它不是最便宜的模型，也未必是绝对最强的模型。</p>
+<p>但它可能是当前最值得关注的“效率型模型”之一。</p>
+<p>对于开发者，它意味着更快的 AI 编程助手。</p>
+<p>对于企业，它意味着更适合落地的 Agent 基础模型。</p>
+<p>对于普通用户，它意味着 AI 终于越来越接近一种感觉：</p>
+<p>不再是你等它回答，而是它跟着你一起工作。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"># AI Agent</a>
+              <a href="/tags/Gemini/" rel="tag"># Gemini</a>
+              <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" rel="tag"># 大模型</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/19/OpenHuman-%E6%8A%8A%E8%AE%B0%E4%BD%8F%E4%BD%A0%E8%BF%99%E4%BB%B6%E4%BA%8B%E5%81%9A%E6%88%90%E4%B8%80%E5%A5%97%E7%9C%9F%E6%AD%A3%E8%83%BD%E5%B7%A5%E4%BD%9C%E7%9A%84AI%E7%B3%BB%E7%BB%9F/" rel="prev" title="OpenHuman：把“记住你”这件事做成一套真正能工作的 AI 系统">
+      <i class="fa fa-chevron-left"></i> OpenHuman：把“记住你”这件事做成一套真正能工作的 AI 系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/05/21/vimax-agentic-video-generation/" rel="next" title="ViMax 开源：把创意和剧本自动拍成视频">
+      ViMax 开源：把创意和剧本自动拍成视频 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Gemini-3-5-Flash-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">一、Gemini 3.5 Flash 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%88%E7%8E%87%E6%8F%90%E9%AB%98%E4%BA%86%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">二、效率提高了多少？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E4%BA%BA%E8%AF%B4%E2%80%9C%E6%95%88%E7%8E%87%E6%8F%90%E5%8D%87-4-%E5%80%8D%E2%80%9D%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">三、为什么有人说“效率提升 4 倍”？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%83%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%9B%B4%E5%BF%AB%EF%BC%8C%E4%B9%9F%E6%9B%B4%E4%BC%9A%E2%80%9C%E5%B9%B2%E6%B4%BB%E2%80%9D"><span class="nav-number">4.</span> <span class="nav-text">四、它不只是更快，也更会“干活”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AF%B9%E5%BC%80%E5%8F%91%E8%80%85%E6%84%8F%E5%91%B3%E7%9D%80%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">五、对开发者意味着什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BC%96%E7%A0%81%E5%93%8D%E5%BA%94%E6%9B%B4%E5%BF%AB"><span class="nav-number">5.1.</span> <span class="nav-text">1. 编码响应更快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E6%9B%B4%E9%80%82%E5%90%88-Agent"><span class="nav-number">5.2.</span> <span class="nav-text">2. 工具调用更适合 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9B%B4%E9%80%82%E5%90%88%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.3.</span> <span class="nav-text">3. 长上下文更适合大型项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AF%B9%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">六、对普通用户有什么用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E4%BD%86%E5%AE%83%E4%B9%9F%E4%B8%8D%E6%98%AF%E5%AE%8C%E7%BE%8E%E7%9A%84"><span class="nav-number">7.</span> <span class="nav-text">七、但它也不是完美的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81Gemini-3-5-Flash-%E7%9C%9F%E6%AD%A3%E7%9A%84%E4%BF%A1%E5%8F%B7"><span class="nav-number">8.</span> <span class="nav-text">八、Gemini 3.5 Flash 真正的信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%80%BB%E7%BB%93%EF%BC%9A1-7-%E5%80%8D%E9%80%9F%E5%BA%A6%E6%8F%90%E5%8D%87%E8%83%8C%E5%90%8E%EF%BC%8C%E6%98%AF-AI-%E5%BA%94%E7%94%A8%E5%BD%A2%E6%80%81%E7%9A%84%E5%8F%98%E5%8C%96"><span class="nav-number">9.</span> <span class="nav-text">九、总结：1.7 倍速度提升背后，是 AI 应用形态的变化</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="不是谁最强，而是谁最适合你的工作方式：Claude Code 偏深度编码，OpenClaw 偏开放可控，Hermes Agent 偏全能执行与长期协作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code、OpenClaw、Hermes Agent，谁更适合你的 AI 编码工作流？">
+<meta property="og:url" content="https://zevenfang.github.io/2026/04/15/Claude-Code%E3%80%81OpenClaw%E3%80%81Hermes-Agent,%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84-AI-%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="不是谁最强，而是谁最适合你的工作方式：Claude Code 偏深度编码，OpenClaw 偏开放可控，Hermes Agent 偏全能执行与长期协作。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zevenfang.github.io/images/wechat-sync/Claude-Code、OpenClaw、Hermes-Agent,谁更适合你的-AI-编码工作流/2f8fd4130361e43d.webp">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-04-15T04:48:02.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.753Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="公众号同步">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zevenfang.github.io/images/wechat-sync/Claude-Code、OpenClaw、Hermes-Agent,谁更适合你的-AI-编码工作流/2f8fd4130361e43d.webp">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/04/15/Claude-Code%E3%80%81OpenClaw%E3%80%81Hermes-Agent,%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84-AI-%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Claude Code、OpenClaw、Hermes Agent，谁更适合你的 AI 编码工作流？ | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/04/15/Claude-Code%E3%80%81OpenClaw%E3%80%81Hermes-Agent,%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84-AI-%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Claude Code、OpenClaw、Hermes Agent，谁更适合你的 AI 编码工作流？<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/Claude-Code%E3%80%81OpenClaw%E3%80%81Hermes-Agent,%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84-AI-%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-15 12:48:02" itemprop="dateCreated datePublished" datetime="2026-04-15T12:48:02+08:00">2026-04-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E5%85%AC%E4%BC%97%E5%8F%B7/" itemprop="url" rel="index"><span itemprop="name">公众号</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">不是谁最强，而是谁最适合你的工作方式：Claude Code 偏深度编码，OpenClaw 偏开放可控，Hermes Agent 偏全能执行与长期协作。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>原公众号链接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Pp9zNH0F4U4z803CkO_AWA">Claude Code、OpenClaw、Hermes Agent，谁更适合你的 AI 编码工作流？</a></p>
+</blockquote>
+<p><img src="/images/wechat-sync/Claude-Code、OpenClaw、Hermes-Agent,谁更适合你的-AI-编码工作流/2f8fd4130361e43d.webp" alt="封面"></p>
+<div class="post-content-summary" aria-label="内容摘要"><div class="post-content-summary-title">内容摘要</div><p>不是谁最强，而是谁最适合你的工作方式：Claude Code 偏深度编码，OpenClaw 偏开放可控，Hermes Agent 偏全能执行与长期协作。</p></div>
+
+<p>AI Coding Agent 已经从“能补几行代码”进入“能独立接活、联动工具、跑完整流程”的阶段。很多团队开始同时接触 Claude Code、OpenClaw 和 Hermes Agent，但真正落地时，最常见的问题并不是参数怎么配，而是：这三类 Agent 的定位根本不一样。如果把它们都当成“另一个聊天框”，最后往往会低估其中一个，也会误用另一个。</p>
+<h2 id="一、先给结论"><a href="#一、先给结论" class="headerlink" title="一、先给结论"></a>一、先给结论</h2><p>如果你主要是在本地仓库里做高质量实现、修 bug、重构和提交代码，Claude Code 往往是最顺手的选择。</p>
+<p>如果你更看重开放性、可替换性、可自托管能力，想把 Agent 深度接进自己的工程体系，OpenClaw 这类开放方案通常更值得投入。</p>
+<p>如果你需要的不只是“写代码”，而是一个能长期协作、会查资料、会调工具、会记住偏好、还能直接帮你执行发布、排查、整理和跨任务协同的 Agent，Hermes Agent 的优势会更明显。</p>
+<p>换句话说，这不是三选一的“战力榜”，而是三种不同工作流哲学的选择。</p>
+<h2 id="二、Claude-Code：更像一个强执行力的资深工程搭档"><a href="#二、Claude-Code：更像一个强执行力的资深工程搭档" class="headerlink" title="二、Claude Code：更像一个强执行力的资深工程搭档"></a>二、Claude Code：更像一个强执行力的资深工程搭档</h2><p>Claude Code 最强的地方，不在于它“会说”，而在于它在真实代码仓里往往更稳。</p>
+<h3 id="1-它适合什么场景"><a href="#1-它适合什么场景" class="headerlink" title="1. 它适合什么场景"></a>1. 它适合什么场景</h3><ul>
+<li><p>已经有明确仓库和代码上下文，需要直接改代码、补测试、修缺陷</p>
+</li>
+<li><p>任务目标相对清楚，希望 Agent 在工程内持续推进，而不是只给建议</p>
+</li>
+<li><p>更在意代码质量、重构节奏、修改范围控制和最终提交质量</p>
+</li>
+</ul>
+<h3 id="2-它的典型优势"><a href="#2-它的典型优势" class="headerlink" title="2. 它的典型优势"></a>2. 它的典型优势</h3><ul>
+<li><p>对大型代码上下文的理解通常比较稳，尤其适合真实项目而不是 toy demo</p>
+</li>
+<li><p>在实现、调试、测试、重构这类连续任务上，完成度往往比较高</p>
+</li>
+<li><p>对“先看代码、再改、再验证”的工程节奏支持更自然</p>
+</li>
+</ul>
+<h3 id="3-它的边界也很明显"><a href="#3-它的边界也很明显" class="headerlink" title="3. 它的边界也很明显"></a>3. 它的边界也很明显</h3><ul>
+<li><p>它最强的时候，通常是在“代码仓库”这个边界里面</p>
+</li>
+<li><p>如果任务变成跨系统查资料、调用外部服务、处理日程、消息、文件、浏览器、多工具联动，体验不一定是它的核心强项</p>
+</li>
+<li><p>它更像顶级 coding specialist，不一定天然就是全能事务代理<br>如果你的核心需求是“把这个 feature 真做出来”，Claude Code 常常是第一优先级。</p>
+</li>
+</ul>
+<h2 id="三、OpenClaw：更像一个你可以自己掌控底盘的开放代理框架"><a href="#三、OpenClaw：更像一个你可以自己掌控底盘的开放代理框架" class="headerlink" title="三、OpenClaw：更像一个你可以自己掌控底盘的开放代理框架"></a>三、OpenClaw：更像一个你可以自己掌控底盘的开放代理框架</h2><p>OpenClaw 的吸引力，不只是能力本身，而是“你能把它改成什么样”。</p>
+<h3 id="1-它适合什么场景-1"><a href="#1-它适合什么场景-1" class="headerlink" title="1. 它适合什么场景"></a>1. 它适合什么场景</h3><ul>
+<li><p>团队不想把能力完全绑死在单一闭源工作流上</p>
+</li>
+<li><p>希望模型、工具、调度、运行策略都能自己替换或扩展</p>
+</li>
+<li><p>有内部平台化需求，准备把 Agent 接进自己的研发流程、知识库或业务系统</p>
+</li>
+</ul>
+<h3 id="2-它的典型优势-1"><a href="#2-它的典型优势-1" class="headerlink" title="2. 它的典型优势"></a>2. 它的典型优势</h3><ul>
+<li><p>开放、可控、可扩展，便于做二次开发和深度定制</p>
+</li>
+<li><p>更适合当作底层能力平台，而不是单一成品工具</p>
+</li>
+<li><p>在需要私有化、自托管、模型替换、工具链接管时，灵活性通常比封闭方案更好</p>
+</li>
+</ul>
+<h3 id="3-它的现实成本"><a href="#3-它的现实成本" class="headerlink" title="3. 它的现实成本"></a>3. 它的现实成本</h3><ul>
+<li><p>开放并不等于开箱即用，很多时候意味着你要自己补工程化</p>
+</li>
+<li><p>你需要自己承担一部分集成、维护、路由、监控和稳定性建设</p>
+</li>
+<li><p>如果团队本身没有平台工程能力，OpenClaw 的优势很可能短期体现不出来<br>所以 OpenClaw 更像“Agent 基础设施”路线，适合想掌控底层的人，不一定适合只想马上把任务做完的人。</p>
+</li>
+</ul>
+<h2 id="四、Hermes-Agent：更像一个真的能长期合作的全能执行型-Agent"><a href="#四、Hermes-Agent：更像一个真的能长期合作的全能执行型-Agent" class="headerlink" title="四、Hermes Agent：更像一个真的能长期合作的全能执行型 Agent"></a>四、Hermes Agent：更像一个真的能长期合作的全能执行型 Agent</h2><p>Hermes Agent 和前两者最不一样的地方，是它把“会推理”和“会动手”更明确地绑在一起。</p>
+<h3 id="1-它适合什么场景-2"><a href="#1-它适合什么场景-2" class="headerlink" title="1. 它适合什么场景"></a>1. 它适合什么场景</h3><ul>
+<li><p>任务不是单一写代码，而是包含搜索、文件处理、终端执行、浏览器操作、资料整理、内容发布等多步骤链路</p>
+</li>
+<li><p>你希望 Agent 不只是回答，而是直接完成任务</p>
+</li>
+<li><p>你有明显的个人偏好、长期工作习惯、重复流程，希望 Agent 能越来越懂你</p>
+</li>
+</ul>
+<h3 id="2-它的典型优势-2"><a href="#2-它的典型优势-2" class="headerlink" title="2. 它的典型优势"></a>2. 它的典型优势</h3><ul>
+<li><p>工具执行面广，不只覆盖代码，还覆盖终端、文件、网页、计划、记忆、定时任务等</p>
+</li>
+<li><p>有持续记忆和工作流沉淀能力，适合形成长期协作关系</p>
+</li>
+<li><p>对“先检查前置条件，再执行，再验证结果”的任务闭环支持更完整</p>
+</li>
+<li><p>更适合处理跨域任务，例如“写一篇文章、生成封面、同步草稿、再回报结果”这种完整链路</p>
+</li>
+</ul>
+<h3 id="3-它的边界同样要看清"><a href="#3-它的边界同样要看清" class="headerlink" title="3. 它的边界同样要看清"></a>3. 它的边界同样要看清</h3><ul>
+<li><p>如果你只想要一个最纯粹、最专注的 coding inner-loop 伙伴，Hermes Agent 不一定总是比 Claude Code 更直接</p>
+</li>
+<li><p>它的优势来自综合执行和编排，不只是某一次代码补全的瞬时表现</p>
+</li>
+<li><p>用得越久、任务越复合，它的价值通常越大；纯单点任务时未必最惊艳<br>从产品定位上说，Hermes Agent 更像“AI 操作系统里的执行代理”，而不只是“IDE 里的代码助手”。</p>
+</li>
+</ul>
+<h2 id="五、如果你是不同角色，应该怎么选"><a href="#五、如果你是不同角色，应该怎么选" class="headerlink" title="五、如果你是不同角色，应该怎么选"></a>五、如果你是不同角色，应该怎么选</h2><h3 id="1-独立开发者"><a href="#1-独立开发者" class="headerlink" title="1. 独立开发者"></a>1. 独立开发者</h3><ul>
+<li><p>主要写代码、调试、提交：优先看 Claude Code</p>
+</li>
+<li><p>还要写文档、查资料、跑脚本、发内容、管多个工具：Hermes Agent 会更省心</p>
+</li>
+</ul>
+<h3 id="2-技术团队负责人"><a href="#2-技术团队负责人" class="headerlink" title="2. 技术团队负责人"></a>2. 技术团队负责人</h3><ul>
+<li><p>想快速提升工程实现效率：先上 Claude Code</p>
+</li>
+<li><p>想建设内部 Agent 平台和自有能力栈：重点看 OpenClaw</p>
+</li>
+<li><p>想让团队把大量杂务和跨系统流程也交给 Agent：补上 Hermes Agent</p>
+</li>
+</ul>
+<h3 id="3-平台-基础设施团队"><a href="#3-平台-基础设施团队" class="headerlink" title="3. 平台/基础设施团队"></a>3. 平台/基础设施团队</h3><ul>
+<li><p>如果你们最关心的是接管模型层、工具层和策略层，OpenClaw 的战略价值更高</p>
+</li>
+<li><p>如果你们最关心的是让业务同学马上把复杂任务跑起来，Hermes Agent 的成品化价值更高</p>
+</li>
+</ul>
+<h2 id="六、真正值得问的问题，不是“谁最强”，而是“谁替你省掉了哪一类成本”"><a href="#六、真正值得问的问题，不是“谁最强”，而是“谁替你省掉了哪一类成本”" class="headerlink" title="六、真正值得问的问题，不是“谁最强”，而是“谁替你省掉了哪一类成本”"></a>六、真正值得问的问题，不是“谁最强”，而是“谁替你省掉了哪一类成本”</h2><p>很多 AI Agent 对比最后都会变成模型能力排行榜，但实际工作里，更应该看下面这几种成本。</p>
+<ul>
+<li><p>理解成本：它多久能进入你的上下文</p>
+</li>
+<li><p>操作成本：它能不能直接动手，而不是让你自己补最后一公里</p>
+</li>
+<li><p>集成成本：它接进你现有系统有多难</p>
+</li>
+<li><p>维护成本：出了问题后，是你修它，还是它帮你修问题</p>
+</li>
+<li><p>迁移成本：以后你想换模型、换工具、换流程，代价有多高<br>Claude Code 更像在“高质量代码执行”上帮你省成本。 OpenClaw 更像在“底层可控和平台自由度”上帮你省长期锁定成本。 Hermes Agent 更像在“跨任务执行和长期协作效率”上帮你省综合成本。</p>
+</li>
+</ul>
+<h2 id="七、我的建议：最实用的配置，不是三选一，而是角色分层"><a href="#七、我的建议：最实用的配置，不是三选一，而是角色分层" class="headerlink" title="七、我的建议：最实用的配置，不是三选一，而是角色分层"></a>七、我的建议：最实用的配置，不是三选一，而是角色分层</h2><p>如果你已经在认真用 Agent，我更建议这样理解它们。</p>
+<ul>
+<li><p>Claude Code 负责深度编码内环</p>
+</li>
+<li><p>OpenClaw 负责开放底盘和可控基础设施</p>
+</li>
+<li><p>Hermes Agent 负责跨工具执行、长期协作和复杂任务闭环<br>这三者其实并不天然互斥。很多成熟团队最后不是只押一个，而是把不同 Agent 放进不同工作层。</p>
+</li>
+</ul>
+<p>最后</p>
+<p>如果你现在还在“先选一个试试”，最简单的判断方法是：先看你今天最痛的那一类任务。</p>
+<h2 id="如果最痛的是实现质量和代码推进速度，先用-Claude-Code"><a href="#如果最痛的是实现质量和代码推进速度，先用-Claude-Code" class="headerlink" title="如果最痛的是实现质量和代码推进速度，先用 Claude Code"></a>如果最痛的是实现质量和代码推进速度，先用 Claude Code</h2><p>如果最痛的是受制于封闭系统、想掌握底层能力，先看 OpenClaw。 如果最痛的是事情太杂、流程太长、总要在多个工具之间来回切，先上 Hermes Agent。</p>
+<p>真正成熟的 AI 工作流，从来不是追最热的名字，而是让每个 Agent 在最合适的位置上发挥价值。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/%E5%85%AC%E4%BC%97%E5%8F%B7%E5%90%8C%E6%AD%A5/" rel="tag"># 公众号同步</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/14/Hermes-Agent-%E4%B8%8A%E6%89%8B%E6%8C%87%E5%8D%975-%E5%88%86%E9%92%9F%E5%AE%89%E8%A3%85%E4%B8%80%E4%B8%AA%E4%BC%9A%E9%95%BF%E6%9C%9F%E8%BF%9B%E5%8C%96%E7%9A%84-AI-Agent/" rel="prev" title="Hermes Agent 上手指南：5 分钟安装一个会长期进化的 AI Agent">
+      <i class="fa fa-chevron-left"></i> Hermes Agent 上手指南：5 分钟安装一个会长期进化的 AI Agent
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/04/16/AI%E7%82%92%E8%82%A1%E9%A1%B9%E7%9B%AE%E5%A4%A7%E8%B0%83%E7%A0%94-8%E4%B8%AA%E4%BB%A3%E8%A1%A8%E6%80%A7%E4%BA%A7%E5%93%81%E4%B8%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE,%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0/" rel="next" title="AI炒股项目大调研：8个代表性产品与开源项目，谁更适合你？">
+      AI炒股项目大调研：8个代表性产品与开源项目，谁更适合你？ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%85%88%E7%BB%99%E7%BB%93%E8%AE%BA"><span class="nav-number">1.</span> <span class="nav-text">一、先给结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Claude-Code%EF%BC%9A%E6%9B%B4%E5%83%8F%E4%B8%80%E4%B8%AA%E5%BC%BA%E6%89%A7%E8%A1%8C%E5%8A%9B%E7%9A%84%E8%B5%84%E6%B7%B1%E5%B7%A5%E7%A8%8B%E6%90%AD%E6%A1%A3"><span class="nav-number">2.</span> <span class="nav-text">二、Claude Code：更像一个强执行力的资深工程搭档</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%83%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF"><span class="nav-number">2.1.</span> <span class="nav-text">1. 它适合什么场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%83%E7%9A%84%E5%85%B8%E5%9E%8B%E4%BC%98%E5%8A%BF"><span class="nav-number">2.2.</span> <span class="nav-text">2. 它的典型优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%83%E7%9A%84%E8%BE%B9%E7%95%8C%E4%B9%9F%E5%BE%88%E6%98%8E%E6%98%BE"><span class="nav-number">2.3.</span> <span class="nav-text">3. 它的边界也很明显</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81OpenClaw%EF%BC%9A%E6%9B%B4%E5%83%8F%E4%B8%80%E4%B8%AA%E4%BD%A0%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%B7%B1%E6%8E%8C%E6%8E%A7%E5%BA%95%E7%9B%98%E7%9A%84%E5%BC%80%E6%94%BE%E4%BB%A3%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-number">3.</span> <span class="nav-text">三、OpenClaw：更像一个你可以自己掌控底盘的开放代理框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%83%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF-1"><span class="nav-number">3.1.</span> <span class="nav-text">1. 它适合什么场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%83%E7%9A%84%E5%85%B8%E5%9E%8B%E4%BC%98%E5%8A%BF-1"><span class="nav-number">3.2.</span> <span class="nav-text">2. 它的典型优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%83%E7%9A%84%E7%8E%B0%E5%AE%9E%E6%88%90%E6%9C%AC"><span class="nav-number">3.3.</span> <span class="nav-text">3. 它的现实成本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Hermes-Agent%EF%BC%9A%E6%9B%B4%E5%83%8F%E4%B8%80%E4%B8%AA%E7%9C%9F%E7%9A%84%E8%83%BD%E9%95%BF%E6%9C%9F%E5%90%88%E4%BD%9C%E7%9A%84%E5%85%A8%E8%83%BD%E6%89%A7%E8%A1%8C%E5%9E%8B-Agent"><span class="nav-number">4.</span> <span class="nav-text">四、Hermes Agent：更像一个真的能长期合作的全能执行型 Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%83%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF-2"><span class="nav-number">4.1.</span> <span class="nav-text">1. 它适合什么场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%83%E7%9A%84%E5%85%B8%E5%9E%8B%E4%BC%98%E5%8A%BF-2"><span class="nav-number">4.2.</span> <span class="nav-text">2. 它的典型优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%83%E7%9A%84%E8%BE%B9%E7%95%8C%E5%90%8C%E6%A0%B7%E8%A6%81%E7%9C%8B%E6%B8%85"><span class="nav-number">4.3.</span> <span class="nav-text">3. 它的边界同样要看清</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%98%AF%E4%B8%8D%E5%90%8C%E8%A7%92%E8%89%B2%EF%BC%8C%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E9%80%89"><span class="nav-number">5.</span> <span class="nav-text">五、如果你是不同角色，应该怎么选</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91%E8%80%85"><span class="nav-number">5.1.</span> <span class="nav-text">1. 独立开发者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F%E8%B4%9F%E8%B4%A3%E4%BA%BA"><span class="nav-number">5.2.</span> <span class="nav-text">2. 技术团队负责人</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B9%B3%E5%8F%B0-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%9B%A2%E9%98%9F"><span class="nav-number">5.3.</span> <span class="nav-text">3. 平台&#x2F;基础设施团队</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%9C%9F%E6%AD%A3%E5%80%BC%E5%BE%97%E9%97%AE%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%8C%E4%B8%8D%E6%98%AF%E2%80%9C%E8%B0%81%E6%9C%80%E5%BC%BA%E2%80%9D%EF%BC%8C%E8%80%8C%E6%98%AF%E2%80%9C%E8%B0%81%E6%9B%BF%E4%BD%A0%E7%9C%81%E6%8E%89%E4%BA%86%E5%93%AA%E4%B8%80%E7%B1%BB%E6%88%90%E6%9C%AC%E2%80%9D"><span class="nav-number">6.</span> <span class="nav-text">六、真正值得问的问题，不是“谁最强”，而是“谁替你省掉了哪一类成本”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%88%91%E7%9A%84%E5%BB%BA%E8%AE%AE%EF%BC%9A%E6%9C%80%E5%AE%9E%E7%94%A8%E7%9A%84%E9%85%8D%E7%BD%AE%EF%BC%8C%E4%B8%8D%E6%98%AF%E4%B8%89%E9%80%89%E4%B8%80%EF%BC%8C%E8%80%8C%E6%98%AF%E8%A7%92%E8%89%B2%E5%88%86%E5%B1%82"><span class="nav-number">7.</span> <span class="nav-text">七、我的建议：最实用的配置，不是三选一，而是角色分层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%9C%80%E7%97%9B%E7%9A%84%E6%98%AF%E5%AE%9E%E7%8E%B0%E8%B4%A8%E9%87%8F%E5%92%8C%E4%BB%A3%E7%A0%81%E6%8E%A8%E8%BF%9B%E9%80%9F%E5%BA%A6%EF%BC%8C%E5%85%88%E7%94%A8-Claude-Code"><span class="nav-number">8.</span> <span class="nav-text">如果最痛的是实现质量和代码推进速度，先用 Claude Code</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

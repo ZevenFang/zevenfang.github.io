@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="调研可灵、Vidu、海螺、通义万相、腾讯混元、即梦等主流视频生成模型，比较价格、优缺点、生成效果与适用场景。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="国内视频生成大模型怎么选？一文看懂价格、优缺点与生成效果">
+<meta property="og:url" content="https://zevenfang.github.io/2026/04/19/%E5%9B%BD%E5%86%85%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%8E%E4%B9%88%E9%80%89-%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E4%BB%B7%E6%A0%BC-%E4%BC%98%E7%BC%BA%E7%82%B9%E4%B8%8E%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="调研可灵、Vidu、海螺、通义万相、腾讯混元、即梦等主流视频生成模型，比较价格、优缺点、生成效果与适用场景。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zevenfang.github.io/images/wechat-sync/国内视频生成大模型怎么选-一文看懂价格-优缺点与生成效果/488e4aab0848969c.webp">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-04-19T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.759Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="公众号同步">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zevenfang.github.io/images/wechat-sync/国内视频生成大模型怎么选-一文看懂价格-优缺点与生成效果/488e4aab0848969c.webp">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/04/19/%E5%9B%BD%E5%86%85%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%8E%E4%B9%88%E9%80%89-%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E4%BB%B7%E6%A0%BC-%E4%BC%98%E7%BC%BA%E7%82%B9%E4%B8%8E%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>国内视频生成大模型怎么选？一文看懂价格、优缺点与生成效果 | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/04/19/%E5%9B%BD%E5%86%85%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%8E%E4%B9%88%E9%80%89-%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E4%BB%B7%E6%A0%BC-%E4%BC%98%E7%BC%BA%E7%82%B9%E4%B8%8E%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          国内视频生成大模型怎么选？一文看懂价格、优缺点与生成效果<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/%E5%9B%BD%E5%86%85%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%8E%E4%B9%88%E9%80%89-%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E4%BB%B7%E6%A0%BC-%E4%BC%98%E7%BC%BA%E7%82%B9%E4%B8%8E%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-19 10:00:00" itemprop="dateCreated datePublished" datetime="2026-04-19T10:00:00+08:00">2026-04-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E5%85%AC%E4%BC%97%E5%8F%B7/" itemprop="url" rel="index"><span itemprop="name">公众号</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">调研可灵、Vidu、海螺、通义万相、腾讯混元、即梦等主流视频生成模型，比较价格、优缺点、生成效果与适用场景。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/images/wechat-sync/国内视频生成大模型怎么选-一文看懂价格-优缺点与生成效果/488e4aab0848969c.webp" alt="封面"></p>
+<p>如果你最近在看视频生成大模型，大概率会有两个最直接的问题：</p>
+<p>第一，国内到底哪几家最值得关注？<br>第二，价格到底差多少，生成效果又差在哪里？</p>
+<p>很多人一上来只盯着“谁最强”，但真正用起来就会发现，视频模型并不像文生图那样只看单张画质。它更考验的是一整套能力：运动是否自然、镜头语言是否成立、人物和主体是否稳定、提示词理解是否准确、首尾帧或参考图控制是否好用、以及最现实的，成本是否可控。</p>
+<p>这篇文章的目标，不是给出一个绝对冠军，而是帮你建立一个更实用的判断框架：不同模型，适合不同任务；不同平台，商业模式也完全不同。</p>
+<h2 id="一、先说结论：如果你只想快速做选择"><a href="#一、先说结论：如果你只想快速做选择" class="headerlink" title="一、先说结论：如果你只想快速做选择"></a>一、先说结论：如果你只想快速做选择</h2><h3 id="1-如果你最在意“镜头张力、运动幅度、成片冲击力”"><a href="#1-如果你最在意“镜头张力、运动幅度、成片冲击力”" class="headerlink" title="1. 如果你最在意“镜头张力、运动幅度、成片冲击力”"></a>1. 如果你最在意“镜头张力、运动幅度、成片冲击力”</h3><p>优先看可灵。</p>
+<p>从官方定位和近一年公开横评来看，可灵的优势更偏复杂镜头语言、多模态控制、长时序叙事和更强的视觉冲击力。它更像是那种“上限很高”的路线，适合做广告感、电影感、情绪强烈、运动明显的内容。</p>
+<h3 id="2-如果你最在意“人物一致性、写实感、参考图稳定度”"><a href="#2-如果你最在意“人物一致性、写实感、参考图稳定度”" class="headerlink" title="2. 如果你最在意“人物一致性、写实感、参考图稳定度”"></a>2. 如果你最在意“人物一致性、写实感、参考图稳定度”</h3><p>优先看 Vidu。</p>
+<p>Vidu 近一年的口碑，核心关键词就是“真实、细腻、一致性强”。如果你经常要做角色连续出镜、商品广告、电商素材、参考图驱动的短视频，它通常是很值得重点试的一条线。</p>
+<h3 id="3-如果你最在意“上手门槛、价格透明、按月就能稳定出量”"><a href="#3-如果你最在意“上手门槛、价格透明、按月就能稳定出量”" class="headerlink" title="3. 如果你最在意“上手门槛、价格透明、按月就能稳定出量”"></a>3. 如果你最在意“上手门槛、价格透明、按月就能稳定出量”</h3><p>优先看海螺。</p>
+<p>海螺的优势非常现实：会员档位清楚、每月能生成多少条视频写得很明白、还能直接换算单条成本。对于中小团队和高频创作者，这种透明度非常重要。</p>
+<h3 id="4-如果你最在意“企业接入、API-计费透明、链路完整”"><a href="#4-如果你最在意“企业接入、API-计费透明、链路完整”" class="headerlink" title="4. 如果你最在意“企业接入、API 计费透明、链路完整”"></a>4. 如果你最在意“企业接入、API 计费透明、链路完整”</h3><p>优先看通义万相。</p>
+<p>阿里这条路线的特点不是单点爆发，而是产品体系完整：文生视频、图生视频、首尾帧、视频续写、视频编辑、自动配音、多模态输入都在一条链路里，且官方计费页公开得比较完整，适合企业和开发者做预算。</p>
+<h3 id="5-如果你最在意“中文理解、文字渲染、开源生态、自部署能力”"><a href="#5-如果你最在意“中文理解、文字渲染、开源生态、自部署能力”" class="headerlink" title="5. 如果你最在意“中文理解、文字渲染、开源生态、自部署能力”"></a>5. 如果你最在意“中文理解、文字渲染、开源生态、自部署能力”</h3><p>优先看腾讯混元。</p>
+<p>腾讯混元视频一大特点是官方同时走了商用能力和开源路线。对于开发者、研究团队和有自部署诉求的企业，这点非常有吸引力。</p>
+<h3 id="6-如果你最在意“工具链整合、可控性、和剪映生态的衔接”"><a href="#6-如果你最在意“工具链整合、可控性、和剪映生态的衔接”" class="headerlink" title="6. 如果你最在意“工具链整合、可控性、和剪映生态的衔接”"></a>6. 如果你最在意“工具链整合、可控性、和剪映生态的衔接”</h3><p>优先看即梦。</p>
+<p>即梦这条线的价值，不只是模型本身，还包括它背后的内容工作流生态。如果你的目标不是单次炫技，而是持续做短视频内容、批量出素材、接入剪映工作流，即梦值得长期关注。</p>
+<h2 id="二、为什么视频模型的比较，不能只看“谁画质高”"><a href="#二、为什么视频模型的比较，不能只看“谁画质高”" class="headerlink" title="二、为什么视频模型的比较，不能只看“谁画质高”"></a>二、为什么视频模型的比较，不能只看“谁画质高”</h2><p>视频生成和图片生成最大的区别，是它考的是连续性。</p>
+<p>一条视频是否好，不只取决于某一帧漂不漂亮，更取决于：</p>
+<ul>
+<li>动作是不是自然</li>
+<li>运镜是不是像真的镜头</li>
+<li>主体会不会中途变形或换脸</li>
+<li>场景切换是否合理</li>
+<li>物理规律有没有崩</li>
+<li>提示词里的情绪、节奏、风格有没有被正确理解</li>
+<li>参考图、首尾帧、配音、音效这些附加能力是否可用</li>
+</ul>
+<p>所以看视频模型，至少要分成六个维度：</p>
+<ul>
+<li>运动表现</li>
+<li>镜头语言</li>
+<li>一致性与稳定性</li>
+<li>指令理解</li>
+<li>可控性</li>
+<li>成本与商业化友好度</li>
+</ul>
+<h2 id="三、国内主流视频生成模型，分别是什么定位"><a href="#三、国内主流视频生成模型，分别是什么定位" class="headerlink" title="三、国内主流视频生成模型，分别是什么定位"></a>三、国内主流视频生成模型，分别是什么定位</h2><h3 id="1-可灵：更像“高上限的镜头表达型选手”"><a href="#1-可灵：更像“高上限的镜头表达型选手”" class="headerlink" title="1. 可灵：更像“高上限的镜头表达型选手”"></a>1. 可灵：更像“高上限的镜头表达型选手”</h3><p>可灵官方当前重点强调的是视频 3.0 / 3.0 Omni，多模态指令深度解析、跨任务融合、超长视频精准分镜、音画同步、视觉主体与听觉音色绑定等能力。</p>
+<p>这意味着什么？</p>
+<p>意味着它不是只想做“把文字变成视频”，而是想把视频生成做成更完整的叙事和创作系统。</p>
+<p>它的优点主要有这些：</p>
+<ul>
+<li>镜头表现力强</li>
+<li>运动幅度和情绪张力更突出</li>
+<li>多模态控制能力更强</li>
+<li>长视频、分镜、音画结合这些方向更有想象空间</li>
+</ul>
+<p>它的不足也很明显：</p>
+<ul>
+<li>公开给普通创作者的定价透明度，不如海螺和阿里直观</li>
+<li>上手时更容易追求“大效果”，不一定适合所有日常商用素材</li>
+<li>如果任务更偏稳定电商素材或高一致性角色视频，它不一定是第一优先</li>
+</ul>
+<p>从公开横评的普遍结论看，可灵更适合：</p>
+<ul>
+<li>广告感内容</li>
+<li>强视觉冲击镜头</li>
+<li>运动幅度大的创作</li>
+<li>想追求“爆款感”的短视频样片</li>
+</ul>
+<h3 id="2-Vidu：更像“稳定写实的一致性选手”"><a href="#2-Vidu：更像“稳定写实的一致性选手”" class="headerlink" title="2. Vidu：更像“稳定写实的一致性选手”"></a>2. Vidu：更像“稳定写实的一致性选手”</h3><p>Vidu 这条路线的辨识度很高。它最常被提到的强项，不是单纯的“炫”，而是“稳”。</p>
+<p>官方对外展示里，重点会放在这些词上：</p>
+<ul>
+<li>多主体一致性</li>
+<li>参考生视频</li>
+<li>图生视频</li>
+<li>高质量视频生成</li>
+<li>动画与写实兼顾</li>
+</ul>
+<p>从公开媒体横评和行业讨论看，Vidu 的核心优势主要集中在：</p>
+<ul>
+<li>人物和主体一致性更强</li>
+<li>写实细节相对更自然</li>
+<li>参考图、参考主体、参考视频驱动能力更实用</li>
+<li>更适合广告、电商、商品展示、角色延续等场景</li>
+</ul>
+<p>它的短板通常在于：</p>
+<ul>
+<li>爆发力和戏剧张力未必是最强</li>
+<li>如果你特别追求“夸张镜头感”或情绪冲击，它可能不如可灵激进</li>
+<li>官方套餐页公开可见，但价格数字对外抓取并不如海螺清晰，理解门槛略高</li>
+</ul>
+<p>一句话概括，Vidu 更像“能稳定交付的生产型选手”。</p>
+<h3 id="3-海螺：更像“产品化和性价比很强的创作者平台”"><a href="#3-海螺：更像“产品化和性价比很强的创作者平台”" class="headerlink" title="3. 海螺：更像“产品化和性价比很强的创作者平台”"></a>3. 海螺：更像“产品化和性价比很强的创作者平台”</h3><p>海螺最有竞争力的，不只是模型本身，而是它把成本和权益讲得很清楚。</p>
+<p>从官方套餐页可见，海螺至少有 Standard、Pro、Master、Ultra、Max 等档位，差别主要体现在：</p>
+<ul>
+<li>每月贝壳数量</li>
+<li>是否支持 1080P</li>
+<li>可生成 6 秒或 10 秒视频的数量</li>
+<li>任务并发能力</li>
+<li>是否支持更高版本模型或无限生成权益</li>
+</ul>
+<p>它的优势在于：</p>
+<ul>
+<li>价格体系透明</li>
+<li>官方直接给出“每月大约能生成多少条视频”</li>
+<li>中低档位就能看清使用成本</li>
+<li>对高频创作者比较友好</li>
+</ul>
+<p>它的不足在于：</p>
+<ul>
+<li>真正高频且高质量地用起来，月费并不低</li>
+<li>低档位并发能力有限</li>
+<li>如果你追求的是最强的电影化镜头表达，它的品牌心智没有可灵那么强</li>
+</ul>
+<p>但从真实使用角度说，海螺是非常适合放进采购清单的，因为它好算账。</p>
+<h3 id="4-通义万相：更像“企业接入和完整工作流选手”"><a href="#4-通义万相：更像“企业接入和完整工作流选手”" class="headerlink" title="4. 通义万相：更像“企业接入和完整工作流选手”"></a>4. 通义万相：更像“企业接入和完整工作流选手”</h3><p>阿里通义万相最大的特点，不是营销感最强，而是体系最完整之一。</p>
+<p>在阿里云百炼官方模型与计费页面里，你能看到它已经把视频相关能力拆得很细：</p>
+<ul>
+<li>文生视频</li>
+<li>图生视频</li>
+<li>首帧生视频</li>
+<li>首尾帧生视频</li>
+<li>视频续写</li>
+<li>参考生视频</li>
+<li>视频编辑</li>
+<li>自动配音</li>
+<li>自定义音频输入</li>
+</ul>
+<p>这条路线的优点很明确：</p>
+<ul>
+<li>官方计费透明，适合企业预算</li>
+<li>链路完整，适合接 API 和工作流</li>
+<li>对多镜头叙事、影视感、音视频联动有明确布局</li>
+<li>更适合做产品能力，而不只是做一个创作者玩具</li>
+</ul>
+<p>它的不足也不难理解：</p>
+<ul>
+<li>价格体系比较复杂</li>
+<li>不同版本、不同任务、不同分辨率价格差别较大</li>
+<li>对普通创作者来说，不如订阅制平台那样直观</li>
+</ul>
+<p>简单说，万相很适合“要规模化接入”的人，不一定最适合“我今天先玩一玩”的人。</p>
+<h3 id="5-腾讯混元：更像“技术能力强、生态和开源都想拿”的路线"><a href="#5-腾讯混元：更像“技术能力强、生态和开源都想拿”的路线" class="headerlink" title="5. 腾讯混元：更像“技术能力强、生态和开源都想拿”的路线"></a>5. 腾讯混元：更像“技术能力强、生态和开源都想拿”的路线</h3><p>腾讯混元视频官方展示的关键词很明确：</p>
+<ul>
+<li>强指令响应</li>
+<li>连续运镜</li>
+<li>文字渲染</li>
+<li>流畅运动生成</li>
+<li>电影美学</li>
+<li>遵循物理规律</li>
+</ul>
+<p>这说明腾讯重点押注的是：中文理解、复杂提示词响应、文字视频渲染、运镜控制，以及更偏底层模型能力的竞争。</p>
+<p>它的另一个差异点是开源生态。</p>
+<p>HunyuanVideo 和 HunyuanVideo 1.5 的官方开源仓库，意味着它不只是一个云平台能力，也是一条面向开发者和研究者的技术路线。</p>
+<p>它的优点主要是：</p>
+<ul>
+<li>中文语义理解强</li>
+<li>文字渲染是明显卖点</li>
+<li>连续运镜和电影化表达值得关注</li>
+<li>开源生态对开发者非常友好</li>
+</ul>
+<p>它的不足主要是：</p>
+<ul>
+<li>公开价格不如阿里清楚</li>
+<li>对普通创作者来说，购买路径和成本感知不够直观</li>
+<li>更像“能力平台”，而不是最标准的 C 端订阅产品</li>
+</ul>
+<h3 id="6-即梦：更像“模型能力加内容生态”的组合拳"><a href="#6-即梦：更像“模型能力加内容生态”的组合拳" class="headerlink" title="6. 即梦：更像“模型能力加内容生态”的组合拳"></a>6. 即梦：更像“模型能力加内容生态”的组合拳</h3><p>即梦这条线，真正值得看的是两层：</p>
+<p>一层是模型能力本身；<br>一层是它背后的内容生产生态。</p>
+<p>从即梦网页可见，当前视频生成强调 Seedance 2.0，全能参考、音视文图可参考、Agent 模式等能力。结合外部横评，行业对它的评价往往是：均衡、可控、生态衔接强。</p>
+<p>它的优点主要有：</p>
+<ul>
+<li>综合表现比较均衡</li>
+<li>控制能力较强</li>
+<li>更容易融入短视频生产流程</li>
+<li>与剪映、字节内容生态的结合，带来工作流优势</li>
+</ul>
+<p>它的不足主要有：</p>
+<ul>
+<li>若只看某些极限镜头表现，未必是最激进的一家</li>
+<li>对外公开的价格信息不如海螺、阿里那样容易直接核实</li>
+<li>优势更多体现在“整体可用性”，而不是单一指标碾压</li>
+</ul>
+<h2 id="四、把价格放在一起看，到底谁贵谁便宜"><a href="#四、把价格放在一起看，到底谁贵谁便宜" class="headerlink" title="四、把价格放在一起看，到底谁贵谁便宜"></a>四、把价格放在一起看，到底谁贵谁便宜</h2><p>这里先说一个很重要的前提：国内视频模型的计价方式并不统一。</p>
+<p>有的平台按月订阅、送积分；<br>有的平台按秒计费；<br>有的平台面向创作者和面向开发者是两套价格体系；<br>有的平台官方展示套餐名和权益，但具体价格需要登录后查看或会根据活动变化。</p>
+<p>所以真正比较价格时，不能只看“月费”，要看三个问题：</p>
+<ul>
+<li>你每个月能稳定生成多少视频</li>
+<li>你要的分辨率和时长是什么</li>
+<li>你是个人创作，还是开发接入</li>
+</ul>
+<h2 id="五、目前能直接核实的官方价格信息"><a href="#五、目前能直接核实的官方价格信息" class="headerlink" title="五、目前能直接核实的官方价格信息"></a>五、目前能直接核实的官方价格信息</h2><h3 id="1-海螺：订阅制里最容易算账"><a href="#1-海螺：订阅制里最容易算账" class="headerlink" title="1. 海螺：订阅制里最容易算账"></a>1. 海螺：订阅制里最容易算账</h3><p>根据官方套餐页可见信息：</p>
+<ul>
+<li>Standard：105 元/月，限时优惠 55 元/月，每月 1000 贝壳</li>
+<li>Pro：385 元/月，限时优惠 196 元/月，每月 4500 贝壳</li>
+<li>Master：799 元/月，限时优惠 463 元/月，每月 10000 贝壳</li>
+<li>Ultra：899 元/月，每月 12000 贝壳</li>
+<li>Max：1399 元/月，每月 20000 贝壳</li>
+</ul>
+<p>官方还给出了大致可生成数量，例如 Standard 档大约可生成：</p>
+<ul>
+<li>40 条 6 秒 768P 视频</li>
+<li>20 条 10 秒 768P 视频</li>
+<li>12 条 6 秒 1080P 视频</li>
+</ul>
+<p>如果按优惠价粗算，Standard 大概是：</p>
+<ul>
+<li>6 秒 768P 约 1.38 元/条</li>
+<li>10 秒 768P 约 2.75 元/条</li>
+<li>6 秒 1080P 约 4.58 元/条</li>
+</ul>
+<p>这也是为什么说，海螺很适合做“成本可预估”的生产工具。</p>
+<h3 id="2-通义万相：API-企业计费非常清楚"><a href="#2-通义万相：API-企业计费非常清楚" class="headerlink" title="2. 通义万相：API / 企业计费非常清楚"></a>2. 通义万相：API / 企业计费非常清楚</h3><p>根据阿里云百炼公开计费页，目前能查到的部分价格大致如下：</p>
+<p>文生视频：</p>
+<ul>
+<li>万相 2.7：720P 0.6 元/秒，1080P 1 元/秒</li>
+<li>万相 2.6：720P 0.6 元/秒，1080P 1 元/秒</li>
+<li>万相 2.5 preview：480P 0.3 元/秒，720P 0.6 元/秒，1080P 1 元/秒</li>
+<li>万相 2.2 专业版：480P 0.14 元/秒，1080P 0.70 元/秒</li>
+<li>万相 2.1 极速版：0.24 元/秒</li>
+<li>万相 2.1 专业版：0.70 元/秒</li>
+</ul>
+<p>图生视频：</p>
+<ul>
+<li>万相 2.7 多任务模型：720P 0.6 元/秒，1080P 1 元/秒</li>
+<li>万相 2.2 极速版：480P 0.10 元/秒，720P 0.20 元/秒，1080P 0.48 元/秒</li>
+<li>万相 2.2 专业版：480P 0.14 元/秒，1080P 0.70 元/秒</li>
+</ul>
+<p>这类计价更适合开发者和企业，因为它能直接折算项目预算。</p>
+<h3 id="3-可灵：官方公开更清晰的是开发者-API-价格"><a href="#3-可灵：官方公开更清晰的是开发者-API-价格" class="headerlink" title="3. 可灵：官方公开更清晰的是开发者 API 价格"></a>3. 可灵：官方公开更清晰的是开发者 API 价格</h3><p>可灵面向普通创作者的会员价格，公开抓取并不如海螺直观；但开发者定价页已经能看到一部分模型计费信息。</p>
+<p>官方开发者定价页可见的部分信息包括：</p>
+<ul>
+<li>kling-v3-omni 等能力存在 points 对应美元单价</li>
+<li>部分模型单次或单图价格在 0.028 美元、0.014 美元、0.0035 美元等区间</li>
+</ul>
+<p>这里需要注意的是，这些主要是开发者 / API 维度的价格，不等于普通创作者的会员订阅价格。</p>
+<p>所以如果你的采购方式是 API 接入，可灵可以纳入预算比较；如果你是个人创作者，最好实际登录产品页再核对一次当前订阅方案。</p>
+<h3 id="4-Vidu、即梦、腾讯混元：价格公开透明度不一致"><a href="#4-Vidu、即梦、腾讯混元：价格公开透明度不一致" class="headerlink" title="4. Vidu、即梦、腾讯混元：价格公开透明度不一致"></a>4. Vidu、即梦、腾讯混元：价格公开透明度不一致</h3><ul>
+<li>Vidu 官方有清晰的套餐页和免费版、标准版、专业版、旗舰版分层，但公开抓取到的完整价格数字不如海螺稳定。</li>
+<li>即梦当前更容易看到功能与模型能力展示，价格信息对外公开透明度相对一般，建议以登录后的订阅页或 App 页面为准。</li>
+<li>腾讯混元的官方重点更偏能力展示和云 / 开发者接入，公开视频生成统一公开价不如阿里集中。</li>
+</ul>
+<p>这并不意味着它们更贵，只是意味着做预算时，你需要更依赖实际后台、活动页或商务报价。</p>
+<h2 id="六、从生成效果看，各家到底强在哪"><a href="#六、从生成效果看，各家到底强在哪" class="headerlink" title="六、从生成效果看，各家到底强在哪"></a>六、从生成效果看，各家到底强在哪</h2><h3 id="1-运动幅度和镜头冲击力"><a href="#1-运动幅度和镜头冲击力" class="headerlink" title="1. 运动幅度和镜头冲击力"></a>1. 运动幅度和镜头冲击力</h3><p>这一项，可灵通常最容易被提到。</p>
+<p>如果你想做更大动作、更戏剧化、更有“哇”感的镜头，可灵通常更有优势。它更适合那种需要在几秒内拉高观感的样片。</p>
+<h3 id="2-人物一致性和参考图稳定度"><a href="#2-人物一致性和参考图稳定度" class="headerlink" title="2. 人物一致性和参考图稳定度"></a>2. 人物一致性和参考图稳定度</h3><p>这一项，Vidu 更有代表性。</p>
+<p>如果你的任务是同一个人反复出镜、同一个角色连续出现、同一商品在多个镜头中保持稳定，Vidu 往往更让人放心。</p>
+<h3 id="3-中文理解、文字渲染、运镜控制"><a href="#3-中文理解、文字渲染、运镜控制" class="headerlink" title="3. 中文理解、文字渲染、运镜控制"></a>3. 中文理解、文字渲染、运镜控制</h3><p>这一项，腾讯混元很值得看。</p>
+<p>特别是带指定文字、品牌字样、复杂中文语义描述的内容，混元强调的文字渲染和复杂语义理解是明确卖点。</p>
+<h3 id="4-链路完整度和工业化能力"><a href="#4-链路完整度和工业化能力" class="headerlink" title="4. 链路完整度和工业化能力"></a>4. 链路完整度和工业化能力</h3><p>这一项，阿里通义万相更突出。</p>
+<p>如果你不是只做单条视频，而是要把生成、编辑、续写、参考、配音串起来，它的体系化能力会更重要。</p>
+<h3 id="5-易用性和内容生产工作流"><a href="#5-易用性和内容生产工作流" class="headerlink" title="5. 易用性和内容生产工作流"></a>5. 易用性和内容生产工作流</h3><p>这一项，即梦的价值更大。</p>
+<p>很多时候内容团队不需要绝对最强的单次生成，而需要“今天就能批量出片、明天还能继续复用”。在这种场景下，即梦的整体工作流价值会比单项指标更重要。</p>
+<h3 id="6-性价比和产能预估"><a href="#6-性价比和产能预估" class="headerlink" title="6. 性价比和产能预估"></a>6. 性价比和产能预估</h3><p>这一项，海螺很强。</p>
+<p>因为它不只是卖模型能力，还把“你这个月能产多少”讲得足够清楚，这对中小团队尤其重要。</p>
+<h2 id="七、不同人群，应该怎么选"><a href="#七、不同人群，应该怎么选" class="headerlink" title="七、不同人群，应该怎么选"></a>七、不同人群，应该怎么选</h2><h3 id="1-个人创作者"><a href="#1-个人创作者" class="headerlink" title="1. 个人创作者"></a>1. 个人创作者</h3><p>如果你是个人创作者，我更建议这样选：</p>
+<ul>
+<li>想做视觉冲击、剧情感、广告感：优先试可灵</li>
+<li>想做人物一致性、商品展示、角色延续：优先试 Vidu</li>
+<li>想控制预算、稳定出量：优先试海螺</li>
+<li>想要和短视频工作流打通：优先试即梦</li>
+</ul>
+<h3 id="2-小团队和工作室"><a href="#2-小团队和工作室" class="headerlink" title="2. 小团队和工作室"></a>2. 小团队和工作室</h3><p>如果你是工作室或者小团队，建议不要只试一款。</p>
+<p>更现实的组合往往是：</p>
+<ul>
+<li>用一个高表现模型做关键镜头</li>
+<li>用一个高一致性模型做稳定镜头</li>
+<li>用一个价格透明的平台做常规批量生产</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>可灵负责高张力镜头</li>
+<li>Vidu 负责人物稳定镜头</li>
+<li>海螺负责日常出量</li>
+</ul>
+<p>这样往往比“只押一家”更高效。</p>
+<h3 id="3-企业和开发者"><a href="#3-企业和开发者" class="headerlink" title="3. 企业和开发者"></a>3. 企业和开发者</h3><p>如果你是企业、开发者或者平台方，更建议优先看：</p>
+<ul>
+<li>阿里通义万相</li>
+<li>腾讯混元</li>
+<li>可灵开发者平台</li>
+</ul>
+<p>因为你们更关心的是：</p>
+<ul>
+<li>API 是否稳定</li>
+<li>价格是否可预算</li>
+<li>能否接入现有工作流</li>
+<li>是否支持更细粒度的功能组合</li>
+<li>是否有开源或私有化延展空间</li>
+</ul>
+<h2 id="八、现在最值得关注的行业趋势是什么"><a href="#八、现在最值得关注的行业趋势是什么" class="headerlink" title="八、现在最值得关注的行业趋势是什么"></a>八、现在最值得关注的行业趋势是什么</h2><p>目前国内视频生成大模型，竞争已经不只是“文生视频能不能做出来”，而是进入三个更现实的阶段：</p>
+<h3 id="1-从单次炫技，走向稳定生产"><a href="#1-从单次炫技，走向稳定生产" class="headerlink" title="1. 从单次炫技，走向稳定生产"></a>1. 从单次炫技，走向稳定生产</h3><p>谁能持续稳定交付、减少翻车、减少返工，谁的商业价值更大。</p>
+<h3 id="2-从单一生成，走向完整工作流"><a href="#2-从单一生成，走向完整工作流" class="headerlink" title="2. 从单一生成，走向完整工作流"></a>2. 从单一生成，走向完整工作流</h3><p>模型本身当然重要，但首尾帧、参考图、视频续写、配音、编辑、资产管理、团队协作，会越来越影响最终选择。</p>
+<h3 id="3-从模型能力，走向生态能力"><a href="#3-从模型能力，走向生态能力" class="headerlink" title="3. 从模型能力，走向生态能力"></a>3. 从模型能力，走向生态能力</h3><p>即梦背后的内容生态、腾讯混元的开源生态、阿里的云接入能力，都会成为模型之外的竞争点。</p>
+<h2 id="九、最后一句话总结：不是谁最好，而是谁最适合你的任务"><a href="#九、最后一句话总结：不是谁最好，而是谁最适合你的任务" class="headerlink" title="九、最后一句话总结：不是谁最好，而是谁最适合你的任务"></a>九、最后一句话总结：不是谁最好，而是谁最适合你的任务</h2><p>如果一定要用一句话收尾，我会这样概括：</p>
+<ul>
+<li>可灵更像“追求上限和张力的导演型选手”</li>
+<li>Vidu 更像“稳定写实和一致性的制片型选手”</li>
+<li>海螺更像“性价比和产能透明的运营型选手”</li>
+<li>通义万相更像“企业接入和工作流完整的工程型选手”</li>
+<li>腾讯混元更像“中文理解、文字渲染和开源生态导向的技术型选手”</li>
+<li>即梦更像“模型能力和内容生态结合的产品型选手”</li>
+</ul>
+<p>你真正该问的，不是“谁最强”，而是：</p>
+<p>我的任务，到底更需要冲击力、稳定性、可控性、生态，还是预算透明度？</p>
+<p>把这个问题想清楚，选型会容易很多。</p>
+<h2 id="十、本文整理时参考的公开资料"><a href="#十、本文整理时参考的公开资料" class="headerlink" title="十、本文整理时参考的公开资料"></a>十、本文整理时参考的公开资料</h2><ul>
+<li>可灵官方首页与开发者定价页</li>
+<li>Vidu 官方定价页与帮助信息</li>
+<li>海螺 AI 官方定价页</li>
+<li>阿里云百炼模型大全与万相视频计费页</li>
+<li>腾讯混元官网与 HunyuanVideo 官方页面、开源仓库</li>
+<li>即梦官方站点功能页面</li>
+<li>36氪 2025 年关于可灵、Vidu、即梦的公开横评文章</li>
+</ul>
+<p>说明：本文价格与功能信息以公开页面可核实内容为基础，订阅促销、模型版本和活动档位可能变化较快；若你准备真实采购，建议在下单前再到官方页面核对一次最新套餐。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/%E5%85%AC%E4%BC%97%E5%8F%B7%E5%90%8C%E6%AD%A5/" rel="tag"># 公众号同步</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/18/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8AI%E5%81%9A%E7%9F%AD%E5%89%A7-%E4%BB%8E%E7%81%B5%E6%84%9F%E5%88%B0%E5%87%BA%E7%89%87%E7%9A%84%E5%AE%9E%E6%93%8D%E6%96%B9%E6%B3%95/" rel="prev" title="如何利用AI做短剧：从灵感到出片的实操方法">
+      <i class="fa fa-chevron-left"></i> 如何利用AI做短剧：从灵感到出片的实操方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/04/20/MCP-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AA%81%E7%84%B6%E7%88%86%E7%81%AB-%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%97%B6%E4%BB%A3%E7%9A%84-%E9%80%9A%E7%94%A8%E6%8E%A5%E5%8F%A3/" rel="next" title="MCP 为什么突然爆火？一文看懂大模型时代的“通用接口”">
+      MCP 为什么突然爆火？一文看懂大模型时代的“通用接口” <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%85%88%E8%AF%B4%E7%BB%93%E8%AE%BA%EF%BC%9A%E5%A6%82%E6%9E%9C%E4%BD%A0%E5%8F%AA%E6%83%B3%E5%BF%AB%E9%80%9F%E5%81%9A%E9%80%89%E6%8B%A9"><span class="nav-number">1.</span> <span class="nav-text">一、先说结论：如果你只想快速做选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%80%E5%9C%A8%E6%84%8F%E2%80%9C%E9%95%9C%E5%A4%B4%E5%BC%A0%E5%8A%9B%E3%80%81%E8%BF%90%E5%8A%A8%E5%B9%85%E5%BA%A6%E3%80%81%E6%88%90%E7%89%87%E5%86%B2%E5%87%BB%E5%8A%9B%E2%80%9D"><span class="nav-number">1.1.</span> <span class="nav-text">1. 如果你最在意“镜头张力、运动幅度、成片冲击力”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%80%E5%9C%A8%E6%84%8F%E2%80%9C%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E3%80%81%E5%86%99%E5%AE%9E%E6%84%9F%E3%80%81%E5%8F%82%E8%80%83%E5%9B%BE%E7%A8%B3%E5%AE%9A%E5%BA%A6%E2%80%9D"><span class="nav-number">1.2.</span> <span class="nav-text">2. 如果你最在意“人物一致性、写实感、参考图稳定度”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%80%E5%9C%A8%E6%84%8F%E2%80%9C%E4%B8%8A%E6%89%8B%E9%97%A8%E6%A7%9B%E3%80%81%E4%BB%B7%E6%A0%BC%E9%80%8F%E6%98%8E%E3%80%81%E6%8C%89%E6%9C%88%E5%B0%B1%E8%83%BD%E7%A8%B3%E5%AE%9A%E5%87%BA%E9%87%8F%E2%80%9D"><span class="nav-number">1.3.</span> <span class="nav-text">3. 如果你最在意“上手门槛、价格透明、按月就能稳定出量”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%80%E5%9C%A8%E6%84%8F%E2%80%9C%E4%BC%81%E4%B8%9A%E6%8E%A5%E5%85%A5%E3%80%81API-%E8%AE%A1%E8%B4%B9%E9%80%8F%E6%98%8E%E3%80%81%E9%93%BE%E8%B7%AF%E5%AE%8C%E6%95%B4%E2%80%9D"><span class="nav-number">1.4.</span> <span class="nav-text">4. 如果你最在意“企业接入、API 计费透明、链路完整”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%80%E5%9C%A8%E6%84%8F%E2%80%9C%E4%B8%AD%E6%96%87%E7%90%86%E8%A7%A3%E3%80%81%E6%96%87%E5%AD%97%E6%B8%B2%E6%9F%93%E3%80%81%E5%BC%80%E6%BA%90%E7%94%9F%E6%80%81%E3%80%81%E8%87%AA%E9%83%A8%E7%BD%B2%E8%83%BD%E5%8A%9B%E2%80%9D"><span class="nav-number">1.5.</span> <span class="nav-text">5. 如果你最在意“中文理解、文字渲染、开源生态、自部署能力”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%80%E5%9C%A8%E6%84%8F%E2%80%9C%E5%B7%A5%E5%85%B7%E9%93%BE%E6%95%B4%E5%90%88%E3%80%81%E5%8F%AF%E6%8E%A7%E6%80%A7%E3%80%81%E5%92%8C%E5%89%AA%E6%98%A0%E7%94%9F%E6%80%81%E7%9A%84%E8%A1%94%E6%8E%A5%E2%80%9D"><span class="nav-number">1.6.</span> <span class="nav-text">6. 如果你最在意“工具链整合、可控性、和剪映生态的衔接”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A7%86%E9%A2%91%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%AF%94%E8%BE%83%EF%BC%8C%E4%B8%8D%E8%83%BD%E5%8F%AA%E7%9C%8B%E2%80%9C%E8%B0%81%E7%94%BB%E8%B4%A8%E9%AB%98%E2%80%9D"><span class="nav-number">2.</span> <span class="nav-text">二、为什么视频模型的比较，不能只看“谁画质高”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9B%BD%E5%86%85%E4%B8%BB%E6%B5%81%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%EF%BC%8C%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%E5%AE%9A%E4%BD%8D"><span class="nav-number">3.</span> <span class="nav-text">三、国内主流视频生成模型，分别是什么定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%AF%E7%81%B5%EF%BC%9A%E6%9B%B4%E5%83%8F%E2%80%9C%E9%AB%98%E4%B8%8A%E9%99%90%E7%9A%84%E9%95%9C%E5%A4%B4%E8%A1%A8%E8%BE%BE%E5%9E%8B%E9%80%89%E6%89%8B%E2%80%9D"><span class="nav-number">3.1.</span> <span class="nav-text">1. 可灵：更像“高上限的镜头表达型选手”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Vidu%EF%BC%9A%E6%9B%B4%E5%83%8F%E2%80%9C%E7%A8%B3%E5%AE%9A%E5%86%99%E5%AE%9E%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%80%89%E6%89%8B%E2%80%9D"><span class="nav-number">3.2.</span> <span class="nav-text">2. Vidu：更像“稳定写实的一致性选手”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%B5%B7%E8%9E%BA%EF%BC%9A%E6%9B%B4%E5%83%8F%E2%80%9C%E4%BA%A7%E5%93%81%E5%8C%96%E5%92%8C%E6%80%A7%E4%BB%B7%E6%AF%94%E5%BE%88%E5%BC%BA%E7%9A%84%E5%88%9B%E4%BD%9C%E8%80%85%E5%B9%B3%E5%8F%B0%E2%80%9D"><span class="nav-number">3.3.</span> <span class="nav-text">3. 海螺：更像“产品化和性价比很强的创作者平台”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%80%9A%E4%B9%89%E4%B8%87%E7%9B%B8%EF%BC%9A%E6%9B%B4%E5%83%8F%E2%80%9C%E4%BC%81%E4%B8%9A%E6%8E%A5%E5%85%A5%E5%92%8C%E5%AE%8C%E6%95%B4%E5%B7%A5%E4%BD%9C%E6%B5%81%E9%80%89%E6%89%8B%E2%80%9D"><span class="nav-number">3.4.</span> <span class="nav-text">4. 通义万相：更像“企业接入和完整工作流选手”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E8%85%BE%E8%AE%AF%E6%B7%B7%E5%85%83%EF%BC%9A%E6%9B%B4%E5%83%8F%E2%80%9C%E6%8A%80%E6%9C%AF%E8%83%BD%E5%8A%9B%E5%BC%BA%E3%80%81%E7%94%9F%E6%80%81%E5%92%8C%E5%BC%80%E6%BA%90%E9%83%BD%E6%83%B3%E6%8B%BF%E2%80%9D%E7%9A%84%E8%B7%AF%E7%BA%BF"><span class="nav-number">3.5.</span> <span class="nav-text">5. 腾讯混元：更像“技术能力强、生态和开源都想拿”的路线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%8D%B3%E6%A2%A6%EF%BC%9A%E6%9B%B4%E5%83%8F%E2%80%9C%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%E5%8A%A0%E5%86%85%E5%AE%B9%E7%94%9F%E6%80%81%E2%80%9D%E7%9A%84%E7%BB%84%E5%90%88%E6%8B%B3"><span class="nav-number">3.6.</span> <span class="nav-text">6. 即梦：更像“模型能力加内容生态”的组合拳</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%8A%8A%E4%BB%B7%E6%A0%BC%E6%94%BE%E5%9C%A8%E4%B8%80%E8%B5%B7%E7%9C%8B%EF%BC%8C%E5%88%B0%E5%BA%95%E8%B0%81%E8%B4%B5%E8%B0%81%E4%BE%BF%E5%AE%9C"><span class="nav-number">4.</span> <span class="nav-text">四、把价格放在一起看，到底谁贵谁便宜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%9B%AE%E5%89%8D%E8%83%BD%E7%9B%B4%E6%8E%A5%E6%A0%B8%E5%AE%9E%E7%9A%84%E5%AE%98%E6%96%B9%E4%BB%B7%E6%A0%BC%E4%BF%A1%E6%81%AF"><span class="nav-number">5.</span> <span class="nav-text">五、目前能直接核实的官方价格信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B5%B7%E8%9E%BA%EF%BC%9A%E8%AE%A2%E9%98%85%E5%88%B6%E9%87%8C%E6%9C%80%E5%AE%B9%E6%98%93%E7%AE%97%E8%B4%A6"><span class="nav-number">5.1.</span> <span class="nav-text">1. 海螺：订阅制里最容易算账</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%80%9A%E4%B9%89%E4%B8%87%E7%9B%B8%EF%BC%9AAPI-%E4%BC%81%E4%B8%9A%E8%AE%A1%E8%B4%B9%E9%9D%9E%E5%B8%B8%E6%B8%85%E6%A5%9A"><span class="nav-number">5.2.</span> <span class="nav-text">2. 通义万相：API &#x2F; 企业计费非常清楚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8F%AF%E7%81%B5%EF%BC%9A%E5%AE%98%E6%96%B9%E5%85%AC%E5%BC%80%E6%9B%B4%E6%B8%85%E6%99%B0%E7%9A%84%E6%98%AF%E5%BC%80%E5%8F%91%E8%80%85-API-%E4%BB%B7%E6%A0%BC"><span class="nav-number">5.3.</span> <span class="nav-text">3. 可灵：官方公开更清晰的是开发者 API 价格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Vidu%E3%80%81%E5%8D%B3%E6%A2%A6%E3%80%81%E8%85%BE%E8%AE%AF%E6%B7%B7%E5%85%83%EF%BC%9A%E4%BB%B7%E6%A0%BC%E5%85%AC%E5%BC%80%E9%80%8F%E6%98%8E%E5%BA%A6%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="nav-number">5.4.</span> <span class="nav-text">4. Vidu、即梦、腾讯混元：价格公开透明度不一致</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%BB%8E%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C%E7%9C%8B%EF%BC%8C%E5%90%84%E5%AE%B6%E5%88%B0%E5%BA%95%E5%BC%BA%E5%9C%A8%E5%93%AA"><span class="nav-number">6.</span> <span class="nav-text">六、从生成效果看，各家到底强在哪</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%BF%90%E5%8A%A8%E5%B9%85%E5%BA%A6%E5%92%8C%E9%95%9C%E5%A4%B4%E5%86%B2%E5%87%BB%E5%8A%9B"><span class="nav-number">6.1.</span> <span class="nav-text">1. 运动幅度和镜头冲击力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E5%8F%82%E8%80%83%E5%9B%BE%E7%A8%B3%E5%AE%9A%E5%BA%A6"><span class="nav-number">6.2.</span> <span class="nav-text">2. 人物一致性和参考图稳定度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%AD%E6%96%87%E7%90%86%E8%A7%A3%E3%80%81%E6%96%87%E5%AD%97%E6%B8%B2%E6%9F%93%E3%80%81%E8%BF%90%E9%95%9C%E6%8E%A7%E5%88%B6"><span class="nav-number">6.3.</span> <span class="nav-text">3. 中文理解、文字渲染、运镜控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%93%BE%E8%B7%AF%E5%AE%8C%E6%95%B4%E5%BA%A6%E5%92%8C%E5%B7%A5%E4%B8%9A%E5%8C%96%E8%83%BD%E5%8A%9B"><span class="nav-number">6.4.</span> <span class="nav-text">4. 链路完整度和工业化能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%98%93%E7%94%A8%E6%80%A7%E5%92%8C%E5%86%85%E5%AE%B9%E7%94%9F%E4%BA%A7%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">6.5.</span> <span class="nav-text">5. 易用性和内容生产工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%80%A7%E4%BB%B7%E6%AF%94%E5%92%8C%E4%BA%A7%E8%83%BD%E9%A2%84%E4%BC%B0"><span class="nav-number">6.6.</span> <span class="nav-text">6. 性价比和产能预估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E4%B8%8D%E5%90%8C%E4%BA%BA%E7%BE%A4%EF%BC%8C%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E9%80%89"><span class="nav-number">7.</span> <span class="nav-text">七、不同人群，应该怎么选</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%AA%E4%BA%BA%E5%88%9B%E4%BD%9C%E8%80%85"><span class="nav-number">7.1.</span> <span class="nav-text">1. 个人创作者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%8F%E5%9B%A2%E9%98%9F%E5%92%8C%E5%B7%A5%E4%BD%9C%E5%AE%A4"><span class="nav-number">7.2.</span> <span class="nav-text">2. 小团队和工作室</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BC%81%E4%B8%9A%E5%92%8C%E5%BC%80%E5%8F%91%E8%80%85"><span class="nav-number">7.3.</span> <span class="nav-text">3. 企业和开发者</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%8E%B0%E5%9C%A8%E6%9C%80%E5%80%BC%E5%BE%97%E5%85%B3%E6%B3%A8%E7%9A%84%E8%A1%8C%E4%B8%9A%E8%B6%8B%E5%8A%BF%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">8.</span> <span class="nav-text">八、现在最值得关注的行业趋势是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BB%8E%E5%8D%95%E6%AC%A1%E7%82%AB%E6%8A%80%EF%BC%8C%E8%B5%B0%E5%90%91%E7%A8%B3%E5%AE%9A%E7%94%9F%E4%BA%A7"><span class="nav-number">8.1.</span> <span class="nav-text">1. 从单次炫技，走向稳定生产</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BB%8E%E5%8D%95%E4%B8%80%E7%94%9F%E6%88%90%EF%BC%8C%E8%B5%B0%E5%90%91%E5%AE%8C%E6%95%B4%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">8.2.</span> <span class="nav-text">2. 从单一生成，走向完整工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BB%8E%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%EF%BC%8C%E8%B5%B0%E5%90%91%E7%94%9F%E6%80%81%E8%83%BD%E5%8A%9B"><span class="nav-number">8.3.</span> <span class="nav-text">3. 从模型能力，走向生态能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%9C%80%E5%90%8E%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93%EF%BC%9A%E4%B8%8D%E6%98%AF%E8%B0%81%E6%9C%80%E5%A5%BD%EF%BC%8C%E8%80%8C%E6%98%AF%E8%B0%81%E6%9C%80%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">9.</span> <span class="nav-text">九、最后一句话总结：不是谁最好，而是谁最适合你的任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%9C%AC%E6%96%87%E6%95%B4%E7%90%86%E6%97%B6%E5%8F%82%E8%80%83%E7%9A%84%E5%85%AC%E5%BC%80%E8%B5%84%E6%96%99"><span class="nav-number">10.</span> <span class="nav-text">十、本文整理时参考的公开资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

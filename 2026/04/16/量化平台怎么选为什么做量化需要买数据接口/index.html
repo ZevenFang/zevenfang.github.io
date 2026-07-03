@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="个人做量化，平台不是最难的，数据才是分水岭。本文结合聚宽、掘金、QMT&#x2F;vn.py、Tushare、AKShare等常见路线，讲清楚平台怎么选、为什么数据接口值得花钱，以及没有数据会把量化交易拖到什么地步。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="量化平台怎么选？为什么做量化需要买数据接口">
+<meta property="og:url" content="https://zevenfang.github.io/2026/04/16/%E9%87%8F%E5%8C%96%E5%B9%B3%E5%8F%B0%E6%80%8E%E4%B9%88%E9%80%89%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%9A%E9%87%8F%E5%8C%96%E9%9C%80%E8%A6%81%E4%B9%B0%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="个人做量化，平台不是最难的，数据才是分水岭。本文结合聚宽、掘金、QMT&#x2F;vn.py、Tushare、AKShare等常见路线，讲清楚平台怎么选、为什么数据接口值得花钱，以及没有数据会把量化交易拖到什么地步。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zevenfang.github.io/images/wechat-sync/量化平台怎么选为什么做量化需要买数据接口/3e6d0b5b20aa7e93.png">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-04-16T09:08:27.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.761Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="公众号同步">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zevenfang.github.io/images/wechat-sync/量化平台怎么选为什么做量化需要买数据接口/3e6d0b5b20aa7e93.png">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/04/16/%E9%87%8F%E5%8C%96%E5%B9%B3%E5%8F%B0%E6%80%8E%E4%B9%88%E9%80%89%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%9A%E9%87%8F%E5%8C%96%E9%9C%80%E8%A6%81%E4%B9%B0%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>量化平台怎么选？为什么做量化需要买数据接口 | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/04/16/%E9%87%8F%E5%8C%96%E5%B9%B3%E5%8F%B0%E6%80%8E%E4%B9%88%E9%80%89%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%9A%E9%87%8F%E5%8C%96%E9%9C%80%E8%A6%81%E4%B9%B0%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          量化平台怎么选？为什么做量化需要买数据接口<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/%E9%87%8F%E5%8C%96%E5%B9%B3%E5%8F%B0%E6%80%8E%E4%B9%88%E9%80%89%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%9A%E9%87%8F%E5%8C%96%E9%9C%80%E8%A6%81%E4%B9%B0%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-16 17:08:27" itemprop="dateCreated datePublished" datetime="2026-04-16T17:08:27+08:00">2026-04-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E5%85%AC%E4%BC%97%E5%8F%B7/" itemprop="url" rel="index"><span itemprop="name">公众号</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">个人做量化，平台不是最难的，数据才是分水岭。本文结合聚宽、掘金、QMT/vn.py、Tushare、AKShare等常见路线，讲清楚平台怎么选、为什么数据接口值得花钱，以及没有数据会把量化交易拖到什么地步。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>原公众号链接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/MbwNLKrnvdq_iMYLUxNwTg">量化平台怎么选？为什么做量化需要买数据接口</a></p>
+</blockquote>
+<div class="post-content-summary" aria-label="内容摘要"><div class="post-content-summary-title">内容摘要</div><p>个人做量化，平台不是最难的，数据才是分水岭。本文结合聚宽、掘金、QMT/vn.py、Tushare、AKShare等常见路线，讲清楚平台怎么选、为什么数据接口值得花钱，以及没有数据会把量化交易拖到什么地步。</p></div>
+
+<p><img src="/images/wechat-sync/量化平台怎么选为什么做量化需要买数据接口/3e6d0b5b20aa7e93.png" alt=""></p>
+<p>摘要：个人做量化，平台不是最难的，数据才是分水岭。本文结合聚宽、掘金、QMT/vn.py、Tushare、AKShare等常见路线，讲清楚平台怎么选、为什么数据接口值得花钱，以及没有数据会把量化交易拖到什么地步。</p>
+<p>很多人刚接触量化时，第一反应是：我该选哪个平台？</p>
+<p>但真正做一段时间后，大多数人都会发现，平台只是表面问题，真正决定你能不能持续做下去的，是数据。</p>
+<p>你可以没有特别高级的界面，也可以先不用最复杂的撮合系统，但你很难长期忍受：数据缺失、口径不一致、复权有误、分钟线不稳定、财务字段不全、指数成分拿不到、回测和实盘对不上。</p>
+<p>所以这篇文章不只是帮你“挑平台”，更重要的是帮你建立一个更现实的认知：个人做量化交易，前期可以先借平台起步，但一旦开始认真做策略，买稳定的数据接口几乎是绕不过去的一步。</p>
+<h2 id="一、个人常见的量化平台，分别适合什么阶段"><a href="#一、个人常见的量化平台，分别适合什么阶段" class="headerlink" title="一、个人常见的量化平台，分别适合什么阶段"></a>一、个人常见的量化平台，分别适合什么阶段</h2><h3 id="1-聚宽：适合快速上手研究和回测"><a href="#1-聚宽：适合快速上手研究和回测" class="headerlink" title="1. 聚宽：适合快速上手研究和回测"></a>1. 聚宽：适合快速上手研究和回测</h3><p>从官方介绍看，聚宽提供经过专业清洗的 A 股、期货、期权、基金、宏观数据，也提供常用因子和第三方数据库，并支持策略研究、历史回测、模拟交易和实盘交易。它还有 JQData 这条独立数据路线，强调可以在本地用几行代码调用数据。</p>
+<p>这类平台最大的优点，是上手快。</p>
+<ul>
+<li><p>数据、研究环境、回测框架是打通的</p>
+</li>
+<li><p>社区内容多，容易找到参考策略和案例</p>
+</li>
+<li><p>对新手友好，能先把“策略是不是有点意思”验证出来</p>
+</li>
+<li><p>对日频、多因子、基本面选股类研究尤其方便<br>它的局限也很明显。</p>
+</li>
+<li><p>你用得越深，越会依赖它的平台规则和接口风格</p>
+</li>
+<li><p>一旦想迁移到本地框架或其他执行系统，成本会出现</p>
+</li>
+<li><p>更细粒度、更定制化、更低延迟的需求，平台未必都能满足<br>如果你现在还处在“先做出第一个能回测的策略”阶段，聚宽是很顺手的起点。</p>
+</li>
+</ul>
+<h3 id="2-掘金：更偏完整交易流程和专业终端思路"><a href="#2-掘金：更偏完整交易流程和专业终端思路" class="headerlink" title="2. 掘金：更偏完整交易流程和专业终端思路"></a>2. 掘金：更偏完整交易流程和专业终端思路</h3><p>掘金官方首页强调“覆盖投资全流程的专业终端”，并写明可提供策略生产、研究、交易、分析、管理等服务。这个定位和单纯的研究平台不太一样，它更强调从研究走向交易闭环。</p>
+<p>它适合的人群通常是：</p>
+<ul>
+<li><p>已经不满足于只看回测结果</p>
+</li>
+<li><p>希望更靠近实盘执行、组合管理和流程化交易</p>
+</li>
+<li><p>想把研究、仿真、执行放到一条链路里<br>对于个人用户来说，掘金的意义往往不只是“有没有一个平台”，而是帮你理解一件事：真正可交易的量化体系，不是只有一个策略脚本，而是研究、数据、执行、风控、复盘一起运转。</p>
+</li>
+</ul>
+<h3 id="3-QMT-PTrade-这类券商终端：更接近真实交易落地"><a href="#3-QMT-PTrade-这类券商终端：更接近真实交易落地" class="headerlink" title="3. QMT / PTrade 这类券商终端：更接近真实交易落地"></a>3. QMT / PTrade 这类券商终端：更接近真实交易落地</h3><p>如果你真正想在 A 股环境做实盘，最后大概率还是会接触到券商交易终端生态，比如 QMT、PTrade 一类方案。以迅投知识库公开文档为例，QMT 的 xtquant 文档里已经拆出了 XtData 行情模块和 XtTrade 交易模块，也提供历史数据下载、行情订阅和交易示例。</p>
+<p>这类平台的优势在于：</p>
+<ul>
+<li><p>更接近真实报单和账户环境</p>
+</li>
+<li><p>更适合处理实盘交易约束</p>
+</li>
+<li><p>更容易解决“研究策略如何真正发单”的问题<br>但它对个人也有明显门槛：</p>
+</li>
+<li><p>学习成本更高</p>
+</li>
+<li><p>环境配置和接口理解更复杂</p>
+</li>
+<li><p>很多问题不再是“Python 会不会写”，而是“交易链路稳不稳定”<br>简单说，QMT 更像是“能下场交易”的平台，而不是“最适合启蒙”的平台。</p>
+</li>
+</ul>
+<h3 id="4-vn-py：适合愿意自己搭框架的人"><a href="#4-vn-py：适合愿意自己搭框架的人" class="headerlink" title="4. vn.py：适合愿意自己搭框架的人"></a>4. vn.py：适合愿意自己搭框架的人</h3><p>vn.py 官方把自己定义为“基于 Python 的开源量化交易平台开发框架”。这句话其实已经说明了它的定位：它不是一个替你全部打包好的云平台，而是一套你可以自己搭建、扩展和控制的交易框架。</p>
+<p>它适合：</p>
+<ul>
+<li><p>有一定 Python 基础</p>
+</li>
+<li><p>不想长期绑定在单一平台之上</p>
+</li>
+<li><p>想自己掌控策略框架、事件引擎、网关接入、数据落地</p>
+</li>
+<li><p>愿意为灵活性付出更多工程时间<br>vn.py 的优点是自由度高，缺点也是自由度高。</p>
+</li>
+</ul>
+<p>你不会被平台限制太多，但你也要自己面对更多现实问题：数据接哪家、缓存怎么做、回测口径怎么统一、日志怎么留、异常怎么恢复。</p>
+<h3 id="5-Tushare、AKShare：它们更像数据层，而不是完整平台"><a href="#5-Tushare、AKShare：它们更像数据层，而不是完整平台" class="headerlink" title="5. Tushare、AKShare：它们更像数据层，而不是完整平台"></a>5. Tushare、AKShare：它们更像数据层，而不是完整平台</h3><p>Tushare 官方强调自己是“大数据开放社区”，提供股票、基金、期货、数字货币等行情数据，以及公司财务、基金经理等基本面数据，同时支持 SDK 和 HTTP Restful 接口。AKShare 的公开文档则覆盖了股票、期货、债券、期权、外汇、宏观、多因子、高频等大量数据目录。</p>
+<p>这两类工具很重要，因为它们提醒你：</p>
+<p>做量化，平台层和数据层其实是两回事。</p>
+<ul>
+<li><p>平台解决的是研究、回测、执行工作流</p>
+</li>
+<li><p>数据接口解决的是“你到底喂给模型什么数据”<br>很多人真正走向成熟，不是换了某个平台，而是开始把数据层独立出来。</p>
+</li>
+</ul>
+<h2 id="二、为什么说做量化，迟早要买数据接口"><a href="#二、为什么说做量化，迟早要买数据接口" class="headerlink" title="二、为什么说做量化，迟早要买数据接口"></a>二、为什么说做量化，迟早要买数据接口</h2><p>先说结论：如果你只是学习，免费的数据和平台足够用；但如果你想认真做策略、持续迭代、尽量靠近实盘，付费数据大概率不是“可选项”，而是“迟早项”。</p>
+<h3 id="1-因为策略好坏，首先取决于你拿到的输入是不是可靠"><a href="#1-因为策略好坏，首先取决于你拿到的输入是不是可靠" class="headerlink" title="1. 因为策略好坏，首先取决于你拿到的输入是不是可靠"></a>1. 因为策略好坏，首先取决于你拿到的输入是不是可靠</h3><p>量化本质上不是“写代码”，而是“用数据描述市场，再让策略对数据做反应”。</p>
+<p>如果输入本身就有问题，后面的回测、因子、择时、仓位管理都会连着歪掉。</p>
+<p>付费数据接口的核心价值，往往不是“多给你几张表”，而是这些你最容易忽视、但实际最致命的东西：</p>
+<ul>
+<li><p>数据是否持续更新</p>
+</li>
+<li><p>停牌、复牌、除权除息是否处理正确</p>
+</li>
+<li><p>财务口径是否统一</p>
+</li>
+<li><p>指数成分和行业分类是否可追溯</p>
+</li>
+<li><p>分钟线、Tick、盘口数据是否连续</p>
+</li>
+<li><p>历史数据是否存在补漏、修正和版本管理<br>这些东西在策略 PPT 里不显眼，但在真实收益里非常显眼。</p>
+</li>
+</ul>
+<h3 id="2-因为免费的数据，最大的问题通常不是“少”，而是“不稳”"><a href="#2-因为免费的数据，最大的问题通常不是“少”，而是“不稳”" class="headerlink" title="2. 因为免费的数据，最大的问题通常不是“少”，而是“不稳”"></a>2. 因为免费的数据，最大的问题通常不是“少”，而是“不稳”</h3><p>很多人一开始会觉得，能拿到 K 线就够了。</p>
+<p>但当你真的开始做策略，会发现免费数据经常会在这些地方卡住你：</p>
+<ul>
+<li><p>拉取速度慢，批量研究效率低</p>
+</li>
+<li><p>字段会变，接口偶尔失效</p>
+</li>
+<li><p>高频和细粒度数据缺失</p>
+</li>
+<li><p>历史覆盖不完整</p>
+</li>
+<li><p>企业行为、指数成分、财务更新时点不够严谨</p>
+</li>
+<li><p>来源分散，口径不统一，最后只能自己拼<br>最糟糕的不是“没有数据”，而是“你以为你有数据”。</p>
+</li>
+</ul>
+<p>表面看回测跑出来了，实际上你喂给策略的是缺口、脏数据、错误复权和混乱字段。这样做出来的结果，往往不是弱一点，而是方向都可能错了。</p>
+<h3 id="3-因为做实盘以后，你会发现时间比钱更贵"><a href="#3-因为做实盘以后，你会发现时间比钱更贵" class="headerlink" title="3. 因为做实盘以后，你会发现时间比钱更贵"></a>3. 因为做实盘以后，你会发现时间比钱更贵</h3><p>个人做量化，很容易陷入一个误区：舍不得买数据，却愿意花大量时间修数据。</p>
+<p>这在早期练手没有问题，但只要你认真持续做三到六个月，你通常会发现：</p>
+<ul>
+<li><p>自己清洗数据非常耗时</p>
+</li>
+<li><p>每次源头接口变化都要重新修</p>
+</li>
+<li><p>策略迭代变慢，研究节奏被打断</p>
+</li>
+<li><p>你越来越像一个“数据修理工”，而不是策略研究者<br>花钱买数据接口，本质上是在买三样东西：</p>
+</li>
+<li><p>稳定性</p>
+</li>
+<li><p>一致性</p>
+</li>
+<li><p>时间<br>对个人来说，这三样东西往往比“绝对低成本”更重要。</p>
+</li>
+</ul>
+<h2 id="三、没有稳定的数据接口，会发生什么"><a href="#三、没有稳定的数据接口，会发生什么" class="headerlink" title="三、没有稳定的数据接口，会发生什么"></a>三、没有稳定的数据接口，会发生什么</h2><p>如果一句话概括，就是：你会把很多本来应该在策略层解决的问题，被迫搬到数据层反复返工。</p>
+<h3 id="1-回测结果会失真，甚至失真得很严重"><a href="#1-回测结果会失真，甚至失真得很严重" class="headerlink" title="1. 回测结果会失真，甚至失真得很严重"></a>1. 回测结果会失真，甚至失真得很严重</h3><p>没有稳定数据，最直接的后果就是回测失真。</p>
+<p>常见表现包括：</p>
+<ul>
+<li><p>复权处理不一致，收益曲线虚高或虚低</p>
+</li>
+<li><p>幸存者偏差没有处理，只看到今天还活着的股票</p>
+</li>
+<li><p>指数成分、ST、停牌状态回溯不准确</p>
+</li>
+<li><p>财报发布日期和生效时间没对齐，产生未来函数</p>
+</li>
+<li><p>分钟级数据有缺口，导致择时结论失真<br>这类问题最危险的地方在于：它们不会让代码报错，它们会让你“看起来成功”。</p>
+</li>
+</ul>
+<h3 id="2-策略很难从研究走向实盘"><a href="#2-策略很难从研究走向实盘" class="headerlink" title="2. 策略很难从研究走向实盘"></a>2. 策略很难从研究走向实盘</h3><p>没有可靠数据，研究环境和实盘环境的差异会越来越大。</p>
+<p>你可能在研究时用的是一套临时拼来的历史数据，到了实盘又接另一套实时行情。这样一来：</p>
+<ul>
+<li><p>信号计算口径不一致</p>
+</li>
+<li><p>买卖点触发逻辑发生偏移</p>
+</li>
+<li><p>风控阈值失真</p>
+</li>
+<li><p>回测表现和实盘体验严重割裂<br>很多人并不是输给策略思想，而是输给“研究时看到的市场”和“下单时面对的市场”根本不是同一个数据世界。</p>
+</li>
+</ul>
+<h3 id="3-你会很难做更高频、更细节的策略"><a href="#3-你会很难做更高频、更细节的策略" class="headerlink" title="3. 你会很难做更高频、更细节的策略"></a>3. 你会很难做更高频、更细节的策略</h3><p>没有高质量数据接口，你能做的策略类型会被天然限制。</p>
+<p>例如：</p>
+<ul>
+<li><p>你想做分钟级轮动，但分钟线质量一般</p>
+</li>
+<li><p>你想做盘口微结构，但没有逐笔和委托队列</p>
+</li>
+<li><p>你想做多因子，但财务字段和因子历史不稳定</p>
+</li>
+<li><p>你想做跨市场配置，但数据源彼此口径不同<br>最后你会发现，不是你不会建模，而是你没有足够好的材料去建模。</p>
+</li>
+</ul>
+<h3 id="4-研究效率会明显下降，信心也会被消耗"><a href="#4-研究效率会明显下降，信心也会被消耗" class="headerlink" title="4. 研究效率会明显下降，信心也会被消耗"></a>4. 研究效率会明显下降，信心也会被消耗</h3><p>当你经常遇到“今天接口又拉不下来”“这个字段到底什么意思”“为什么这段历史少了一截”时，研究会变得非常碎。</p>
+<p>个人量化最宝贵的资源其实不是钱，而是持续性。</p>
+<p>如果每周宝贵的研究时间，都被浪费在数据修补和排错上，你很容易在还没走到策略成熟之前，就先把耐心耗尽了。</p>
+<h2 id="四、个人做量化，应该怎么买平台和数据"><a href="#四、个人做量化，应该怎么买平台和数据" class="headerlink" title="四、个人做量化，应该怎么买平台和数据"></a>四、个人做量化，应该怎么买平台和数据</h2><h3 id="1-先分清楚：你买的是平台能力，还是数据能力"><a href="#1-先分清楚：你买的是平台能力，还是数据能力" class="headerlink" title="1. 先分清楚：你买的是平台能力，还是数据能力"></a>1. 先分清楚：你买的是平台能力，还是数据能力</h3><p>很多人会把“买平台”和“买数据”混为一谈。</p>
+<p>其实最好拆开看：</p>
+<ul>
+<li><p>如果你需要快速验证想法，优先买研究效率</p>
+</li>
+<li><p>如果你需要稳定迭代策略，优先买数据质量</p>
+</li>
+<li><p>如果你准备做实盘，优先买执行链路和账户接入能力<br>平台和数据并不是二选一，而是不同阶段各有主次。</p>
+</li>
+</ul>
+<h3 id="2-新手阶段，不建议一上来就堆最贵配置"><a href="#2-新手阶段，不建议一上来就堆最贵配置" class="headerlink" title="2. 新手阶段，不建议一上来就堆最贵配置"></a>2. 新手阶段，不建议一上来就堆最贵配置</h3><p>对个人用户，我通常更建议分阶段：</p>
+<ul>
+<li><p>第一阶段：先用聚宽、AKShare、Tushare 这类工具把研究流程跑通</p>
+</li>
+<li><p>第二阶段：确认自己真的会持续做，再补更稳定的数据接口</p>
+</li>
+<li><p>第三阶段：准备实盘时，再接 QMT、vn.py 或更适合自己的执行框架<br>先证明你有稳定输出，再给系统升级预算。</p>
+</li>
+</ul>
+<p>否则最常见的结果就是：花了不少钱，最后只留下几个没跑完的回测脚本。</p>
+<h3 id="3-当你出现这几个信号时，就该认真买数据了"><a href="#3-当你出现这几个信号时，就该认真买数据了" class="headerlink" title="3. 当你出现这几个信号时，就该认真买数据了"></a>3. 当你出现这几个信号时，就该认真买数据了</h3><p>如果你已经出现下面这些情况，说明你买数据接口的时点到了：</p>
+<ul>
+<li><p>你已经不满足于日频玩具回测</p>
+</li>
+<li><p>你开始反复做同一类策略迭代</p>
+</li>
+<li><p>你发现大量时间花在清洗和修补数据上</p>
+</li>
+<li><p>你准备把研究结果往模拟盘或实盘迁移</p>
+</li>
+<li><p>你需要更完整的基本面、因子、分钟级甚至 Tick 级数据<br>这时候继续死扛免费接口，往往是省小钱、亏大时间。</p>
+</li>
+</ul>
+<h3 id="4-数据预算别只看价格，要看“每周节省你多少时间”"><a href="#4-数据预算别只看价格，要看“每周节省你多少时间”" class="headerlink" title="4. 数据预算别只看价格，要看“每周节省你多少时间”"></a>4. 数据预算别只看价格，要看“每周节省你多少时间”</h3><p>个人投资者最容易犯的错误，就是只按年费判断贵不贵。</p>
+<p>更好的算账方式是：</p>
+<ul>
+<li><p>它能不能减少我自己清洗数据的时间？</p>
+</li>
+<li><p>它能不能减少回测口径出错的概率？</p>
+</li>
+<li><p>它能不能让我更快完成一次策略验证？</p>
+</li>
+<li><p>它能不能让研究和实盘更一致？<br>如果一个数据接口每周能稳定帮你省下几小时，而且明显减少错误结论，那它往往就是值得的。</p>
+</li>
+</ul>
+<h2 id="五、给个人量化交易者的几条实用建议"><a href="#五、给个人量化交易者的几条实用建议" class="headerlink" title="五、给个人量化交易者的几条实用建议"></a>五、给个人量化交易者的几条实用建议</h2><h3 id="1-不要先迷信策略，先怀疑数据"><a href="#1-不要先迷信策略，先怀疑数据" class="headerlink" title="1. 不要先迷信策略，先怀疑数据"></a>1. 不要先迷信策略，先怀疑数据</h3><p>当一个策略看起来“特别好”时，第一反应不要是兴奋，而要先检查：</p>
+<ul>
+<li><p>有没有未来函数</p>
+</li>
+<li><p>有没有复权错误</p>
+</li>
+<li><p>有没有样本选择偏差</p>
+</li>
+<li><p>有没有漏掉交易成本、滑点、停牌和涨跌停约束</p>
+</li>
+<li><p>数据是不是来自多个口径不一致的源头<br>很多“神策略”，本质上都是“神数据错误”。</p>
+</li>
+</ul>
+<h3 id="2-一开始就建立本地数据缓存和版本意识"><a href="#2-一开始就建立本地数据缓存和版本意识" class="headerlink" title="2. 一开始就建立本地数据缓存和版本意识"></a>2. 一开始就建立本地数据缓存和版本意识</h3><p>哪怕你还没买很贵的数据，也建议尽早建立自己的数据缓存习惯。</p>
+<ul>
+<li><p>把关键研究数据落到本地</p>
+</li>
+<li><p>记录更新时间和字段来源</p>
+</li>
+<li><p>保留核心表的版本</p>
+</li>
+<li><p>区分原始数据、清洗数据、回测输入数据<br>这件事会极大减少你后续的混乱。</p>
+</li>
+</ul>
+<h3 id="3-平台最好只是工具，不要变成枷锁"><a href="#3-平台最好只是工具，不要变成枷锁" class="headerlink" title="3. 平台最好只是工具，不要变成枷锁"></a>3. 平台最好只是工具，不要变成枷锁</h3><p>平台可以帮你起步，但不要让自己永远只能在某个平台里思考。</p>
+<p>更健康的状态是：</p>
+<ul>
+<li><p>用平台提升早期效率</p>
+</li>
+<li><p>用独立数据层增强可迁移性</p>
+</li>
+<li><p>用本地框架沉淀自己的研究和执行能力<br>这样你以后无论切换到 vn.py、QMT，还是接入别的券商和数据源，都不会从头再来。</p>
+</li>
+</ul>
+<h3 id="4-先做自己能驾驭的频率和市场"><a href="#4-先做自己能驾驭的频率和市场" class="headerlink" title="4. 先做自己能驾驭的频率和市场"></a>4. 先做自己能驾驭的频率和市场</h3><p>对个人来说，最忌讳一上来就想做最复杂的高频。</p>
+<p>如果你目前是单兵作战，更现实的路径通常是：</p>
+<ul>
+<li><p>先从日频或低频择时、选股开始</p>
+</li>
+<li><p>先在一个熟悉市场里建立方法论</p>
+</li>
+<li><p>先把数据口径、回测流程、执行约束吃透</p>
+</li>
+<li><p>再逐步提高频率和复杂度<br>量化不是“代码越炫越厉害”，而是“系统越稳越有生命力”。</p>
+</li>
+</ul>
+<h2 id="六、最后一句话：平台决定你起步有多快，数据决定你能走多远"><a href="#六、最后一句话：平台决定你起步有多快，数据决定你能走多远" class="headerlink" title="六、最后一句话：平台决定你起步有多快，数据决定你能走多远"></a>六、最后一句话：平台决定你起步有多快，数据决定你能走多远</h2><p>聚宽、掘金、QMT、vn.py、Tushare、AKShare，这些工具都各有价值，没有谁能一把解决全部问题。</p>
+<p>但如果你问我，个人做量化交易最容易后知后觉的一件事是什么，我会回答：不是平台没选对，而是太晚才意识到数据才是基础设施。</p>
+<p>没有稳定数据，策略像建在沙上； 有了稳定数据，平台、框架、执行系统才真正有可能接起来。</p>
+<p>所以一个更务实的顺序应该是：</p>
+<ul>
+<li><p>先用合适的平台把研究流程跑通</p>
+</li>
+<li><p>再尽早把数据层独立出来</p>
+</li>
+<li><p>当策略开始认真迭代时，舍得为稳定数据付费</p>
+</li>
+<li><p>最后再把研究、回测、执行做成一条完整链路<br>这样走，个人量化交易才更有机会从“兴趣项目”，真正变成“可持续的系统工程”。</p>
+</li>
+</ul>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/%E5%85%AC%E4%BC%97%E5%8F%B7%E5%90%8C%E6%AD%A5/" rel="tag"># 公众号同步</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/16/AI%E7%82%92%E8%82%A1%E9%A1%B9%E7%9B%AE%E5%A4%A7%E8%B0%83%E7%A0%94-8%E4%B8%AA%E4%BB%A3%E8%A1%A8%E6%80%A7%E4%BA%A7%E5%93%81%E4%B8%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE,%E8%B0%81%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%A0/" rel="prev" title="AI炒股项目大调研：8个代表性产品与开源项目，谁更适合你？">
+      <i class="fa fa-chevron-left"></i> AI炒股项目大调研：8个代表性产品与开源项目，谁更适合你？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/04/17/%E8%81%9A%E5%AE%BD-%E6%8E%98%E9%87%91-QMT-vn.py-Tushare-AKShare,%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E9%80%89-%E4%B8%80%E7%AF%87%E7%9C%8B%E6%87%82%E4%BC%98%E7%BC%BA%E7%82%B9/" rel="next" title="聚宽、掘金、QMT、vn.py、Tushare、AKShare，到底怎么选？一篇看懂优缺点">
+      聚宽、掘金、QMT、vn.py、Tushare、AKShare，到底怎么选？一篇看懂优缺点 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%B8%AA%E4%BA%BA%E5%B8%B8%E8%A7%81%E7%9A%84%E9%87%8F%E5%8C%96%E5%B9%B3%E5%8F%B0%EF%BC%8C%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E9%98%B6%E6%AE%B5"><span class="nav-number">1.</span> <span class="nav-text">一、个人常见的量化平台，分别适合什么阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%81%9A%E5%AE%BD%EF%BC%9A%E9%80%82%E5%90%88%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%E7%A0%94%E7%A9%B6%E5%92%8C%E5%9B%9E%E6%B5%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1. 聚宽：适合快速上手研究和回测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8E%98%E9%87%91%EF%BC%9A%E6%9B%B4%E5%81%8F%E5%AE%8C%E6%95%B4%E4%BA%A4%E6%98%93%E6%B5%81%E7%A8%8B%E5%92%8C%E4%B8%93%E4%B8%9A%E7%BB%88%E7%AB%AF%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">2. 掘金：更偏完整交易流程和专业终端思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-QMT-PTrade-%E8%BF%99%E7%B1%BB%E5%88%B8%E5%95%86%E7%BB%88%E7%AB%AF%EF%BC%9A%E6%9B%B4%E6%8E%A5%E8%BF%91%E7%9C%9F%E5%AE%9E%E4%BA%A4%E6%98%93%E8%90%BD%E5%9C%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3. QMT &#x2F; PTrade 这类券商终端：更接近真实交易落地</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-vn-py%EF%BC%9A%E9%80%82%E5%90%88%E6%84%BF%E6%84%8F%E8%87%AA%E5%B7%B1%E6%90%AD%E6%A1%86%E6%9E%B6%E7%9A%84%E4%BA%BA"><span class="nav-number">1.4.</span> <span class="nav-text">4. vn.py：适合愿意自己搭框架的人</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Tushare%E3%80%81AKShare%EF%BC%9A%E5%AE%83%E4%BB%AC%E6%9B%B4%E5%83%8F%E6%95%B0%E6%8D%AE%E5%B1%82%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%AE%8C%E6%95%B4%E5%B9%B3%E5%8F%B0"><span class="nav-number">1.5.</span> <span class="nav-text">5. Tushare、AKShare：它们更像数据层，而不是完整平台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%81%9A%E9%87%8F%E5%8C%96%EF%BC%8C%E8%BF%9F%E6%97%A9%E8%A6%81%E4%B9%B0%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">二、为什么说做量化，迟早要买数据接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9B%A0%E4%B8%BA%E7%AD%96%E7%95%A5%E5%A5%BD%E5%9D%8F%EF%BC%8C%E9%A6%96%E5%85%88%E5%8F%96%E5%86%B3%E4%BA%8E%E4%BD%A0%E6%8B%BF%E5%88%B0%E7%9A%84%E8%BE%93%E5%85%A5%E6%98%AF%E4%B8%8D%E6%98%AF%E5%8F%AF%E9%9D%A0"><span class="nav-number">2.1.</span> <span class="nav-text">1. 因为策略好坏，首先取决于你拿到的输入是不是可靠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9B%A0%E4%B8%BA%E5%85%8D%E8%B4%B9%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E9%97%AE%E9%A2%98%E9%80%9A%E5%B8%B8%E4%B8%8D%E6%98%AF%E2%80%9C%E5%B0%91%E2%80%9D%EF%BC%8C%E8%80%8C%E6%98%AF%E2%80%9C%E4%B8%8D%E7%A8%B3%E2%80%9D"><span class="nav-number">2.2.</span> <span class="nav-text">2. 因为免费的数据，最大的问题通常不是“少”，而是“不稳”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9B%A0%E4%B8%BA%E5%81%9A%E5%AE%9E%E7%9B%98%E4%BB%A5%E5%90%8E%EF%BC%8C%E4%BD%A0%E4%BC%9A%E5%8F%91%E7%8E%B0%E6%97%B6%E9%97%B4%E6%AF%94%E9%92%B1%E6%9B%B4%E8%B4%B5"><span class="nav-number">2.3.</span> <span class="nav-text">3. 因为做实盘以后，你会发现时间比钱更贵</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%B2%A1%E6%9C%89%E7%A8%B3%E5%AE%9A%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3%EF%BC%8C%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88"><span class="nav-number">3.</span> <span class="nav-text">三、没有稳定的数据接口，会发生什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9B%9E%E6%B5%8B%E7%BB%93%E6%9E%9C%E4%BC%9A%E5%A4%B1%E7%9C%9F%EF%BC%8C%E7%94%9A%E8%87%B3%E5%A4%B1%E7%9C%9F%E5%BE%97%E5%BE%88%E4%B8%A5%E9%87%8D"><span class="nav-number">3.1.</span> <span class="nav-text">1. 回测结果会失真，甚至失真得很严重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AD%96%E7%95%A5%E5%BE%88%E9%9A%BE%E4%BB%8E%E7%A0%94%E7%A9%B6%E8%B5%B0%E5%90%91%E5%AE%9E%E7%9B%98"><span class="nav-number">3.2.</span> <span class="nav-text">2. 策略很难从研究走向实盘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%A0%E4%BC%9A%E5%BE%88%E9%9A%BE%E5%81%9A%E6%9B%B4%E9%AB%98%E9%A2%91%E3%80%81%E6%9B%B4%E7%BB%86%E8%8A%82%E7%9A%84%E7%AD%96%E7%95%A5"><span class="nav-number">3.3.</span> <span class="nav-text">3. 你会很难做更高频、更细节的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%A0%94%E7%A9%B6%E6%95%88%E7%8E%87%E4%BC%9A%E6%98%8E%E6%98%BE%E4%B8%8B%E9%99%8D%EF%BC%8C%E4%BF%A1%E5%BF%83%E4%B9%9F%E4%BC%9A%E8%A2%AB%E6%B6%88%E8%80%97"><span class="nav-number">3.4.</span> <span class="nav-text">4. 研究效率会明显下降，信心也会被消耗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%B8%AA%E4%BA%BA%E5%81%9A%E9%87%8F%E5%8C%96%EF%BC%8C%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E4%B9%B0%E5%B9%B3%E5%8F%B0%E5%92%8C%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">四、个人做量化，应该怎么买平台和数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%88%E5%88%86%E6%B8%85%E6%A5%9A%EF%BC%9A%E4%BD%A0%E4%B9%B0%E7%9A%84%E6%98%AF%E5%B9%B3%E5%8F%B0%E8%83%BD%E5%8A%9B%EF%BC%8C%E8%BF%98%E6%98%AF%E6%95%B0%E6%8D%AE%E8%83%BD%E5%8A%9B"><span class="nav-number">4.1.</span> <span class="nav-text">1. 先分清楚：你买的是平台能力，还是数据能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%96%B0%E6%89%8B%E9%98%B6%E6%AE%B5%EF%BC%8C%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%B8%80%E4%B8%8A%E6%9D%A5%E5%B0%B1%E5%A0%86%E6%9C%80%E8%B4%B5%E9%85%8D%E7%BD%AE"><span class="nav-number">4.2.</span> <span class="nav-text">2. 新手阶段，不建议一上来就堆最贵配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BD%93%E4%BD%A0%E5%87%BA%E7%8E%B0%E8%BF%99%E5%87%A0%E4%B8%AA%E4%BF%A1%E5%8F%B7%E6%97%B6%EF%BC%8C%E5%B0%B1%E8%AF%A5%E8%AE%A4%E7%9C%9F%E4%B9%B0%E6%95%B0%E6%8D%AE%E4%BA%86"><span class="nav-number">4.3.</span> <span class="nav-text">3. 当你出现这几个信号时，就该认真买数据了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E9%A2%84%E7%AE%97%E5%88%AB%E5%8F%AA%E7%9C%8B%E4%BB%B7%E6%A0%BC%EF%BC%8C%E8%A6%81%E7%9C%8B%E2%80%9C%E6%AF%8F%E5%91%A8%E8%8A%82%E7%9C%81%E4%BD%A0%E5%A4%9A%E5%B0%91%E6%97%B6%E9%97%B4%E2%80%9D"><span class="nav-number">4.4.</span> <span class="nav-text">4. 数据预算别只看价格，要看“每周节省你多少时间”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BB%99%E4%B8%AA%E4%BA%BA%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93%E8%80%85%E7%9A%84%E5%87%A0%E6%9D%A1%E5%AE%9E%E7%94%A8%E5%BB%BA%E8%AE%AE"><span class="nav-number">5.</span> <span class="nav-text">五、给个人量化交易者的几条实用建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8D%E8%A6%81%E5%85%88%E8%BF%B7%E4%BF%A1%E7%AD%96%E7%95%A5%EF%BC%8C%E5%85%88%E6%80%80%E7%96%91%E6%95%B0%E6%8D%AE"><span class="nav-number">5.1.</span> <span class="nav-text">1. 不要先迷信策略，先怀疑数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%80%E5%BC%80%E5%A7%8B%E5%B0%B1%E5%BB%BA%E7%AB%8B%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E7%BC%93%E5%AD%98%E5%92%8C%E7%89%88%E6%9C%AC%E6%84%8F%E8%AF%86"><span class="nav-number">5.2.</span> <span class="nav-text">2. 一开始就建立本地数据缓存和版本意识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B9%B3%E5%8F%B0%E6%9C%80%E5%A5%BD%E5%8F%AA%E6%98%AF%E5%B7%A5%E5%85%B7%EF%BC%8C%E4%B8%8D%E8%A6%81%E5%8F%98%E6%88%90%E6%9E%B7%E9%94%81"><span class="nav-number">5.3.</span> <span class="nav-text">3. 平台最好只是工具，不要变成枷锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%85%88%E5%81%9A%E8%87%AA%E5%B7%B1%E8%83%BD%E9%A9%BE%E9%A9%AD%E7%9A%84%E9%A2%91%E7%8E%87%E5%92%8C%E5%B8%82%E5%9C%BA"><span class="nav-number">5.4.</span> <span class="nav-text">4. 先做自己能驾驭的频率和市场</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%9C%80%E5%90%8E%E4%B8%80%E5%8F%A5%E8%AF%9D%EF%BC%9A%E5%B9%B3%E5%8F%B0%E5%86%B3%E5%AE%9A%E4%BD%A0%E8%B5%B7%E6%AD%A5%E6%9C%89%E5%A4%9A%E5%BF%AB%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%86%B3%E5%AE%9A%E4%BD%A0%E8%83%BD%E8%B5%B0%E5%A4%9A%E8%BF%9C"><span class="nav-number">6.</span> <span class="nav-text">六、最后一句话：平台决定你起步有多快，数据决定你能走多远</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

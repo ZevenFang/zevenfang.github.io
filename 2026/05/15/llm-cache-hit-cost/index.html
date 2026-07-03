@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="大模型缓存命中不是玄学优惠，而是复用已计算过的输入前缀：把稳定上下文放在前面，重复请求就能显著降低成本并提升响应速度。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大模型缓存命中：为什么它能让计费便宜很多？">
+<meta property="og:url" content="https://zevenfang.github.io/2026/05/15/llm-cache-hit-cost/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="大模型缓存命中不是玄学优惠，而是复用已计算过的输入前缀：把稳定上下文放在前面，重复请求就能显著降低成本并提升响应速度。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-05-15T06:30:00.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.755Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Prompt Engineering">
+<meta property="article:tag" content="大模型">
+<meta property="article:tag" content="成本优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/05/15/llm-cache-hit-cost/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>大模型缓存命中：为什么它能让计费便宜很多？ | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/05/15/llm-cache-hit-cost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大模型缓存命中：为什么它能让计费便宜很多？<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/llm-cache-hit-cost.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-15 14:30:00" itemprop="dateCreated datePublished" datetime="2026-05-15T14:30:00+08:00">2026-05-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">大模型缓存命中不是玄学优惠，而是复用已计算过的输入前缀：把稳定上下文放在前面，重复请求就能显著降低成本并提升响应速度。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>开头先说结论：大模型缓存命中，就是模型服务发现你这次请求里有一大段内容，和之前已经处理过的内容完全相同，于是不用重新“读一遍”，直接复用上次算好的中间结果。</p>
+<p>这件事听起来像浏览器缓存，但本质更接近“把模型读过的前缀笔记保存下来”。它之所以能让计费便宜很多，是因为大模型最贵的一部分工作，往往不是吐出那几百个字，而是先把你塞进去的长上下文全部看懂。</p>
+<h2 id="一、一次大模型请求到底在花什么钱"><a href="#一、一次大模型请求到底在花什么钱" class="headerlink" title="一、一次大模型请求到底在花什么钱"></a>一、一次大模型请求到底在花什么钱</h2><p>我们平时说调用大模型，通常会分成两类 token：</p>
+<ul>
+<li>输入 token：你发给模型的内容，比如系统提示词、工具说明、历史对话、文档、代码、知识库片段。</li>
+<li>输出 token：模型生成给你的内容，也就是回答本身。</li>
+</ul>
+<p>很多人直觉上以为“输出才是计算”，因为我们看到的是模型一个字一个字往外吐。但在真实服务里，输入同样要消耗大量计算：模型需要把每个输入 token 逐层处理，建立它们之间的注意力关系，形成后续生成时可复用的内部状态。</p>
+<p>如果你的请求只有一句话，输入成本不明显；但如果你每次都带上几万字的系统提示、长文档、完整代码仓库片段，输入处理就会成为主要成本。</p>
+<h2 id="二、什么是缓存命中"><a href="#二、什么是缓存命中" class="headerlink" title="二、什么是缓存命中"></a>二、什么是缓存命中</h2><p>大模型里的缓存，通常指的是 prefix cache，也就是“前缀缓存”。</p>
+<p>如果两次请求的开头部分完全一样，比如：</p>
+<ul>
+<li>相同的系统提示词</li>
+<li>相同的角色设定</li>
+<li>相同的工具说明</li>
+<li>相同的长文档背景</li>
+<li>相同的历史对话前半段</li>
+</ul>
+<p>服务端就可以把第一次处理这些内容时产生的中间结果保存下来。第二次请求到来时，只要前缀一致，就不必重新计算这部分内容，而是直接复用。</p>
+<p>这就叫缓存命中。</p>
+<p>你可以把它想象成：第一次让模型读一本 200 页的产品手册，它需要从头读；第二次你还是拿同一本手册来问不同问题，模型服务发现“这本手册我刚读过”，于是直接翻到已经做好的读书笔记上，再处理你新问的那几句话。</p>
+<h2 id="三、为什么必须是“前缀”相同"><a href="#三、为什么必须是“前缀”相同" class="headerlink" title="三、为什么必须是“前缀”相同"></a>三、为什么必须是“前缀”相同</h2><p>这里有一个关键点：缓存命中通常要求相同内容出现在请求开头，并且 token 序列完全一致。</p>
+<p>原因是 Transformer 模型处理文本时，后面的 token 会依赖前面的 token。服务端缓存的是“读到某个位置时的内部状态”。如果前面任何一个 token 变了，后面的状态都可能变，缓存就很难直接复用。</p>
+<p>所以，下面这种组织方式更容易命中缓存：</p>
+<ol>
+<li>固定系统提示词</li>
+<li>固定工具说明</li>
+<li>固定项目背景或文档</li>
+<li>变化的用户问题放在最后</li>
+</ol>
+<p>而下面这种方式就不友好：</p>
+<ol>
+<li>每次在最前面插入当前时间、随机 ID、临时说明</li>
+<li>把用户问题放在最前面</li>
+<li>后面再拼接固定文档</li>
+</ol>
+<p>哪怕固定文档本身没变，只要它前面多了不同内容，它就不再处于相同前缀位置，缓存命中率就会下降。</p>
+<h2 id="四、为什么缓存命中会便宜很多"><a href="#四、为什么缓存命中会便宜很多" class="headerlink" title="四、为什么缓存命中会便宜很多"></a>四、为什么缓存命中会便宜很多</h2><p>便宜的核心原因很简单：已经算过的输入，不必完整再算一次。</p>
+<p>大模型服务商的计费通常会把 token 分成几种价格：</p>
+<ul>
+<li>普通输入 token：需要完整计算，价格较高。</li>
+<li>缓存命中的输入 token：复用已有中间结果，价格显著更低。</li>
+<li>输出 token：需要逐步生成，通常仍按正常输出价格计费。</li>
+</ul>
+<p>以一些主流 API 的定价方式看，缓存命中的输入 token 可能只有普通输入价格的十分之一、二十分之一，甚至更低。不同厂商比例不一样，但方向一致：只要能复用，成本就会大幅下降。</p>
+<p>这不是平台“打折促销”，而是计算成本真的低了。服务商少做了大量矩阵计算，自然可以把这部分价格压低。</p>
+<h2 id="五、一个直观例子"><a href="#五、一个直观例子" class="headerlink" title="五、一个直观例子"></a>五、一个直观例子</h2><p>假设你做了一个代码助手，每次请求都带上：</p>
+<ul>
+<li>2 万 token 的项目规范</li>
+<li>5 万 token 的代码上下文</li>
+<li>500 token 的用户问题</li>
+<li>1000 token 的模型回答</li>
+</ul>
+<p>如果没有缓存，每次都要重新处理前面 7 万多 token 的输入。</p>
+<p>如果项目规范和代码上下文稳定，且都放在请求前缀里，那么第一次请求会正常计费；第二次、第三次、第四次，只要前缀命中，大部分输入就可以按缓存命中价格计算。你问的问题和模型回答仍然要正常算，但那 7 万 token 的“大头”会便宜很多。</p>
+<p>这就是为什么在长上下文应用里，缓存命中能让账单差出一个数量级。</p>
+<h2 id="六、哪些场景最适合缓存"><a href="#六、哪些场景最适合缓存" class="headerlink" title="六、哪些场景最适合缓存"></a>六、哪些场景最适合缓存</h2><p>缓存命中最适合“固定大背景 + 多轮变化问题”的场景：</p>
+<ul>
+<li>代码助手：固定仓库上下文，用户不断问不同问题。</li>
+<li>文档问答：固定产品手册、合同、论文，用户连续追问。</li>
+<li>Agent 系统：固定系统提示词、工具说明、策略约束，每次只改变任务目标。</li>
+<li>客服机器人：固定品牌话术、知识库片段、合规说明，多次服务不同问题。</li>
+<li>内容生产：固定风格指南、栏目定位、选题背景，每次生成不同文章。</li>
+</ul>
+<p>这些场景的共同点是：有一大段内容经常重复，而且可以稳定地放在请求开头。</p>
+<h2 id="七、怎样提高缓存命中率"><a href="#七、怎样提高缓存命中率" class="headerlink" title="七、怎样提高缓存命中率"></a>七、怎样提高缓存命中率</h2><p>想让缓存真正省钱，关键不是“打开某个开关”，而是调整请求结构。</p>
+<ol>
+<li>把稳定内容放前面</li>
+</ol>
+<p>系统提示词、工具定义、长文档、固定规则，尽量放在请求最前面。变化内容，比如当前问题、临时参数、用户输入，放在最后。</p>
+<ol start="2">
+<li>不要在前缀里塞随机变化</li>
+</ol>
+<p>当前时间、请求 ID、用户昵称、动态标签、AB 实验参数，如果每次都不同，就不要放在最前面。它们会破坏后面整段前缀的复用。</p>
+<ol start="3">
+<li>保持文本序列完全一致</li>
+</ol>
+<p>缓存按 token 序列匹配。多一个空格、换一种换行、JSON 字段顺序变化，都可能影响命中。工程上最好用稳定模板生成 prompt。</p>
+<ol start="4">
+<li>复用同一份上下文</li>
+</ol>
+<p>如果文档内容没变，不要每次重新切分、重新排序、重新改写。固定顺序、固定格式，更容易命中。</p>
+<ol start="5">
+<li>注意缓存有生命周期</li>
+</ol>
+<p>缓存不是永久保存。很多平台会设置时间窗口，比如几分钟到数小时不等。越密集的连续请求，越容易吃到缓存红利。</p>
+<h2 id="八、缓存命中不等于模型“记住了你”"><a href="#八、缓存命中不等于模型“记住了你”" class="headerlink" title="八、缓存命中不等于模型“记住了你”"></a>八、缓存命中不等于模型“记住了你”</h2><p>这里也要澄清一个常见误解：缓存命中不是长期记忆。</p>
+<p>它不代表模型真的把你的资料永久学会了，也不代表以后不用再传上下文。缓存只是服务端为了节省重复计算，在一段时间内保存了部分中间状态。</p>
+<p>换句话说：缓存是计算优化，不是知识写入；是省钱提速，不是训练模型。</p>
+<h2 id="九、开发者应该关注什么指标"><a href="#九、开发者应该关注什么指标" class="headerlink" title="九、开发者应该关注什么指标"></a>九、开发者应该关注什么指标</h2><p>如果你在做 LLM 应用，建议至少关注这几个指标：</p>
+<ul>
+<li>cache hit tokens：命中的缓存输入 token 数。</li>
+<li>cache miss tokens：没有命中的普通输入 token 数。</li>
+<li>input/output token 成本占比：到底钱花在读上下文，还是花在生成回答。</li>
+<li>prompt 模板稳定性：同一个任务的固定前缀是否真的保持一致。</li>
+<li>首次请求和后续请求的延迟差异：缓存命中通常也会让响应更快。</li>
+</ul>
+<p>这些指标能帮助你判断：账单贵，到底是模型选太大了，输出太长了，还是上下文组织方式太浪费。</p>
+<h2 id="十、总结"><a href="#十、总结" class="headerlink" title="十、总结"></a>十、总结</h2><p>大模型缓存命中，本质上是复用已经计算过的输入前缀。</p>
+<p>它便宜很多，是因为模型不用反复处理同一大段上下文；服务商节省了真实计算量，所以缓存命中的输入 token 可以按更低价格计费。</p>
+<p>对开发者来说，最重要的实践是：把不变的内容放在前面，把变化的内容放在后面，并尽量让固定前缀保持字面一致。</p>
+<p>如果你的应用经常携带长提示词、长文档、长代码上下文，那么缓存命中不是一个小优化，而是决定成本结构的关键设计。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Prompt-Engineering/" rel="tag"># Prompt Engineering</a>
+              <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" rel="tag"># 大模型</a>
+              <a href="/tags/%E6%88%90%E6%9C%AC%E4%BC%98%E5%8C%96/" rel="tag"># 成本优化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/15/text-to-cad-agent-skills/" rel="prev" title="这可能是 AI Agent 的下一个硬核入口：一句话生成 CAD、机器人模型和工程文件">
+      <i class="fa fa-chevron-left"></i> 这可能是 AI Agent 的下一个硬核入口：一句话生成 CAD、机器人模型和工程文件
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/05/18/cli-anything-agent-native-software/" rel="next" title="Agent 终于能用真软件了：CLI-Anything 想把所有软件变成命令行工具">
+      Agent 终于能用真软件了：CLI-Anything 想把所有软件变成命令行工具 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%B8%80%E6%AC%A1%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AF%B7%E6%B1%82%E5%88%B0%E5%BA%95%E5%9C%A8%E8%8A%B1%E4%BB%80%E4%B9%88%E9%92%B1"><span class="nav-number">1.</span> <span class="nav-text">一、一次大模型请求到底在花什么钱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD"><span class="nav-number">2.</span> <span class="nav-text">二、什么是缓存命中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%85%E9%A1%BB%E6%98%AF%E2%80%9C%E5%89%8D%E7%BC%80%E2%80%9D%E7%9B%B8%E5%90%8C"><span class="nav-number">3.</span> <span class="nav-text">三、为什么必须是“前缀”相同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD%E4%BC%9A%E4%BE%BF%E5%AE%9C%E5%BE%88%E5%A4%9A"><span class="nav-number">4.</span> <span class="nav-text">四、为什么缓存命中会便宜很多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%80%E4%B8%AA%E7%9B%B4%E8%A7%82%E4%BE%8B%E5%AD%90"><span class="nav-number">5.</span> <span class="nav-text">五、一个直观例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E6%9C%80%E9%80%82%E5%90%88%E7%BC%93%E5%AD%98"><span class="nav-number">6.</span> <span class="nav-text">六、哪些场景最适合缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%80%8E%E6%A0%B7%E6%8F%90%E9%AB%98%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD%E7%8E%87"><span class="nav-number">7.</span> <span class="nav-text">七、怎样提高缓存命中率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD%E4%B8%8D%E7%AD%89%E4%BA%8E%E6%A8%A1%E5%9E%8B%E2%80%9C%E8%AE%B0%E4%BD%8F%E4%BA%86%E4%BD%A0%E2%80%9D"><span class="nav-number">8.</span> <span class="nav-text">八、缓存命中不等于模型“记住了你”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E5%BC%80%E5%8F%91%E8%80%85%E5%BA%94%E8%AF%A5%E5%85%B3%E6%B3%A8%E4%BB%80%E4%B9%88%E6%8C%87%E6%A0%87"><span class="nav-number">9.</span> <span class="nav-text">九、开发者应该关注什么指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">十、总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

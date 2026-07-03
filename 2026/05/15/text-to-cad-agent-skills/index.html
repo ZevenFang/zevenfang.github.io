@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="am4yQQJiTvZn_BSeDxm-CCBG__kNtS1GHzRXSrUPZPs">
+  <meta name="baidu-site-verification" content="peTRUbDMQC">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zevenfang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":false,"nav":null,"activeClass":"giscus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="text-to-cad 把 CAD、机器人描述和硬件设计流程包装成 Agent Skills：先写可追溯源码，再导出 STEP&#x2F;STL&#x2F;URDF 等工程文件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="这可能是 AI Agent 的下一个硬核入口：一句话生成 CAD、机器人模型和工程文件">
+<meta property="og:url" content="https://zevenfang.github.io/2026/05/15/text-to-cad-agent-skills/index.html">
+<meta property="og:site_name" content="好好风格的博客">
+<meta property="og:description" content="text-to-cad 把 CAD、机器人描述和硬件设计流程包装成 Agent Skills：先写可追溯源码，再导出 STEP&#x2F;STL&#x2F;URDF 等工程文件。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zevenfang.github.io/images/wechat-sync/text-to-cad-agent-skills/cover.jpg">
+<meta property="og:image" content="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg">
+<meta property="article:published_time" content="2026-05-15T04:04:58.000Z">
+<meta property="article:modified_time" content="2026-07-03T03:10:36.756Z">
+<meta property="article:author" content="好好风格">
+<meta property="article:tag" content="AI Agent">
+<meta property="article:tag" content="开源项目">
+<meta property="article:tag" content="CAD">
+<meta property="article:tag" content="机器人">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zevenfang.github.io/images/wechat-sync/text-to-cad-agent-skills/cover.jpg">
+
+<link rel="canonical" href="https://zevenfang.github.io/2026/05/15/text-to-cad-agent-skills/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>这可能是 AI Agent 的下一个硬核入口：一句话生成 CAD、机器人模型和工程文件 | 好好风格的博客</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9585afa43e646ce0e2c1b56d98cca4a2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">好好风格的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个好风格的博客，分享技术，分享生活，分享经验。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">88</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/ZevenFang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zevenfang.github.io/2026/05/15/text-to-cad-agent-skills/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="好好风格">
+      <meta itemprop="description" content="前端,后端,全栈,爱生活,爱技术,与世界分享经验">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好好风格的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          这可能是 AI Agent 的下一个硬核入口：一句话生成 CAD、机器人模型和工程文件<a href="https://github.com/zevenfang/fangzf.me/edit/master/source/_posts/text-to-cad-agent-skills.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-15 12:04:58" itemprop="dateCreated datePublished" datetime="2026-05-15T12:04:58+08:00">2026-05-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">text-to-cad 把 CAD、机器人描述和硬件设计流程包装成 Agent Skills：先写可追溯源码，再导出 STEP/STL/URDF 等工程文件。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>text-to-cad 把 CAD、机器人描述和硬件设计流程包装成 Agent Skills：先写可追溯源码，再导出 STEP/STL/URDF 等工程文件。</p>
+</blockquote>
+<p><img src="/images/wechat-sync/text-to-cad-agent-skills/cover.jpg" alt="文章封面"></p>
+<p>最近看到一个很有意思的开源项目：earthtojake/text-to-cad。名字听起来像“文本转 CAD”，但它真正做的事情更像是给 Codex、Claude Code、Gemini CLI、OpenClaw 这类 Coding Agent 装上一套硬件工程技能包。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/earthtojake/text-to-cad">https://github.com/earthtojake/text-to-cad</a></p>
+<p>它的定位很明确：A collection of agent skills for CAD, robotics and hardware design。也就是说，它不是只想生成一张好看的 3D 图，而是希望 Agent 能参与更真实的 CAD、机器人和硬件设计工作流。</p>
+<h2 id="一、它解决的不是“画出来”，而是“做成工程文件”"><a href="#一、它解决的不是“画出来”，而是“做成工程文件”" class="headerlink" title="一、它解决的不是“画出来”，而是“做成工程文件”"></a>一、它解决的不是“画出来”，而是“做成工程文件”</h2><p>很多 Text-to-3D 项目停在视觉层面：输入一句话，得到一个模型预览。但工程世界更关心的是：</p>
+<ul>
+<li>能不能导出 STEP / STL / 3MF / DXF 这样的可交付文件；</li>
+<li>能不能保留可修改、可复现的源代码；</li>
+<li>能不能检查几何、引用具体面和边，方便下一轮修改；</li>
+<li>能不能和机器人描述文件 URDF / SDF / SRDF 串起来；</li>
+<li>能不能找现成标准件，而不是每次从零瞎编一个螺丝。</li>
+</ul>
+<p>text-to-cad 的 README 里列出的能力，正是围绕这些工程化需求展开：Generate、Export、Browse、Source、Reference、Review、Reproduce、Local。</p>
+<p>这几个词放在一起，说明作者不是在做一个炫技 Demo，而是在把“AI 生成 CAD”拆成 Agent 可以稳定执行的步骤。</p>
+<h2 id="二、核心思路：让-Agent-写-CAD-源码，再导出明确目标"><a href="#二、核心思路：让-Agent-写-CAD-源码，再导出明确目标" class="headerlink" title="二、核心思路：让 Agent 写 CAD 源码，再导出明确目标"></a>二、核心思路：让 Agent 写 CAD 源码，再导出明确目标</h2><p>这个项目的 CAD Skill 以 build123d / Python 为基础，默认把 STEP 当作一等公民。Agent 不是直接吐一个神秘的二进制模型，而是先生成或修改参数化 CAD 源码，再导出 STEP、STL、3MF、DXF、GLB/topology 等目标文件。</p>
+<p>这点非常关键。</p>
+<p>如果 AI 只是生成最终模型，后续修改会很痛苦：今天说“孔距加 2mm”，明天说“把倒角改小一点”，模型本身没有清晰的设计意图，Agent 很容易越改越乱。</p>
+<p>但如果它维护的是源代码，工程师就能看到尺寸、基准、孔、倒角、装配关系是如何定义的。下一轮修改也可以落在源码层，而不是对网格做玄学手术。</p>
+<h2 id="三、它不只管零件，还覆盖机器人描述"><a href="#三、它不只管零件，还覆盖机器人描述" class="headerlink" title="三、它不只管零件，还覆盖机器人描述"></a>三、它不只管零件，还覆盖机器人描述</h2><p>text-to-cad 里比较有价值的一点，是它把 CAD 和机器人文件放在同一个技能体系里：</p>
+<ul>
+<li>CAD Skill：生成 STEP、STL、3MF、DXF、GLB/topology，并提供几何引用；</li>
+<li>CAD Explorer Skill：本地预览 CAD 和机器人描述文件；</li>
+<li>step.parts Skill：搜索、评估、下载常见标准件 STEP 模型；</li>
+<li>URDF Skill：生成和校验 ROS 常用机器人描述；</li>
+<li>SDF Skill：面向仿真场景的 SDFormat / SDF；</li>
+<li>SRDF Skill：面向 MoveIt2 的语义机器人描述；</li>
+<li>SendCutSend Skill：面向 SendCutSend 下单前的 DXF / STEP 预检查。</li>
+</ul>
+<p>这说明它瞄准的是“硬件 Agent 工作台”，而不是单点 CAD 生成器。一个 Agent 未来可能从自然语言需求出发，生成结构件、拉标准件、输出机器人描述、打开预览、做下单前检查，形成完整闭环。</p>
+<h2 id="四、CAD-Explorer-让迭代更像真实协作"><a href="#四、CAD-Explorer-让迭代更像真实协作" class="headerlink" title="四、CAD Explorer 让迭代更像真实协作"></a>四、CAD Explorer 让迭代更像真实协作</h2><p>项目提供了 CAD Explorer，用来检查生成的几何、钣金展开和机器人描述文件。README 里还提到一个很重要的能力：复制稳定的 @cad[…] 引用，让 Agent 能基于具体几何位置做后续编辑。</p>
+<p>这非常像把“看图说话”变成“指着模型说话”。</p>
+<p>传统对话里，我们只能说“把左边那个孔往上挪一点”。但在 CAD 场景里，“左边那个孔”必须变成可定位、可复现的对象引用。否则 Agent 下一轮很可能理解错对象。</p>
+<p>@cad[…] 这类引用的价值就在这里：让人、Agent、模型预览之间有一个共同坐标系。</p>
+<h2 id="五、为什么这是-Agent-时代很重要的方向"><a href="#五、为什么这是-Agent-时代很重要的方向" class="headerlink" title="五、为什么这是 Agent 时代很重要的方向"></a>五、为什么这是 Agent 时代很重要的方向</h2><p>软件 Agent 已经可以改代码、跑测试、提 PR。但硬件设计更难，因为它有几个天然门槛：</p>
+<ol>
+<li>几何约束比文字更严格。尺寸、装配、坐标系错一点，结果就不可用。</li>
+<li>输出格式更复杂。STEP、URDF、SDF、SRDF、DXF 各自服务不同环节。</li>
+<li>迭代成本更高。一个错误可能到打印、加工、装配时才暴露。</li>
+<li>标准件和供应链很重要。真实项目不会把所有零件都从零生成。</li>
+</ol>
+<p>text-to-cad 的路线不是让 AI “凭感觉画一个”，而是给 Agent 加上技能、约束、验证和预览。它承认硬件设计不能只靠一次性生成，必须有可审计的过程。</p>
+<h2 id="六、目前应该怎么看它"><a href="#六、目前应该怎么看它" class="headerlink" title="六、目前应该怎么看它"></a>六、目前应该怎么看它</h2><p>这个项目创建于 2026 年 4 月，目前 GitHub 上已经有 2.7k+ stars、300+ forks，采用 MIT License。它的 README 显示支持 Codex、Claude Code、Gemini CLI、OpenClaw，也可以通过 npx agent-skills-cli 安装。</p>
+<p>但我更建议把它看成一个方向，而不是“马上替代工程师”的成品。</p>
+<p>对于真实机械设计，AI 仍然需要工程师定义需求、检查约束、确认材料和工艺，尤其涉及承重、安全、加工公差、运动学和仿真时，不能把 Agent 输出当最终结论。</p>
+<p>它最适合的切入点，可能是这些：</p>
+<ul>
+<li>快速生成早期结构草案；</li>
+<li>把自然语言需求转成参数化 CAD 初稿；</li>
+<li>生成标准格式文件，方便预览和讨论；</li>
+<li>拉取标准件，减少重复建模；</li>
+<li>给机器人项目生成 URDF / SDF / SRDF 初版；</li>
+<li>在下单或加工前做基础预检查。</li>
+</ul>
+<h2 id="七、真正值得关注的是“技能化”"><a href="#七、真正值得关注的是“技能化”" class="headerlink" title="七、真正值得关注的是“技能化”"></a>七、真正值得关注的是“技能化”</h2><p>我觉得 text-to-cad 最有启发的地方，不只是 CAD，而是它用“Agent Skills”的方式包装硬件能力。</p>
+<p>过去我们习惯给 AI 一个大 Prompt，让它临场发挥。现在更有效的方式可能是：把某个专业领域的流程、默认假设、验证步骤、工具调用和输出约束，沉淀成可复用 Skill。</p>
+<p>CAD、机器人、硬件设计都非常适合这种模式。因为这些领域不仅需要生成内容，还需要遵守流程。</p>
+<p>如果未来 Agent 能可靠调用这类技能，那么“自然语言 → 源码 → 工程文件 → 可视化检查 → 修改 → 交付”的链路，会比单纯 Text-to-3D 更接近真实生产力。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>earthtojake/text-to-cad 让我看到一个很清晰的趋势：AI Agent 正在从“帮你写字、写代码”，进入“帮你生成可交付工程资产”的阶段。</p>
+<p>它还不是魔法按钮，但方向对了：不是把 CAD 当图片生成，而是把硬件设计拆成可执行、可验证、可复现的工作流。</p>
+<p>这可能就是 Agent 进入物理世界的一条现实路径。</p>
+<hr>
+<p>更多内容欢迎关注公众号：</p>
+<p><img src="https://zmgo.oss-cn-shenzhen.aliyuncs.com/logo/qrcode_for_gh_de689d92e7f2_258.jpg" alt="公众号关注二维码"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"># AI Agent</a>
+              <a href="/tags/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" rel="tag"># 开源项目</a>
+              <a href="/tags/CAD/" rel="tag"># CAD</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" rel="tag"># 机器人</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/13/hyperframes-html-video-agent/" rel="prev" title="AI 做视频终于不用剪辑软件了？HeyGen 开源 Hyperframes：写 HTML 就能生成 MP4">
+      <i class="fa fa-chevron-left"></i> AI 做视频终于不用剪辑软件了？HeyGen 开源 Hyperframes：写 HTML 就能生成 MP4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/05/15/llm-cache-hit-cost/" rel="next" title="大模型缓存命中：为什么它能让计费便宜很多？">
+      大模型缓存命中：为什么它能让计费便宜很多？ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments" id="giscus-comments">
+    <script src="https://giscus.app/client.js"
+      data-repo="ZevenFang/fangzf.me"
+      data-repo-id="MDEwOlJlcG9zaXRvcnk5MDcxMjkxNg=="
+      data-category="General"
+      data-category-id="DIC_kwDOBWgrVM4C772e"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+  </div>
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%83%E8%A7%A3%E5%86%B3%E7%9A%84%E4%B8%8D%E6%98%AF%E2%80%9C%E7%94%BB%E5%87%BA%E6%9D%A5%E2%80%9D%EF%BC%8C%E8%80%8C%E6%98%AF%E2%80%9C%E5%81%9A%E6%88%90%E5%B7%A5%E7%A8%8B%E6%96%87%E4%BB%B6%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">一、它解决的不是“画出来”，而是“做成工程文件”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF%EF%BC%9A%E8%AE%A9-Agent-%E5%86%99-CAD-%E6%BA%90%E7%A0%81%EF%BC%8C%E5%86%8D%E5%AF%BC%E5%87%BA%E6%98%8E%E7%A1%AE%E7%9B%AE%E6%A0%87"><span class="nav-number">2.</span> <span class="nav-text">二、核心思路：让 Agent 写 CAD 源码，再导出明确目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%83%E4%B8%8D%E5%8F%AA%E7%AE%A1%E9%9B%B6%E4%BB%B6%EF%BC%8C%E8%BF%98%E8%A6%86%E7%9B%96%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">三、它不只管零件，还覆盖机器人描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81CAD-Explorer-%E8%AE%A9%E8%BF%AD%E4%BB%A3%E6%9B%B4%E5%83%8F%E7%9C%9F%E5%AE%9E%E5%8D%8F%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">四、CAD Explorer 让迭代更像真实协作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%98%AF-Agent-%E6%97%B6%E4%BB%A3%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E6%96%B9%E5%90%91"><span class="nav-number">5.</span> <span class="nav-text">五、为什么这是 Agent 时代很重要的方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%9B%AE%E5%89%8D%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E7%9C%8B%E5%AE%83"><span class="nav-number">6.</span> <span class="nav-text">六、目前应该怎么看它</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%9C%9F%E6%AD%A3%E5%80%BC%E5%BE%97%E5%85%B3%E6%B3%A8%E7%9A%84%E6%98%AF%E2%80%9C%E6%8A%80%E8%83%BD%E5%8C%96%E2%80%9D"><span class="nav-number">7.</span> <span class="nav-text">七、真正值得关注的是“技能化”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="好好风格"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">好好风格</p>
+  <div class="site-description" itemprop="description">前端,后端,全栈,爱生活,爱技术,与世界分享经验</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZevenFang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZevenFang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fangfan1997@126.com" title="E-Mail → mailto:fangfan1997@126.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">好好风格</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
